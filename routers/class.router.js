@@ -4,4 +4,6 @@ const classController =  require("../controllers/class.controller");
 
 router.get('/',classController.loadPage)
 
+router.get('/:class_name',classController.loadStudentListPage)
+
 module.exports = router;
