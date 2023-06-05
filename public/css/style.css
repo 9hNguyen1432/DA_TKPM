@@ -1,3 +1,10 @@
 th { 
     text-align: center;
 }
+
+line { 
+  
+    border:         none;
+    border-left:    1px solid hsla(200, 10%, 50%,100);
+    width:          1px;       
+}
