@@ -7,15 +7,15 @@ module.exports = (app) => {
     handlebars.engine({
       extname: ".hbs",
       helpers: {
-    //     ifNotEqualZero: function (value,status , options) {
-    //       if (value > 0) {
-    //         return value;
-    //       }
-    //       else if (status == "isFinished"){
-    //         // return "FT"
-    //         return "FT";
-    //       }
-    //     },
+        // ifNotEqualZero: function (value,status , options) {
+        //   if (value > 0) {
+        //     return value;
+        //   }
+        //   else if (status == "isFinished"){
+        //     // return "FT"
+        //     return "FT";
+        //   }
+        // },
     //     ifInIf(v1, v2){
     //       return v1 && v2;
     //     },

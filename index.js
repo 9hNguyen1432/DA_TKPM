@@ -1,8 +1,9 @@
 const express = require("express");
-const handlebars = require("express-handlebars");
+const hbs = require("express-handlebars");
 const routes = require('./routers');
 const path = require('path')
 const session = require('express-session');
+const morgan=require('morgan')
 
 
 // Router
@@ -19,7 +20,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 require("./config/hbs")(app);
 
-
+//HTTP logger
+app.use(morgan('dev'));
 
 const oneDay = 1000 * 60 * 60 * 24;
 app.set('trust proxy', 1) // trust first proxy
@@ -29,6 +31,16 @@ app.use(session({
     saveUninitialized: true,
     cookie: { maxAge: oneDay }
 }))
+
+//HBS
+app.engine('hbs', hbs.engine({
+    extname: 'hbs',
+    defaultLayout: 'main',
+    layoutsDir: path.join(__dirname, '/views/layouts'),
+    partialsDir  : [
+        path.join(__dirname, '/views/partials')
+    ]
+}));
 
 
 routes(app)

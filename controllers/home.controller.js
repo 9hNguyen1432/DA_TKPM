@@ -1,5 +1,5 @@
 class HomePageController{
-    async index(req,res){
+    async home(req,res){
         res.render('home_page');
     }
 }
