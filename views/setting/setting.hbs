@@ -1,6 +1,30 @@
 <h5 class="card py-2 shadow-sm" style="width: 200px; text-align: center; margin: 15px auto; border-radius: 10px;">
-        Quy định</h5></span>
+    Quy định</h5></span>
 
-<div class="card shadow" style="border: 1px solid #D9D9D9; width: 80%; height: 500px; margin: 0px auto;">
+<div class="card shadow" style="border: 1px solid #D9D9D9; width: 50%; margin: 0px auto;
+    padding-inline: 100px; padding-top: 30px;">
+    <form method="post" action="#">
+        <div class="d-flex justify-content-between">
+            <div class="d-flex">
+                <label for="age_min" class="form-label" style="width: 120px;">Tuổi tối thiểu:</label>
+                <input type="text" class="form-control" id="age_min" style="width: 100px;">
+            </div>
+            <div class="d-flex">
+                <label for="age_max" class="form-label" style="width: 120px;">Tuổi tối đa:</label>
+                <input type="text" class="form-control" id="age_max" style="width: 100px;">
+            </div>
+        </div>
+        <div class="d-flex mt-3">
+            <label for="numberofstudent_max" class="form-label" style="width: 120px;">Sĩ số tối đa:</label>
+            <input type="text" class="form-control" id="numberofstudent_max" style="width: 100px;">
+        </div>
+        <div class="d-flex mt-3">
+            <label for="benchmark" class="form-label" style="width: 120px;">Điểm chuẩn:</label>
+            <input type="text" class="form-control" id="benchmark" style="width: 100px;">
+        </div>
+        <div class="d-flex justify-content-end mb-4 mt-5">
+            <button type="submit" class="btn btn-success px-4">Lưu</button>
+        </div>
 
+    </form>
 </div>
