@@ -107,7 +107,10 @@
                                     <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                         data-bs-target="#viewStudentDetailModal" data-bs-mssv="mssv nè"
                                         onclick="showModal(this)">Xem chi tiết</button>
-                                    <a href="#" class="btn btn-success mx-3">Chỉnh sửa</a>
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                        data-bs-target="#addStudent" data-bs-mssv="mssv nè"
+                                        onclick="showModal(this)">Chỉnh sửa</button>
+                                    {{!-- <a href="#" class="btn btn-success mx-3">Chỉnh sửa</a> --}}
                                     <a href="#" class="btn btn-danger">Xóa</a>
                                 </div>
                             </div>
@@ -174,9 +177,10 @@
     </div>
 </div>
 
+{{!-- FORM ADD STUDENT --}}
 <div class="modal fade" id="addStudent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog modal-lg modal-dialog-centered" >
-        <div class="modal-content" >
+    <div class="modal-dialog modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
             <div class="modal-header">
                 <div></div>
                 <h5 class="card py-2 shadow-sm"
@@ -246,11 +250,13 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary"
-                    style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); background-color:#73f909">Xác nhận</button>
+                    style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); background-color:#73f909">Xác
+                    nhận</button>
             </div>
         </div>
     </div>
 </div>
+{{!-- END FORM ADD STUDENT --}}
 
 
 
