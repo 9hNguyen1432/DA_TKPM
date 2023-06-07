@@ -111,7 +111,9 @@
                                         data-bs-target="#addStudent" data-bs-mssv="mssv nè"
                                         onclick="showModal(this)">Chỉnh sửa</button>
                                     {{!-- <a href="#" class="btn btn-success mx-3">Chỉnh sửa</a> --}}
-                                    <a href="#" class="btn btn-danger">Xóa</a>
+                                    {{!-- <a href="#" class="btn btn-danger">Xóa</a> --}}
+                                    <a class="btn btn-danger" data-bs-toggle="modal" href="#deleteStudent"
+                                        role="button">Xóa</a>
                                 </div>
                             </div>
                         </div>
@@ -258,6 +260,35 @@
 </div>
 {{!-- END FORM ADD STUDENT --}}
 
+
+{{!-- DELETE STUDENT --}}
+<!-- Modal -->
+<div class="modal fade" id="deleteStudent" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalToggleLabel">Bạn muốn xóa sinh viên này</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="post" id="form-delete">
+                    <div class="m-3">
+                        <label for="student-name">Nhập mật khẩu admin: </label>
+                        <input type="text" class="form-control mt-2" id="student-name" style="width: 350px;">
+                    </div>
+                </form>
+                <div class="text-danger mx-3">
+                    *Không thể phục hồi dữ liệu nếu thực hiện xóa
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="submit" form="form-delete" class="btn btn-danger">Xác nhận xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{!-- END DELETE STUDENT --}}
 
 
 <div class="modal fade mt-1" id="viewStudentDetailModal" tabindex="-1" aria-labelledby="viewStudentDetailModalLabel"
