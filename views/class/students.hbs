@@ -6,7 +6,6 @@
             <a href="/class/{{ClassName}}" style="text-decoration: underline; color: red;">Danh sách học sinh</a>
             |
             <a href="/class/{{ClassName}}/course" style="text-decoration: underline; color: gray;">Danh sách môn học</a>
-
         </div>
         <div>
             <div>GVCN: {{Teacher}}</div>
@@ -105,7 +104,9 @@
                                 </div>
 
                                 <div style="text-align: end; margin-top: -5px; margin-bottom: 5px; margin-right: 5px;">
-                                    <a href="#" class="btn btn-success">Xem chi tiết</a>
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                        data-bs-target="#viewStudentDetailModal" data-bs-mssv="mssv nè"
+                                        onclick="showModal(this)">Xem chi tiết</button>
                                     <a href="#" class="btn btn-success mx-3">Chỉnh sửa</a>
                                     <a href="#" class="btn btn-danger">Xóa</a>
                                 </div>
@@ -170,4 +171,150 @@
         <a href="#" class="btn btn-success">Thêm học sinh</a>
     </div>
 
+</div>
+
+<div class="modal fade mt-1" id="viewStudentDetailModal" tabindex="-1" aria-labelledby="viewStudentDetailModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title container-fluid" style="text-align: center; ">
+                    <h1 class=" fs-5" id="viewStudentDetailModalLabel">THÔNG TIN CHI TIẾT</h1>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mb-2">
+                <div>Thông tin cá nhân</div>
+                <div class="card mx-5">
+                    <div class="card-body container-fluid">
+                        <div class="d-flex justify-content-between container-fluid mx-4">
+                            <div>
+                                <div>Họ và tên: Lê Thị Ngọc Bích</div>
+                                <div>Giới tính: Nữ</div>
+                                <div>Ngày sinh: 10/04/2002</div>
+                                <div>Địa chỉ: Thủ Đức, Hồ Chí Minh</div>
+                            </div>
+
+                            <div style="width: 50%;">
+                                {{!-- <line style="height: 70px;"></line> --}}
+                                <div class="mx-5">
+                                    <div>TB HK1: 0.0</div>
+                                    <div>TB HK2: 0.0</div>
+                                    <div>CK: 0.0</div>
+                                    <div>Ghi chú: </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="my-2 d-flex">
+                    Bảng điểm
+                    <div class="mx-3">
+                        <a href="#" style="text-decoration: underline; color: red;">HK1</a>
+                        |
+                        <a href="#" style="text-decoration: underline; color: gray;">HK2</a>
+                    </div>
+
+                </div>
+                <div class="table-responsive bg-light" style="height: 350px; margin-inline: 20px;">
+                    <table class="table table-bordered table-sm" id="table-score-of-student">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="col-1">STT</th>
+                                <th scope="col" class="col-3">Tên môn học</th>
+                                <th scope="col" class="col-2">Điểm 15 phút</th>
+                                <th scope="col" class="col-2">Điểm 1 tiết</th>
+                                <th scope="col" class="col-2">Điểm cuối HK</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bs-spy="scroll" data-bs-smooth-scroll="true">
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>@mdo</td>
+                                <td>@mdo</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                                <td>@fat</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                                <td>@fat</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                                <td>@fat</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                                <td>@fat</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                                <td>@fat</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                                <td>@fat</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                                <td>@fat</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                                <td>@fat</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                                <td>@fat</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                                <td>@fat</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td colspan="2">Larry the Bird</td>
+                                <td colspan="2">@twitter</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

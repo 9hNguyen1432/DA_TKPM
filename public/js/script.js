@@ -26,3 +26,27 @@ $(document).ready(function() {
     $(item_course).prev().text(text)
 });
 
+$(document).on('show.bs.modal', '#viewStudentDetailModal',event => {
+    console.log("hihi")
+    const button = event.relatedTarget
+    // Extract info from data-bs-* attributes
+    const mssv = button.getAttribute('data-bs-mssv')
+    // If necessary, you could initiate an Ajax request here
+    // and then do the updating in a callback.
+
+    //get student info with ID 
+
+
+    // Update the modal's content.
+    //const modalTitle = this.querySelector('.modal-title')
+    const modalIDInfo = this.querySelector('.modal-body .ID')
+
+    // modalTitle.textContent = `New message to ${recipient}`
+    // modalBodyInput.value = recipient
+    modalIDInfo.value = mssv;
+    this.modal('show');
+    
+})
+
+
+
