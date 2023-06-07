@@ -25,3 +25,4 @@ $(document).ready(function() {
     var text = $(item_course).find('.active').text()
     $(item_course).prev().text(text)
 });
+
