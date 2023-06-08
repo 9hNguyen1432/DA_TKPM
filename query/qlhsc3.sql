@@ -1,5 +1,8 @@
 CREATE DATABASE [QLHSC3]
 
+--use master
+--DROP database [QLHSC3]
+
 USE QLHSC3
 GO
 
@@ -18,7 +21,7 @@ CREATE TABLE STUDENT (
 CREATE TABLE CLASS (
 	id varchar(10),
 	name varchar(10),
-	amountStudent int,
+	amount_student int,
 	year_id int,
 
 	PRIMARY KEY (id),
@@ -32,53 +35,135 @@ CREATE TABLE YEAR (
 )
 
 CREATE TABLE SUBJECT (
-	ID int,
-	Name varchar(30),
-	PRIMARY KEY (ID),
+	id int,
+	name varchar(30),
+
+	PRIMARY KEY (id),
 );
 
 CREATE TABLE EXAM_RESULT (
-    ExamID int,
-    StudentID varchar(10),
-	Mark float,
+    exam_id int,
+    student_id varchar(10),
+	mark float,
 );
 
 CREATE TABLE PARAMETERS (
-	MinAge int,
-	MaxAge int,
-	MaxStudent int,
-	NumOfClass int,
-	NameClass varchar(300),
-	NumOfSubject int,
-	NameOfSubject varchar(300),
-	StandardScore float,	
+	min_age int,
+	max_age int,
+	max_student int,
+	num_of_class int,
+	name_class varchar(300),
+	num_of_subject int,
+	name_of_subject varchar(300),
+	standard_score float,	
 )
 
 CREATE TABLE RESULT(
-	id INT PRIMARY KEY,
-	studentId VARCHAR(10),
-	subjectId INT,
-	semeter INT,
-	mark FLOAT
+	id INT,
+	student_id VARCHAR(10),
+	subject_id INT,
+	semester INT,
+	mark FLOAT,
+
+	PRIMARY KEY(id),
 )
 
 CREATE TABLE CLASS_SUBJECT(
-	classId VARCHAR(10),
-	subjectId INT,
-	PRIMARY KEY (classId, subjectId)
+	class_id VARCHAR(10),
+	subject_id INT,
+
+	PRIMARY KEY (class_id, subject_id)
 )
 
 
-CREATE TABLE SEMETER(
-	id INT PRIMARY KEY,
+CREATE TABLE SEMESTER(
+	id INT,
 	name VARCHAR(2),
-	yearId INT
+	year_id INT
+
+	PRIMARY KEY (id),
 )
 
 CREATE TABLE EXAM(
-	id INT PRIMARY KEY,
+	id INT,
 	name nvarchar(50),
-	subjectId int,
-	classId varchar(10),
-	semeterId int
+	subject_id int,
+	class_id varchar(10),
+	semester_id int
+
+	PRIMARY KEY (id),
 )
+
+--FOREIGN KEY
+
+--STUDENT: 1 FK
+ALTER TABLE STUDENT 
+ADD CONSTRAINT FK_STUDENT_CLASS
+FOREIGN KEY (class_id)
+REFERENCES CLASS(id);
+
+--CLASS: 1 FK
+ALTER TABLE CLASS 
+ADD CONSTRAINT FK_CLASS_YEAR
+FOREIGN KEY (year_id)
+REFERENCES YEAR(id);
+
+--RESULT:  3 FK
+ALTER TABLE RESULT 
+ADD CONSTRAINT FK_RESULT_SUBJECT
+FOREIGN KEY (subject_id)
+REFERENCES SUBJECT(id);
+
+ALTER TABLE RESULT 
+ADD CONSTRAINT FK_RESULT_SEMESTER
+FOREIGN KEY (semester)
+REFERENCES SEMESTER(id);
+
+ALTER TABLE RESULT 
+ADD CONSTRAINT FK_RESULT_STUDENT
+FOREIGN KEY (student_id)
+REFERENCES STUDENT(id);
+
+--CLASS_SUBJECT: 2 FK
+ALTER TABLE CLASS_SUBJECT
+ADD CONSTRAINT FK_CS_CLASS
+FOREIGN KEY (class_id)
+REFERENCES CLASS(id);
+
+ALTER TABLE CLASS_SUBJECT
+ADD CONSTRAINT FK_CS_SUBJECT
+FOREIGN KEY (subject_id)
+REFERENCES SUBJECT(id);
+
+--SEMESTER: 1 FK
+ALTER TABLE SEMESTER
+ADD CONSTRAINT FK_SEMESTER_YEAR
+FOREIGN KEY (year_id)
+REFERENCES YEAR(id);
+
+--EXAM: 3 FK
+ALTER TABLE EXAM
+ADD CONSTRAINT FK_EXAM_SEMESTER
+FOREIGN KEY (semester_id)
+REFERENCES SEMESTER(id);
+
+ALTER TABLE EXAM
+ADD CONSTRAINT FK_EXAM_CLASS
+FOREIGN KEY (class_id)
+REFERENCES CLASS(id);
+
+ALTER TABLE EXAM
+ADD CONSTRAINT FK_EXAM_SUBJECT
+FOREIGN KEY (subject_id)
+REFERENCES SUBJECT(id);
+
+--EXAM_RESULT: 2 FK
+ALTER TABLE EXAM_RESULT
+ADD CONSTRAINT FK_ER_STUDENT
+FOREIGN KEY (student_id)
+REFERENCES STUDENT(id);
+
+ALTER TABLE EXAM_RESULT
+ADD CONSTRAINT FK_ER_EXAM
+FOREIGN KEY (exam_id)
+REFERENCES EXAM(id);
