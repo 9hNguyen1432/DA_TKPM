@@ -35,8 +35,7 @@ $(document).on('show.bs.modal', '#viewStudentDetailModal',event => {
     // and then do the updating in a callback.
 
     //get student info with ID 
-
-
+    
     // Update the modal's content.
     //const modalTitle = this.querySelector('.modal-title')
     const modalIDInfo = this.querySelector('.modal-body .ID')

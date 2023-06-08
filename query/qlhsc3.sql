@@ -30,3 +30,25 @@ CREATE TABLE YEAR (
 
 	PRIMARY KEY (id),
 )
+
+CREATE TABLE SUBJECT (
+	ID int,
+	Name varchar(30),
+	PRIMARY KEY (ID),
+);
+
+CREATE TABLE EXAM_RESULT (
+	Mark float,
+);
+
+CREATE TABLE PARAMETERS (
+	MinAge int,
+	MaxAge int,
+	MaxStudent int,
+	NumOfClass int,
+	NameClass varchar(300),
+	NumOfSubject int,
+	NameOfSubject varchar(300),
+	StandardScore float,	
+)
+
