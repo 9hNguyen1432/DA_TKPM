@@ -41,8 +41,43 @@
 </div>
 
 <div class="text-end me-5">
-    <button type="button" class="btn btn-success"
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addClass"
         style="font-weight: bold; width:150px; position: fixed; bottom: 20px; right: 20px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
-        <i class="fas fa-plus"></i>  Thêm lớp
+        <i class="fas fa-plus"></i> Thêm lớp
     </button>
 </div>
+
+
+{{!-- ADD CLASS --}}
+<div class="modal fade" id="addClass" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalToggleLabel">Thêm lớp học</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="d-flex" id="form-add-class" method="post">
+                    <div class="border-end">
+                        <label for="country" style="width: 150px;">Chọn khối: </label>
+                        <select id="country" name="country" style="width: 100px;">
+                            <option value="usa">10</option>
+                            <option value="canada">11</option>
+                            <option value="uk">12</option>
+                        </select>
+                    </div>
+
+                    <div class="ms-5">
+                        <label for="class-name" style="width: 150px;">Tên lớp: </label>
+                        <input type="text">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="submit" form="form-delete" class="btn btn-success" formtarget="form-add-class">Thêm</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{!-- END ADD CLASS --}}

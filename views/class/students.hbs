@@ -173,6 +173,9 @@
         <p>1</p>
     </div>
     <div class="d-flex justify-content-center">
+        <button class="mt-3  btn btn-danger me-5" type="button" data-bs-toggle="modal" data-bs-target="#deleteClass">
+            Xóa lớp
+        </button>
         <button class="mt-3  btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#addStudent">
             Thêm học sinh
         </button>
@@ -267,7 +270,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalToggleLabel">Bạn muốn xóa sinh viên này</h5>
+                <h5 class="modal-title" id="exampleModalToggleLabel">Xác nhận xóa sinh viên</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -289,6 +292,35 @@
     </div>
 </div>
 {{!-- END DELETE STUDENT --}}
+
+{{!-- DELETE CLASS --}}
+<!-- Modal -->
+<div class="modal fade" id="deleteClass" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalToggleLabel">Xác nhận xóa lớp này</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="post" id="form-delete-class">
+                    <div class="m-3">
+                        <label for="student-name">Nhập mật khẩu admin: </label>
+                        <input type="text" class="form-control mt-2" id="student-name" style="width: 350px;">
+                    </div>
+                </form>
+                <div class="text-danger mx-3">
+                    *Không thể phục hồi dữ liệu nếu thực hiện xóa
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="submit" form="form-delete-class" class="btn btn-danger">Xác nhận xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{!-- END DELETE CLASS --}}
 
 
 <div class="modal fade mt-1" id="viewStudentDetailModal" tabindex="-1" aria-labelledby="viewStudentDetailModalLabel"
