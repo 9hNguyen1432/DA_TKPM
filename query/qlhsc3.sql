@@ -38,6 +38,8 @@ CREATE TABLE SUBJECT (
 );
 
 CREATE TABLE EXAM_RESULT (
+    ExamID int,
+    StudentID varchar(10),
 	Mark float,
 );
 
