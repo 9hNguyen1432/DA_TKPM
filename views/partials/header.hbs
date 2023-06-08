@@ -66,18 +66,20 @@
 <div class="modal fade" id="addYearModal" tabindex="-1" aria-labelledby="addYearModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header" >
+            <div class="modal-header">
                 <div class="modal-title container-fluid" style="text-align: center; ">
-                    <h1 class=" fs-5" id="addYearModalLabel" >ADD SCHOOL YEAR</h1>
+                    <h1 class=" fs-5" id="addYearModalLabel">TẠO NĂM HỌC MỚI</h1>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                    
+                <div class="d-flex my-3">
+                    <label for="start_year" class="form-label mt-1" style="width: 120px;">Năm bắt đầu :</label>
+                    <input type="number" class="form-control text-center" id="start_year" style="width: 120px;" value="2023" step="1" >
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-success">Tạo mới</button>
             </div>
         </div>
     </div>
