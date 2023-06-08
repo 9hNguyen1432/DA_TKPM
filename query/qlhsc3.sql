@@ -54,3 +54,31 @@ CREATE TABLE PARAMETERS (
 	StandardScore float,	
 )
 
+CREATE TABLE RESULT(
+	id INT PRIMARY KEY,
+	studentId VARCHAR(10),
+	subjectId INT,
+	semeter INT,
+	mark FLOAT
+)
+
+CREATE TABLE CLASS_SUBJECT(
+	classId VARCHAR(10),
+	subjectId INT,
+	PRIMARY KEY (classId, subjectId)
+)
+
+
+CREATE TABLE SEMETER(
+	id INT PRIMARY KEY,
+	name VARCHAR(2),
+	yearId INT
+)
+
+CREATE TABLE EXAM(
+	id INT PRIMARY KEY,
+	name nvarchar(50),
+	subjectId int,
+	classId varchar(10),
+	semeterId int
+)
