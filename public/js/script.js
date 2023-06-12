@@ -9,9 +9,9 @@ function changeItem_DD(item) {
 }
 
 $(document).ready(function() {
-    // var item_year = $('#yearmenu-dropdown')
-    // var text_year = $(item_year).find('.active').text()
-    // $(item_year).prev().text(text_year)
+    var item_year = $('#yearmenu-dropdown')
+    var text_year = $(item_year).find('.active').text()
+    $(item_year).prev().text(text_year)
 
     // var item_seme = $('#semestermenu-dropdown')
     // var text = $(item_seme).find('.active').text()
