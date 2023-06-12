@@ -1,6 +1,10 @@
+const Model = require("../models/data.model")
+
 class ClassPageController{
     async loadPage(req,res){
-        res.render('class/home');
+        let list_year = await Model.getYears();
+        console.log(list_year)
+        res.render('class/home',{Years: list_year});
     }
 
     async loadStudentListPage(req,res){

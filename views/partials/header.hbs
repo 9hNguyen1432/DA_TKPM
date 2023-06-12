@@ -33,43 +33,17 @@
                     width: 100px;">
                 </button>
                 <div class="dropdown-menu dropdown-menu-end" id="yearmenu-dropdown" style="min-width: 100px; ">
+                    {{#each Years}}
                     <button class="dropdown-item active" onclick="changeItem_DD(this)"
-                        style="font-size: 12px; text-align: center;">2020-2021</button>
-                    <button class="dropdown-item" onclick="changeItem_DD(this)"
-                        style="font-size: 12px; text-align: center;">2021-2022</button>
-                    <button class="dropdown-item" onclick="changeItem_DD(this)"
-                        style="font-size: 12px; text-align: center;">2022-2023</button>
+                        style="font-size: 12px; text-align: center;">{{name}}</button>
+                    {{/each}}
                     <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addYearModal"
                         style="font-size: 12px; text-align: center;">+</button>
                 </div>
             </div>
-            {{!-- <div class="mx-2">
-                <select class="py-1 px-2 fw-bold" aria-label=".form-select-lg example" style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9; 
-                    width: 110px; ">
-                    <option value="2020" style="font-size: 13px;">2020-2021</option>
-                    <option value="2021" style="font-size: 13px;">2021-2022</option>
-                    <option value="2022" selected style="font-size: 13px;">2022-2023</option>
-                    <option value="2023" style="font-size: 13px;">2023-2024</option>
-                    <option><button value="2023" style="font-size: 13px;" class="dropdown-item" data-bs-toggle="modal"
-                            data-bs-target="#addYearModal">+</button></option>
-
-                </select>
-            </div> --}}
         </div>
         <div class="d-flex mt-3">
             <div class="mt-1" style="font-size: 13px;">Học kỳ: </div>
-            {{!-- <div class="dropdown mx-2">
-                <button type="button" class="btn dropdown-toggle py-1 px-3 fw-bold" data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9;">
-                </button>
-                <div class="dropdown-menu dropdown-menu-end" id="semestermenu-dropdown" style="width: 60px;">
-                    <button class="dropdown-item active" onclick="changeItem_DD(this)"
-                        style="font-size: 12px; text-align: center;">1</button>
-                    <button class="dropdown-item" onclick="changeItem_DD(this)"
-                        style="font-size: 12px; text-align: center;">2</button>
-                </div>
-            </div> --}}
             <div class="mx-2">
                 <select class="py-1 px-3 fw-bold" aria-label=".form-select-lg example"
                     style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9;">
@@ -92,14 +66,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="d-flex my-3">
-                    <label for="start_year" class="form-label mt-1" style="width: 120px;">Năm bắt đầu :</label>
-                    <input type="number" class="form-control text-center" id="start_year" style="width: 120px;"
-                        value="2023" step="1">
-                </div>
+                <form action="setting/add_year" method="post" id="addYearForm">
+                    <div class="d-flex my-3">
+                        <label for="start_year" class="form-label mt-1" style="width: 120px;">Năm bắt đầu :</label>
+                        <input type="number" class="form-control text-center" id="start_year" name="start_year" style="width: 120px;"
+                            value="2023" step="1">
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success">Tạo mới</button>
+                <button type="button" form="addYearForm" class="btn btn-success">Tạo mới</button>
             </div>
         </div>
     </div>

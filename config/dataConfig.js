@@ -1,16 +1,13 @@
-var sql = require('mssql/msnodesqlv8');
 // information to connect to database
 var config = {
     server: "localhost",
     user: "sa",
-    password: "123456",
-    database: "QLDeTai",
+    password: "1",
+    database: "QLHSC3",
     driver: "msnodesqlv8"
 }
+//password
+//NB: 1
+//HC: 123456
 
-const conn = new sql.ConnectionPool(config).connect().then(pool => {return pool});
-
-module.exports = {
-    conn: conn,
-    sql: sql
-}
+module.exports = config;
