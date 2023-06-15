@@ -22,6 +22,12 @@ class ClassPageController{
         let course_name = req.params.course_name;
         res.render('class/courses_detail',{ClassName: class_name, Teacher: "Lê Thị Ngọc Bích", StudentNumber: 100, CourseName: course_name});
     }
+    
+    async importStudent(req,res){
+        let class_name = req.params.class_name;
+        let course_name = req.params.course_name;
+        res.render('class/import_students');
+    }
 }
 
 module.exports = new ClassPageController;
