@@ -6,6 +6,7 @@ var config = {
     database: "QLHSC3",
     driver: "msnodesqlv8"
 }
+
 //password
 //NB: 1
 //HC: 123456
