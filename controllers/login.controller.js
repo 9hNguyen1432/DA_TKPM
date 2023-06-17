@@ -1,7 +1,45 @@
+const account = require('../models/account')
+
 class LoginPageController{
     async loadPage(req,res){
         res.render('login_page',{header: 'none'});
     }
-}
+
+    async logIn(req, res, next){
+        const {username , password} = req.body;
+
+        let errors =[]
+
+        if(!username || !password){
+            errors.push("Vui lòng điền đầy đủ thông tin. ")
+            res.render('login_page',{username,password, errors,header:'none'})
+        }
+        else{
+            var result = await account.logIn(username,password)
+            if(result != true){
+               
+                errors.push("Tài khoản hoặc mật khẩu không chính xác");
+              
+                return res.render('login_page',{username,password,errors,header:'none'} );
+
+            }else{
+                
+                const user = account.user(username)
+                req.session.regenerate(function (err) {
+                    if (err) next(err)
+                    req.session.user = {
+                        ...user,
+                    };
+    
+                    req.session.save(function (err) {
+                        if (err) return next(err)
+                        res.redirect('/home')
+                    })
+                })
+            }
+           
+        }
+    }
+} 
 
 module.exports = new LoginPageController;
