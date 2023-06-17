@@ -22,16 +22,14 @@ CREATE TABLE CLASS (
 	id varchar(10),
 	name varchar(10),
 	amount_student int,
-	year_id int,
+	_year varchar(10),
 
 	PRIMARY KEY (id),
 )	
 
 CREATE TABLE YEAR (
-	id int,
-	name varchar(10),
-
-	PRIMARY KEY (id),
+	_year varchar(10),
+	PRIMARY KEY (_year),
 )
 
 CREATE TABLE SUBJECT (
@@ -62,7 +60,8 @@ CREATE TABLE RESULT(
 	id INT,
 	student_id VARCHAR(10),
 	subject_id INT,
-	semester INT,
+	_semester INT,
+	_year varchar(10),
 	mark FLOAT,
 
 	PRIMARY KEY(id),
@@ -77,11 +76,10 @@ CREATE TABLE CLASS_SUBJECT(
 
 
 CREATE TABLE SEMESTER(
-	id INT,
-	name VARCHAR(2),
-	year_id INT
+	_semester INT,
+	_year varchar(10)
 
-	PRIMARY KEY (id),
+	PRIMARY KEY (_semester,_year),
 )
 
 CREATE TABLE EXAM(
@@ -89,7 +87,8 @@ CREATE TABLE EXAM(
 	name nvarchar(50),
 	subject_id int,
 	class_id varchar(10),
-	semester_id int
+	_semester INT,
+	_year varchar(10)
 
 	PRIMARY KEY (id),
 )
@@ -105,8 +104,8 @@ REFERENCES CLASS(id);
 --CLASS: 1 FK
 ALTER TABLE CLASS 
 ADD CONSTRAINT FK_CLASS_YEAR
-FOREIGN KEY (year_id)
-REFERENCES YEAR(id);
+FOREIGN KEY (_year)
+REFERENCES YEAR(_year);
 
 --RESULT:  3 FK
 ALTER TABLE RESULT 
@@ -116,8 +115,8 @@ REFERENCES SUBJECT(id);
 
 ALTER TABLE RESULT 
 ADD CONSTRAINT FK_RESULT_SEMESTER
-FOREIGN KEY (semester)
-REFERENCES SEMESTER(id);
+FOREIGN KEY (_semester,_year)
+REFERENCES SEMESTER(_semester,_year);
 
 ALTER TABLE RESULT 
 ADD CONSTRAINT FK_RESULT_STUDENT
@@ -138,14 +137,14 @@ REFERENCES SUBJECT(id);
 --SEMESTER: 1 FK
 ALTER TABLE SEMESTER
 ADD CONSTRAINT FK_SEMESTER_YEAR
-FOREIGN KEY (year_id)
-REFERENCES YEAR(id);
+FOREIGN KEY (_year)
+REFERENCES YEAR(_year);
 
 --EXAM: 3 FK
 ALTER TABLE EXAM
 ADD CONSTRAINT FK_EXAM_SEMESTER
-FOREIGN KEY (semester_id)
-REFERENCES SEMESTER(id);
+FOREIGN KEY (_semester,_year)
+REFERENCES SEMESTER(_semester,_year);
 
 ALTER TABLE EXAM
 ADD CONSTRAINT FK_EXAM_CLASS
