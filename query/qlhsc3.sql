@@ -166,3 +166,35 @@ ALTER TABLE EXAM_RESULT
 ADD CONSTRAINT FK_ER_EXAM
 FOREIGN KEY (exam_id)
 REFERENCES EXAM(id);
+
+-- CREATE TABLE ACCOUNT AND PROCEDURE CREATE_ACCOUNT
+
+CREATE TABLE ACCOUNT (
+	username varchar(64),
+	password varchar(64)
+)
+
+
+CREATE PROCEDURE create_account
+(
+    @_username VARCHAR(64),
+    @_password VARCHAR(64)
+)
+AS
+BEGIN
+    IF EXISTS (SELECT * FROM ACCOUNT WHERE username = @_username)
+    BEGIN
+        PRINT 'Tai khoan da ton tai.'
+    END
+    ELSE
+    BEGIN
+        DECLARE @_crypto_pass VARCHAR(64)
+        SET @_crypto_pass = CONVERT(VARCHAR(32), HashBytes('MD5', @_password), 2)
+        INSERT INTO ACCOUNT VALUES (@_username, @_crypto_pass)
+    END
+END
+
+
+EXEC create_account 'user','user'
+
+SELECT * FROM ACCOUNT
