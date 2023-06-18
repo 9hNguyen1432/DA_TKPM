@@ -1,5 +1,5 @@
 function changeItem_DD(item) {
-    var parent=$(item).parent();
+    var parent = $(item).parent();
     var old_active = $(parent).find('.active');
     old_active.removeClass('active');
     $(this).addClass('active')
@@ -8,7 +8,7 @@ function changeItem_DD(item) {
     console.log(content)
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     var item_year = $('#yearmenu-dropdown')
     var text_year = $(item_year).find('.active').text()
     $(item_year).prev().text(text_year)
@@ -26,7 +26,7 @@ $(document).ready(function() {
     // $(item_course).prev().text(text)
 });
 
-$(document).on('show.bs.modal', '#viewStudentDetailModal',event => {
+$(document).on('show.bs.modal', '#viewStudentDetailModal', event => {
     console.log("hihi")
     const button = event.relatedTarget
     // Extract info from data-bs-* attributes
@@ -45,8 +45,30 @@ $(document).on('show.bs.modal', '#viewStudentDetailModal',event => {
     // modalBodyInput.value = recipient
     modalIDInfo.value = mssv;
     this.modal('show');
-    
+
 })
+
+function activeYear(item) {
+
+    //Edit current year here
+    var cur_year = "2023";
+
+    var child_list = $(item).children();
+    console.log(cur_year)
+    for (var i = 0; i < child_list.length; i++) {
+        var child = child_list.eq(i);
+        var year = child.attr('data');
+        if (year === cur_year) {
+            child.addClass('active');
+            break;
+        }
+    }
+
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    activeYear(document.getElementById("yearmenu-dropdown"));
+  });
 
 
 
