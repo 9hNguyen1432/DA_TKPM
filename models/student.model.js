@@ -2,13 +2,22 @@ var conn = require('./connect.model').conn
 
 
 module.exports = {
-    getStudentOfId: async (idStudent) => {
+    getStudentById: async (idStudent) => {
         try {
-            let query_string = `SELECT * FROM ACCOUNT WHERE username = '${user}'`
+            let query_string = `SELECT * FROM STUDENT WHERE ID = '${idStudent}'`
             let result = (await conn).query(query_string);
             return (await result);
         } catch (error) {
 
+        }
+    },
+    getStudentByName: async (studentName) => {
+        try {
+            let query_string = `SELECT * FROM STUDENT WHERE Name = '${studentName}'`;
+            let result = (await conn).query(query_string);
+            return (await result);
+        } catch (error) {
+            
         }
     },
 
@@ -21,5 +30,9 @@ module.exports = {
             return (await result);
         } catch (error) {
         }
+    },
+
+    addInfoStudent: async(studentDate) => {
+        //TODO: Do sth
     }
 }

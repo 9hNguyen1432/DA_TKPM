@@ -2,34 +2,37 @@
     <h5 class="card py-2 shadow-sm" style="width: 400px; text-align: center; margin: 15px auto; border-radius: 10px;">
         TRA CỨU HỌC SINH
     </h5>
-    {{!-- Search bar --}}
-    <div class="d-flex justify-content-between">
-        <div class="d-flex">
-            <div>Thông tin tìm kiếm:</div>
-            <div class="d-flex mx-2">
-                <div>
-                    <input type="radio" id="html" name="fav_language" value="HTML">
-                    <label for="html">MSSV</label><br>
-                </div>
+    <form method="post">
+        {{!-- Search bar --}}
+        <div class="d-flex justify-content-between" style="margin: 0 150px;">
+            <div class="d-flex">
+                <div>Thông tin tìm kiếm:</div>
+                <div class="d-flex mx-2">
+                    <div>
+                        <input type="radio" id="mssv" name="type_search" value="mssv" checked>
+                        <label for="mssv">MSSV</label><br>
+                    </div>
 
-                <div class="mx-4">
-                    <input type="radio" id="html" name="fav_language" value="HTML">
-                    <label for="html">Họ và tên</label><br>
-                </div>
+                    <div class="mx-4">
+                        <input type="radio" id="name" name="type_search" value="name">
+                        <label for="name">Họ và tên</label><br>
+                    </div>
 
+                </div>
+            </div>
+
+            <div class="search-input">
+                <div class="input-group rounded">
+                    <input type="search" class="form-control rounded" placeholder="Nhập thông tin" aria-label="Search"
+                        aria-describedby="search-addon" name="search_input" />
+                    <button class="input-group-text border-0" id="search-addon">
+                        <i class="fas fa-search"></i>
+                        </span>
+                </div>
             </div>
         </div>
+    </form>
 
-        <div class="search-input">
-            <div class="input-group rounded">
-                <input type="search" class="form-control rounded" placeholder="Nhập thông tin" aria-label="Search"
-                    aria-describedby="search-addon" />
-                <button class="input-group-text border-0" id="search-addon">
-                    <i class="fas fa-search"></i>
-                    </span>
-            </div>
-        </div>
-    </div>
 
     {{#if students}}
     {{!-- Result --}}

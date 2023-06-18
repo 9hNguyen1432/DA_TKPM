@@ -1,6 +1,5 @@
 const Model = require("../models/data.model")
 const fs = require('fs');
-const { createObjectCsvWriter } = require('csv-writer');
 const DataHelper = require('../helper/Helper');
 const student = require('../models/student.model');
 const subject = require('../models/subject.model')
@@ -60,6 +59,17 @@ class ClassPageController {
 
         // Send the CSV data to the client
         res.send(csv);
+    }
+
+    async getInfoStudent(req, res){
+        console.log('Get Student');
+        res.send(`{"name":"toainguyen", "gender":"femail", "birthday":"20/10/2002","address":"Binh Dinh", "phone":"0348871531","note":"Yeu Giang"}`);
+    }
+
+    async addStudent(req, res){
+        
+        let class_name = req.params.class_name;
+        res.render('class/students', { ClassName: class_name, Teacher: "Lê Thị Ngọc Bích", StudentNumber: 100 });
     }
 }
 
