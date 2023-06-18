@@ -4,6 +4,7 @@ const { createObjectCsvWriter } = require('csv-writer');
 const multer = require('multer');
 const DataHelper = require('../helper/Helper');
 const student = require('../models/student.model');
+const Class = require('../models/class.model');
 const subject = require('../models/subject.model')
 const mo = require("../models/class.model")
 
@@ -16,6 +17,8 @@ class ClassPageController {
 
     async loadStudentListPage(req, res) {
         let class_name = req.params.class_name;
+        let year = "2021-2022"
+
         res.render('class/students', { ClassName: class_name, Teacher: "Lê Thị Ngọc Bích", StudentNumber: 100 });
     }
 
