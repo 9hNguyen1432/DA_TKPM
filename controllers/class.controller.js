@@ -68,7 +68,7 @@ class ClassPageController {
         let semester = 1;
         //
         //TODO get current class
-
+        student.getAStudent("2110002");
         //
         let allClass = await mo.getAllClassInYear(year);
         let allClassName = allClass.map(_class => _class.name);
