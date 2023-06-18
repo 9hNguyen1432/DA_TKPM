@@ -1,8 +1,8 @@
 // information to connect to database
 var config = {
-    server: "LAPTOP-GAU8P18F\\SQLEXPRESS02",
+    server: "localhost",
     user: "sa",
-    password: "123",
+    password: "123456",
     database: "QLHSC3",
     driver: "msnodesqlv8"
 }
