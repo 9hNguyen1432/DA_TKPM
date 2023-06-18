@@ -2,10 +2,15 @@ const express = require('express')
 const router = express.Router()
 const classController =  require("../controllers/class.controller");
 const {isNotAuthenticated} = require("..//middlewares/auth")
+//
+var multer = require('multer')
+var storage = multer.memoryStorage();
+var upload = multer({ storage: storage });
 
 router.get('/:class_name/modify_student/:student_id', classController.getInfoStudent);
 router.post('/:class_name/modify_student/:student_id', classController.addStudent);
-router.get('/:class_name/import',classController.importStudent);
+router.get('/:class_name/import',classController.importStudentRender);
+router.post('/:class_name/import', upload.fields([{name: "danhsachhocsinh"}]),classController.importStudentHandle);
 router.get('/:class_name/course/:course_name',classController.loadCourseDetailPage);
 router.get('/:class_name/course',classController.loadCourseListPage);
 router.get('/:class_name',classController.loadStudentListPage);
