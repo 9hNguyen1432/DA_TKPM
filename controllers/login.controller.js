@@ -40,6 +40,11 @@ class LoginPageController{
            
         }
     }
+
+    async logOut(req, res, next){
+        req.session.destroy();
+        res.redirect('/');
+    }
 } 
 
 module.exports = new LoginPageController;
