@@ -29,7 +29,7 @@ exports.checkListStudent = async (listStudent, semester) => {
             listStudentInvalid.push(Student)
         }
     }
-    if (listStudentValid.length <= rules.maxStudent) {
+    if (listStudentValid.length <= rules.maxStudents) {
         constrainNumOfStudents = true;
     }
     const returnObject = {

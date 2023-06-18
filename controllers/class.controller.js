@@ -1,6 +1,7 @@
 const Model = require("../models/data.model");
 const fs = require('fs');
 const { createObjectCsvWriter } = require('csv-writer');
+const multer = require('multer');
 const DataHelper = require('../helper/Helper');
 const student = require('../models/student.model');
 const subject = require('../models/subject.model')
@@ -79,11 +80,11 @@ class ClassPageController {
                 maxStudents: 40
             }
             //
-            console.log(req)
+            console.log(req.body)
             var csvFileStudent = await mo.CSVFiletoJsonObject(req.files.danhsachhocsinh[0].buffer.toString('utf8'))
             var validedData = await mo.checkListStudent(csvFileStudent);
             var errors = [];
-
+            console.log(validedData)
             var classChoosen = req.body.class;
             var teacher = req.body.gvcn;
             var success = false
