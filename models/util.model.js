@@ -6,6 +6,18 @@ exports.getAge = (DOB) => {
     var yyyy = today.getFullYear();
     return yyyy-DOByyyy;
 }
+exports.checkValidMonth = (DOB) => {
+    var DOBmm = DOB.split('/')[1];
+    return DOBmm <= 12;
+}
+exports.changFormatDayMMDD = (DOB) => {
+    var DOBsplit = DOB.split('/');
+    temp = DOBsplit[0];
+    DOBsplit[0] = DOBsplit[1];
+    DOBsplit[1] = temp;
+
+    return DOBsplit.join("/");
+}
 
 exports.isBetween = (vari, start, end)=>{
     if (vari <= end && vari >= start){

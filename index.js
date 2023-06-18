@@ -32,17 +32,6 @@ app.use(session({
     cookie: { maxAge: oneDay }
 }))
 
-//HBS
-app.engine('hbs', hbs.engine({
-    extname: 'hbs',
-    defaultLayout: 'main',
-    layoutsDir: path.join(__dirname, '/views/layouts'),
-    partialsDir  : [
-        path.join(__dirname, '/views/partials')
-    ]
-}));
-
-
 routes(app)
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));

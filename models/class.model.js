@@ -1,6 +1,8 @@
 const csv = require('csvtojson')
+var conn = require('./connect.model').conn
+var util = require('./util.model')
 
-exports.checkListStudent = async (listStudent, semester) => {
+exports.checkListStudent = async (listStudent, amountStudent) => {
     // TODO: load rule from database
     var rules = {
         minAge: 15,
@@ -18,7 +20,9 @@ exports.checkListStudent = async (listStudent, semester) => {
     for (let Student of listStudent) {
         try {
             let age = util.getAge(Student.DOB);
-            if (util.isBetween(age, rules.minAge, rules.maxAge)) {
+            let checkValidMonth = util.checkValidMonth(Student.DOB);
+            if (util.isBetween(age, rules.minAge, rules.maxAge) && checkValidMonth) {
+                Student.DOB = util.changFormatDayMMDD(Student.DOB);
                 listStudentValid.push(Student)
             }
             else {
@@ -29,7 +33,7 @@ exports.checkListStudent = async (listStudent, semester) => {
             listStudentInvalid.push(Student)
         }
     }
-    if (listStudentValid.length <= rules.maxStudents) {
+    if (amountStudent + listStudentValid.length <= rules.maxStudents) {
         constrainNumOfStudents = true;
     }
     const returnObject = {
@@ -61,4 +65,26 @@ exports.CSVFiletoJsonObject = async (uriFile) => {
         headers: ['stt', 'name', 'gender', 'DOB', 'address']
     }).fromString(uriFile);
     return jsonArray;
+}
+
+exports.getClass = async (className, year) => {
+    try {
+        var query_string = `SELECT * FROM CLASS WHERE name = '${className}' and _year = '${year}'`;
+        let result = (await conn).query(query_string);
+        return (await result).recordset[0];
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+exports.getAllClassInYear = async (year) => {
+    try {
+        var query_string = `SELECT * FROM CLASS WHERE _year = '${year}'`;
+        let result = (await conn).query(query_string);
+        return (await result).recordset;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
 }

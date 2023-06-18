@@ -59,19 +59,33 @@ class ClassPageController {
 
     //for method get(/:class_name/import)
     async importStudentRender(req, res) {
-        let class_name = req.params.class_name;
-        let course_name = req.params.course_name;
-        res.render('class/import_students');
+        var user = req.session.user;
+        //TODO:get year and semester:
+        let year = "2021-2022";
+        let semester = 1;
+        //
+        //TODO get current class
+
+        //
+        let allClass = await mo.getAllClassInYear(year);
+        let allClassName = allClass.map(_class => _class.name);
+        //
+        res.render('class/import_students',  { user, year, semester, allClassName});
     }
     //for method post(/:class_name/import)
     async importStudentHandle(req, res, next) {
         // console.log(req.files)
-        //TODO: get user
         var user = req.session.user
-        var user = "Chinh";
         //
         
+        let year = "2021-2022";
+        let semester = 1;
+        //
+        //TODO get current class
 
+        //
+        let allClass = await mo.getAllClassInYear(year);
+        let allClassName = allClass.map(_class => _class.name);
         try {
             // TODO: load rule from database
             var rule = {
@@ -80,44 +94,49 @@ class ClassPageController {
                 maxStudents: 40
             }
             //
-            console.log(req.body)
+            var classChoosen = req.body.class.trim();
+            console.log(classChoosen)
+            var teacher = req.body.gvcn;
+            let classInfo = await mo.getClass(classChoosen,"2021-2022");
+            let amountStudent = classInfo.amount_student;
+            //
             var csvFileStudent = await mo.CSVFiletoJsonObject(req.files.danhsachhocsinh[0].buffer.toString('utf8'))
-            var validedData = await mo.checkListStudent(csvFileStudent);
+            var validedData = await mo.checkListStudent(csvFileStudent, amountStudent);
             var errors = [];
             console.log(validedData)
-            var classChoosen = req.body.class;
-            var teacher = req.body.gvcn;
+
             var success = false
             if (validedData.constrainNumOfStudents == false) {
                 errors.push("Số học sinh của lớp không hợp lệ (tối đa " + rule.maxStudents + ")");
                 if (validedData.listStudentInvalid.length != 0) {
                     for (let Student of validedData.listStudentInvalid) {
-                        errors.push("Thông tin học sinh " + Student.name + " Không hợp lệ.");
+                        errors.push("Thông tin học sinh " + Student.name + " Không hợp lệ. (Lưu ý: Ngày sinh: mm/dd/yyyy)");
                     }
-                    res.render('class/import_students', { user, errors })
+                    res.render('class/import_students', { user, errors, allClassName })
                 }
             }
 
             else {
                 if (validedData.listStudentInvalid.length != 0) {
                     for (let Student of validedData.listStudentInvalid) {
-                        errors.push("Thông tin học sinh " + Student.name + " Không hợp lệ.");
+                        errors.push("Thông tin học sinh " + Student.name + " Không hợp lệ. (Lưu ý: Ngày sinh: mm/dd/yyyy)");
                     }
-                    res.render('class/import_students', { user, errors })
+                    res.render('class/import_students', { user, errors, allClassName })
                     return;
                 }
                 success = true
                 //TODO save in database
                 var listStudent = validedData.listStudentValid
+                var id = await student.getTheNewestStuedentID(classChoosen, year);
+                await student.addListStudent(listStudent, id, classInfo);
 
-
-                res.render('class/import_students', { user, errors })
+                res.render('class/import_students', { user, errors, allClassName })
             }
 
         }
         catch (err) {
             console.log(err)
-            res.render('class/import_students', { user, errors })
+            res.render('class/import_students', { user, errors, allClassName })
 
         }
 
