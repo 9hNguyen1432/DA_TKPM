@@ -4,7 +4,7 @@ var config = {
     user: "sa",
     password: "123456",
     database: "QLHSC3",
-    driver: "msnodesqlv8"
+    driver: "msnodesqlv8",
 }
 
 //password
