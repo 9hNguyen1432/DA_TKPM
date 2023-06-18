@@ -67,7 +67,7 @@ class ClassPageController {
     async importStudentHandle(req, res, next) {
         // console.log(req.files)
         //TODO: get user
-        // var user = req.session.user
+        var user = req.session.user
         var user = "Chinh";
         //
         
@@ -92,7 +92,7 @@ class ClassPageController {
                 errors.push("Số học sinh của lớp không hợp lệ (tối đa " + rule.maxStudents + ")");
                 if (validedData.listStudentInvalid.length != 0) {
                     for (let Student of validedData.listStudentInvalid) {
-                        errors.push("Thông tin học sinh " + Student.ten + " Không hợp lệ.");
+                        errors.push("Thông tin học sinh " + Student.name + " Không hợp lệ.");
                     }
                     res.render('class/import_students', { user, errors })
                 }
@@ -101,7 +101,7 @@ class ClassPageController {
             else {
                 if (validedData.listStudentInvalid.length != 0) {
                     for (let Student of validedData.listStudentInvalid) {
-                        errors.push("Thông tin cầu thủ " + Student.ten + " Không hợp lệ.");
+                        errors.push("Thông tin học sinh " + Student.name + " Không hợp lệ.");
                     }
                     res.render('class/import_students', { user, errors })
                     return;
