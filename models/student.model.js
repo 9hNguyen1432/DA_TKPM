@@ -48,6 +48,15 @@ addAStudent = async function (student) {
             } catch (error) {
             }
         },
+        getListStudentInClass_2: async (className, year) => {
+            try {
+                let query_string = `SELECT * FROM STUDENT st, CLASS cl WHERE st.class_id = cl.ID AND cl.Name = '${className}' AND cl._year = '${year}'`;
+                let result = (await conn).query(query_string);
+
+                return (await result).recordset;
+            } catch (error) {
+            }
+        },
         getAStudent: async (id) => {
             let query_string = `SELECT * FROM STUDENT
                             WHERE id = '${id}'`;

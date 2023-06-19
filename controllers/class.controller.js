@@ -4,6 +4,7 @@ const { createObjectCsvWriter } = require('csv-writer');
 const multer = require('multer');
 const DataHelper = require('../helper/Helper');
 const student = require('../models/student.model');
+const Class = require('../models/class.model');
 const subject = require('../models/subject.model')
 const mo = require("../models/class.model")
 
@@ -14,9 +15,27 @@ class ClassPageController {
         res.render('class/home', { Years: list_year });
     }
 
+
     async loadStudentListPage(req, res) {
         let class_name = req.params.class_name;
-        res.render('class/students', { ClassName: class_name, Teacher: "Lê Thị Ngọc Bích", StudentNumber: 100 });
+        let year = "2021-2022"
+        const _class = await Class.getClass(class_name,year).amount_student;
+        var listStudent = await student.getListStudentInClass_2(class_name, year);
+        listStudent.forEach((student,index) => {
+            student.stt = index + 1;
+            student.name = student.name[0];
+            student.id = student.id[0];
+           
+            var date = new Date(student.dob.toString());
+            var day = date.getDate();
+            var month = date.getMonth() + 1; // Tháng trong JavaScript bắt đầu từ 0
+            var year = date.getFullYear();
+            day = (day < 10) ? "0" + day : day;
+            month = (month < 10) ? "0" + month : month;
+
+            student.dob  = day + "/" + month + "/" + year;
+        })
+        res.render('class/students', { ClassName: class_name, Teacher: "Lê Thị Ngọc Bích", class: _class, listStudent: listStudent});
     }
 
     async loadCourseListPage(req, res) {
