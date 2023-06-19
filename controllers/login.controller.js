@@ -33,7 +33,7 @@ class LoginPageController{
     
                     req.session.save(function (err) {
                         if (err) return next(err)
-                        res.redirect('/home')
+                        res.redirect('/class')
                     })
                 })
             }

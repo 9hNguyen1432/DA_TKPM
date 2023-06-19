@@ -1,4 +1,4 @@
-const Model = require("../models/data.model")
+const Model = require("../models/year.model")
 
 class SettingPageController {
 
@@ -7,12 +7,12 @@ class SettingPageController {
     }
 
     async addYear(req, res) {
-        let start_year = req.params.start_year;
-        let next_year = start_year + 1;
-        let year_name = "" + start_year + " - " + next_year;
-        await Model.addYear(start_year,year_name)
+        let year = req.body.start_year;
+        console.log(year);
 
-        location.reload();
+        await Model.addYear(year)
+
+        res.redirect('/class')
     }
 }
 

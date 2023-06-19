@@ -1,4 +1,4 @@
-const Model = require("../models/data.model");
+const Model = require("../models/year.model")
 const fs = require('fs');
 const { createObjectCsvWriter } = require('csv-writer');
 const multer = require('multer');
