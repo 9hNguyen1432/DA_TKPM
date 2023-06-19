@@ -34,7 +34,7 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-end" id="yearmenu-dropdown" style="min-width: 100px; ">
                     {{#each Years}}
-                    <button class="dropdown-item active" onclick="changeItem_DD(this)"
+                    <button current-year = "2021-2022" class="dropdown-item active" onclick="changeItem_DD(this)"
                         style="font-size: 12px; text-align: center;">{{name}}</button>
                     {{/each}}
                     <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addYearModal"

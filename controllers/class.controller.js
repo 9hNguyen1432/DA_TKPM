@@ -19,13 +19,13 @@ class ClassPageController {
     async loadStudentListPage(req, res) {
         let class_name = req.params.class_name;
         let year = "2021-2022"
-        const _class = await Class.getClass(class_name,year).amount_student;
+        const _class = await Class.getClass(class_name, year).amount_student;
         var listStudent = await student.getListStudentInClass_2(class_name, year);
-        listStudent.forEach((student,index) => {
+        listStudent.forEach((student, index) => {
             student.stt = index + 1;
             student.name = student.name[0];
             student.id = student.id[0];
-           
+
             var date = new Date(student.dob.toString());
             var day = date.getDate();
             var month = date.getMonth() + 1; // Tháng trong JavaScript bắt đầu từ 0
@@ -33,9 +33,9 @@ class ClassPageController {
             day = (day < 10) ? "0" + day : day;
             month = (month < 10) ? "0" + month : month;
 
-            student.dob  = day + "/" + month + "/" + year;
+            student.dob = day + "/" + month + "/" + year;
         })
-        res.render('class/students', { ClassName: class_name, Teacher: "Lê Thị Ngọc Bích", class: _class, listStudent: listStudent});
+        res.render('class/students', { ClassName: class_name, Teacher: "Lê Thị Ngọc Bích", class: _class, listStudent: listStudent });
     }
 
     async loadCourseListPage(req, res) {
@@ -50,7 +50,7 @@ class ClassPageController {
     }
 
     async downloadStudentsOfClass_CSV(req, res) {
-        const data = await student.getListStudentInClass("12A1", "2021-2022")
+        const data = await student.getListStudentInClass_2("12A1", "2021-2022")
 
         // Convert the data to CSV format
         const csv = DataHelper.convertToCsv(data);
@@ -63,7 +63,7 @@ class ClassPageController {
         res.send(csv);
     }
 
-    async downloadTranscriptOfSubject_CSV(req,res){
+    async downloadTranscriptOfSubject_CSV(req, res) {
         const data = await subject.getTranscriptOfSubject("Toan", "10A1");
 
         // Convert the data to CSV format
@@ -77,17 +77,21 @@ class ClassPageController {
         res.send(csv);
     }
 
-    async getInfoStudent(req, res){
-        console.log('Get Student');
-        res.send(`{"name":"toainguyen", "gender":"femail", "birthday":"20/10/2002","address":"Binh Dinh", "phone":"0348871531","note":"Yeu Giang"}`);
+    async getInfoStudent(req, res) {
+        const className = req.params.class_name;
+        const studentId = req.params.student_id;
+        const year = req.query.year;
+        console.log("Get info student with: " + className + " " + studentId + " " + year);
+
+        const studentData = await student.getAStudent(studentId);
+
+        res.send(studentData);
     }
 
-    async addStudent(req, res){
-        
-        let class_name = req.params.class_name;
-        res.render('class/students', { ClassName: class_name, Teacher: "Lê Thị Ngọc Bích", StudentNumber: 100 });
+    async addStudent(req, res) {
+        await this.loadStudentListPage(req,res);
     }
-    
+
     //for method get(/:class_name/import)
     async importStudentRender(req, res) {
         var user = req.session.user;
@@ -101,15 +105,15 @@ class ClassPageController {
         let allClass = await mo.getAllClassInYear(year);
         let allClassName = allClass.map(_class => _class.name);
         //
-        res.render('class/import_students',  { user, year, semester, allClassName});
+        res.render('class/import_students', { user, year, semester, allClassName });
     }
-    
+
     //for method post(/:class_name/import)
     async importStudentHandle(req, res, next) {
         // console.log(req.files)
         var user = req.session.user
         //
-        
+
         let year = "2021-2022";
         let semester = 1;
         //
@@ -129,7 +133,7 @@ class ClassPageController {
             var classChoosen = req.body.class.trim();
             console.log(classChoosen)
             var teacher = req.body.gvcn;
-            let classInfo = await mo.getClass(classChoosen,"2021-2022");
+            let classInfo = await mo.getClass(classChoosen, "2021-2022");
             let amountStudent = classInfo.amount_student;
             //
             var csvFileStudent = await mo.CSVFiletoJsonObject(req.files.danhsachhocsinh[0].buffer.toString('utf8'))

@@ -1,16 +1,6 @@
 var conn = require('./connect.model').conn
 
 addAStudent = async function (student) {
-    // try {
-    //     let query_string = `insert into STUDENT(id, name, gender, dob, email ,address,class_id)'
-    //                     values('${student.id}','${student.name}','${student.gender}','${student.dob}',
-    //                     '${student.email}','${student.address}',${student.class_id})`
-    //         ;
-    //     let result = (await conn).query(query_string);
-    //     console.log("save ok")
-    //     return (await result);
-    // } catch (error) {
-    // }
     conn.then(pool => {
         let query_string = `insert into STUDENT(id, name, gender, dob, email ,address,class_id)
             values('${student.id}',N'${student.name}',N'${student.gender}','${student.dob}',
@@ -25,18 +15,7 @@ addAStudent = async function (student) {
     });
 },
     module.exports = {
-        getStudentOfId: async (idStudent) => {
-            try {
-                let query_string = `SELECT * FROM ACCOUNT WHERE username = '${user}'`
-                let result = (await conn).query(query_string);
-                return (await result);
-            } catch (error) {
-
-            }
-        },
-
         addAStudent,
-
 
         getListStudentInClass: async (className, year) => {
             try {
@@ -62,9 +41,10 @@ addAStudent = async function (student) {
                             WHERE id = '${id}'`;
             let result = (await conn).query(query_string);
             console.log(await result);
-            return (await result);
+            console.log((await result).recordset);
+            return (await result).recordset[0];
         },
-        getTheNewestStuedentID: async (_class, year) => {
+        getTheNewestStudentID: async (_class, year) => {
             try {
                 let query_string = `SELECT st.id as id, cl.name as classname FROM STUDENT st, CLASS cl
                             WHERE st.class_id = cl.id AND cl._year = '${year}'`;
@@ -98,5 +78,15 @@ addAStudent = async function (student) {
                 }
                 await addAStudent(student);
             }
-        }
+        },
+
+        getListStudentInClassByID: async (idStudent, className, year) => {
+            try {
+                let query_string = `SELECT * FROM STUDENT st, CLASS cl WHERE st.class_id = cl.ID AND cl.Name = '${className}' AND cl._year = '${year}' AND st.id = '${idStudent}'`;
+                let result = (await conn).query(query_string);
+
+                return (await result).recordset;
+            } catch (error) {
+            }
+        },
     }
