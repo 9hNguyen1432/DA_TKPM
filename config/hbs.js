@@ -7,6 +7,18 @@ module.exports = (app) => {
     handlebars.engine({
       extname: ".hbs",
       helpers: {
+        rendercombolist: function (value, options) {
+          let item = "";
+          for (let i = 0; i < value.length; i++) {
+            if (i==0){
+              item = item + "<option value='"+options.fn(value[i])+"' selected>" + options.fn(value[i]) + "</option>"
+            }
+            else{
+            item = item + "<option value='"+options.fn(value[i])+"'>" + options.fn(value[i]) + "</option>";
+          }
+        }
+          return item
+        },
         plus1: function (number, option) {
           var num = parseInt(number);
           var out = num+1;
@@ -40,18 +52,6 @@ module.exports = (app) => {
     //       else if(value =="isFinished"){
     //         return "Đã kết thúc"
     //       }
-    //     },
-    //     rendercombolist: function (value, options) {
-    //       let item = "";
-    //       for (let i = 0; i < value.length; i++) {
-    //         if (i==0){
-    //           item = item + "<option value='"+options.fn(value[i])+"' selected>" + options.fn(value[i]) + "</option>"
-    //         }
-    //         else{
-    //         item = item + "<option value='"+options.fn(value[i])+"'>" + options.fn(value[i]) + "</option>";
-    //       }
-    //     }
-    //       return item
     //     },
     //     renderlines: function (value, options) {
     //       let item = "";

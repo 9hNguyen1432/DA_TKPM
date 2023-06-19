@@ -45,9 +45,6 @@ app.use(session({
     cookie: { maxAge: oneDay }
 }))
 
-
-
-
 routes(app)
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
