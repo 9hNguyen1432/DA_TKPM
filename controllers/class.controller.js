@@ -48,6 +48,7 @@ class ClassPageController {
         let course_name = req.params.course_name;
         res.render('class/courses_detail', { ClassName: class_name, Teacher: "Lê Thị Ngọc Bích", StudentNumber: 100, CourseName: course_name });
     }
+
     async downloadStudentsOfClass_CSV(req, res) {
         const data = await student.getListStudentInClass("12A1", "2021-2022")
 
@@ -102,6 +103,7 @@ class ClassPageController {
         //
         res.render('class/import_students',  { user, year, semester, allClassName});
     }
+    
     //for method post(/:class_name/import)
     async importStudentHandle(req, res, next) {
         // console.log(req.files)

@@ -1,9 +1,12 @@
 // information to connect to database
 var config = {
-    server: "localhost",
-    user: "sa",
-    password: "123456",
+    server: "TOAINGUYEN\\SQLEXPRESS",
+    user: "toainguyenvan",
+    password: "toainguyenvan",
     database: "QLHSC3",
+    options: {
+        trustedConnection: true,
+    },
     driver: "msnodesqlv8",
 }
 
