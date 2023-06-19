@@ -12,9 +12,9 @@ module.exports = {
             return null;
         }
     },
-    addYear: async (_id, _yearname) => {
+    addYear: async (_year) => {
         try {
-            var query_string = `INSERT INTO YEAR VALUES(${_id}),'${_yearname}'`;
+            var query_string = `INSERT INTO YEAR VALUES(${_year})`;
             let result = (await conn).query(query_string)
             return result;
         } catch (error) {

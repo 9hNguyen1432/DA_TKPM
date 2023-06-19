@@ -19,6 +19,13 @@ module.exports = (app) => {
         }
           return item
         },
+        plus1: function (number, option) {
+          var num = parseInt(number);
+          var out = num+1;
+          
+          console.log(out)
+          return out;
+      }
         // ifNotEqualZero: function (value,status , options) {
         //   if (value > 0) {
         //     return value;

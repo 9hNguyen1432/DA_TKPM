@@ -1,3 +1,5 @@
+<script rel="stylesheet" type="text/javascript" src="/js/script.js"></script>
+
 <nav id="header" class="navbar form-inline px-4 shadow d-{{header}}
     shadow-sm" style="border-radius: 0 0 20px 20px; ">
     <div class="d-flex">
@@ -30,12 +32,12 @@
             <div class="dropdown mx-2">
                 <button type="button" class="btn dropdown-toggle py-1 fw-bold" data-bs-toggle="dropdown"
                     aria-expanded="false" style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9;
-                    width: 100px;">
+                    width: 110px;">
                 </button>
-                <div class="dropdown-menu dropdown-menu-end" id="yearmenu-dropdown" style="min-width: 100px; ">
+                <div class="dropdown-menu dropdown-menu-end" id="yearmenu-dropdown" style="min-width: 110px;" onloadeddata="activeYear(this)">
                     {{#each Years}}
-                    <button class="dropdown-item active" onclick="changeItem_DD(this)"
-                        style="font-size: 12px; text-align: center;">{{name}}</button>
+                    <button class="dropdown-item" onclick="changeItem_DD(this)"
+                        style="font-size: 12px; text-align: center;" data={{_year}}>{{_year}} - {{plus1 _year}}</button>
                     {{/each}}
                     <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addYearModal"
                         style="font-size: 12px; text-align: center;">+</button>
@@ -56,6 +58,7 @@
     </div>
 </nav>
 
+{{!-- ADD YEAR MODEL --}}
 <div class="modal fade" id="addYearModal" tabindex="-1" aria-labelledby="addYearModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
@@ -75,8 +78,9 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" form="addYearForm" class="btn btn-success">Tạo mới</button>
+                <button type="submit" form="addYearForm" class="btn btn-success">Tạo mới</button>
             </div>
         </div>
     </div>
 </div>
+
