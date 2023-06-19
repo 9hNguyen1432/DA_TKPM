@@ -11,7 +11,7 @@ var config = {
 }
 
 //password
-//NB: 1
+//NB: PANDA\\SQLEXPRESS01 - 1
 //HC: 123456
 //TT: 123
 module.exports = config;
