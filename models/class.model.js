@@ -1,15 +1,11 @@
 const csv = require('csvtojson')
 var conn = require('./connect.model').conn
 var util = require('./util.model')
+const regulation = require('./regulation.model');
 
-exports.checkListStudent = async (listStudent, amountStudent) => {
+exports.checkListStudent = async (listStudent, amountStudent, year) => {
     // TODO: load rule from database
-    var rules = {
-        minAge: 15,
-        maxAge: 20,
-        maxStudents: 40
-    }
-    //TODO: load number student of Class
+    var rules = await regulation.getRegulation(year);
     let numStudent= 0;
     // lish hoc sinh hop le (trong khoang tuoi quy dinh)
     var listStudentValid = [];
@@ -21,7 +17,7 @@ exports.checkListStudent = async (listStudent, amountStudent) => {
         try {
             let age = util.getAge(Student.DOB);
             let checkValidMonth = util.checkValidMonth(Student.DOB);
-            if (util.isBetween(age, rules.minAge, rules.maxAge) && checkValidMonth) {
+            if (util.isBetween(age, rules.min_age, rules.max_age) && checkValidMonth) {
                 Student.DOB = util.changFormatDayMMDD(Student.DOB);
                 listStudentValid.push(Student)
             }
@@ -33,7 +29,7 @@ exports.checkListStudent = async (listStudent, amountStudent) => {
             listStudentInvalid.push(Student)
         }
     }
-    if (amountStudent + listStudentValid.length <= rules.maxStudents) {
+    if (amountStudent + listStudentValid.length <= rules.max_student) {
         constrainNumOfStudents = true;
     }
     const returnObject = {
@@ -87,4 +83,18 @@ exports.getAllClassInYear = async (year) => {
         console.error(error);
         return null;
     }
+}
+exports.updateAmountStudent = async (_class, year, amountStudent) => {
+    conn.then(pool => {
+        let query_string = `UPDATE CLASS
+        SET amount_student = ${amountStudent}
+        WHERE name = '${_class}' and _year = '${year}'`
+        console.log(query_string)
+        return pool.request().query(query_string);
+
+    }).then(result => {
+        console.log(result.recordset);
+    }).catch(err => {
+        console.error('Lỗi truy vấn:', err);
+    });
 }

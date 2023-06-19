@@ -7,14 +7,14 @@ module.exports = (app) => {
     handlebars.engine({
       extname: ".hbs",
       helpers: {
-        rendercombolist: function (value, options) {
+        rendercombolist: function (value, valueChoosen, options) {
           let item = "";
           for (let i = 0; i < value.length; i++) {
             if (i==0){
-              item = item + "<option value='"+options.fn(value[i])+"' selected>" + options.fn(value[i]) + "</option>"
+              item = item + "<option value='"+options.fn(value[i])+`'${value[i]===valueChoosen? "selected": "" } >` + options.fn(value[i]) + "</option>"
             }
             else{
-            item = item + "<option value='"+options.fn(value[i])+"'>" + options.fn(value[i]) + "</option>";
+            item = item + "<option value='"+options.fn(value[i])+`'${value[i]===valueChoosen? "selected": "" } >` + options.fn(value[i]) + "</option>";
           }
         }
           return item
