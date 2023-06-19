@@ -27,7 +27,7 @@ CREATE TABLE STUDENT (
 	gender nvarchar(10),
 	dob date,
 	email varchar(100),
-	address varchar(300),
+	address nvarchar(300),
 	class_id int,
 
 	PRIMARY KEY (id),
@@ -38,6 +38,7 @@ CREATE TABLE CLASS (
 	name varchar(10),
 	amount_student int,
 	_year varchar(10),
+	teacher nvarchar(50),
 
 	PRIMARY KEY (id),
 )	
@@ -73,7 +74,7 @@ CREATE TABLE PARAMETERS (
 	name_class_11  varchar(300),
 	name_class_12  varchar(300),
 	num_of_subject int,
-	name_of_subject varchar(1000),
+	name_of_subject nvarchar(1000),
 	standard_score float,	
 )
 
@@ -224,25 +225,25 @@ EXEC create_account 'user','user'
 INSERT INTO YEAR (_year) values ('2021-2022');
 INSERT INTO SEMESTER(_semester, _year) values (1, '2021-2022');
 --class
-INSERT INTO CLASS(name, amount_student, _year) values ('10A1', 0, '2021-2022');
-INSERT INTO CLASS(name, amount_student, _year) values ('10A2', 0, '2021-2022');
-INSERT INTO CLASS(name, amount_student, _year) values ('10A3', 0, '2021-2022');
-INSERT INTO CLASS(name, amount_student, _year) values ('10A4', 0, '2021-2022');
-INSERT INTO CLASS(name, amount_student, _year) values ('11A1', 0, '2021-2022');
-INSERT INTO CLASS(name, amount_student, _year) values ('11A2', 0, '2021-2022');
-INSERT INTO CLASS(name, amount_student, _year) values ('11A3', 0, '2021-2022');
-INSERT INTO CLASS(name, amount_student, _year) values ('12A1', 0, '2021-2022');
-INSERT INTO CLASS(name, amount_student, _year) values ('12A2', 0, '2021-2022');
---subject
-INSERT INTO SUBJECT(name, _year) values ('Toán', '2021-2022');
-INSERT INTO SUBJECT(name, _year) values ('Lý', '2021-2022');
-INSERT INTO SUBJECT(name, _year) values ('Hóa', '2021-2022');
-INSERT INTO SUBJECT(name, _year) values ('Văn', '2021-2022');
-INSERT INTO SUBJECT(name, _year) values ('Sử', '2021-2022');
-INSERT INTO SUBJECT(name, _year) values ('Địa', '2021-2022');
-INSERT INTO SUBJECT(name, _year) values ('Đạo Đức', '2021-2022');
-INSERT INTO SUBJECT(name, _year) values ('Thể dục', '2021-2022');
-INSERT INTO SUBJECT(name, _year) values ('Sinh', '2021-2022');
+INSERT INTO CLASS(name, amount_student, _year, teacher) values ('10A1', 0, '2021-2022', "");
+INSERT INTO CLASS(name, amount_student, _year, teacher) values ('10A2', 0, '2021-2022', "");
+INSERT INTO CLASS(name, amount_student, _year, teacher) values ('10A3', 0, '2021-2022', "");
+INSERT INTO CLASS(name, amount_student, _year, teacher) values ('10A4', 0, '2021-2022', "");
+INSERT INTO CLASS(name, amount_student, _year, teacher) values ('11A1', 0, '2021-2022', "");
+INSERT INTO CLASS(name, amount_student, _year, teacher) values ('11A2', 0, '2021-2022', "");
+INSERT INTO CLASS(name, amount_student, _year, teacher) values ('11A3', 0, '2021-2022', "");
+INSERT INTO CLASS(name, amount_student, _year, teacher) values ('12A1', 0, '2021-2022', "");
+INSERT INTO CLASS(name, amount_student, _year, teacher) values ('12A2', 0, '2021-2022', "");
+--subject, ""
+INSERT INTO SUBJECT(name, _year) values (N'Toán', '2021-2022');
+INSERT INTO SUBJECT(name, _year) values (N'Lý', '2021-2022');
+INSERT INTO SUBJECT(name, _year) values (N'Hóa', '2021-2022');
+INSERT INTO SUBJECT(name, _year) values (N'Văn', '2021-2022');
+INSERT INTO SUBJECT(name, _year) values (N'Sử', '2021-2022');
+INSERT INTO SUBJECT(name, _year) values (N'Địa', '2021-2022');
+INSERT INTO SUBJECT(name, _year) values (N'Đạo Đức', '2021-2022');
+INSERT INTO SUBJECT(name, _year) values (N'Thể dục', '2021-2022');
+INSERT INTO SUBJECT(name, _year) values (N'Sinh', '2021-2022');
 
 INSERT INTO PARAMETERS (
 	_year,
@@ -270,5 +271,5 @@ INSERT INTO PARAMETERS (
 	'11A1, 11A2, 11A3',
 	'12A1, 12A2',
 	9,
-	'Toán, Lý, Hóa, Sinh, Văn, Sử, Địa, Công dân, Thể dục',
+	N'Toán, Lý, Hóa, Sinh, Văn, Sử, Địa, Công dân, Thể dục',
 	5)
