@@ -1,4 +1,5 @@
 var conn = require('./connect.model').conn
+var classModel = require('./class.model')
 
 addAStudent = async function (student) {
     // try {
@@ -85,6 +86,10 @@ addAStudent = async function (student) {
         },
 
         addListStudent: async (listStudent, id, classInfo) => {
+            //update amount student of class
+            classInfo.amount_student = classInfo.amount_student + listStudent.length;
+            await classModel.updateAmountStudent(classInfo.name, classInfo._year, classInfo.amount_student);
+            
             for (let i = 0; i < listStudent.length; i++) {
                 id = String(parseInt(id) + 1);
                 student = {
