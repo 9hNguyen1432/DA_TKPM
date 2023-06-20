@@ -21,20 +21,23 @@ class ClassPageController {
         let allClassName = allClass.map(_class => _class.name);
 
         let className = {
-            class10: allClassName.filter(name => name.slice(0,2) === "10"),
-            class11: allClassName.filter(name => name.slice(0,2) === "11"),
-            class12: allClassName.filter(name => name.slice(0,2) === "12"),
+            class10: allClassName.filter(name => name.slice(0, 2) === "10"),
+            class11: allClassName.filter(name => name.slice(0, 2) === "11"),
+            class12: allClassName.filter(name => name.slice(0, 2) === "12"),
         }
 
-        
-        res.render('class/home', { Years: list_year, className, CurYear: year_str, CurSem: sem_str});
+
+        res.render('class/home', { Years: list_year, className, CurYear: year_str, CurSem: sem_str });
     }
 
     async loadStudentListPage(req, res) {
+        let list_year = await Model.getYears();
+        let year_str = req.query.year
+        let sem_str = req.query.semester
+
         let class_name = req.params.class_name;
-        let year = "2021-2022"
-        const _class = await Class.getClass(class_name, year).amount_student;
-        var listStudent = await student.getListStudentInClass_2(class_name, year);
+        const _class = await Class.getClass(class_name, year_str).amount_student;
+        var listStudent = await student.getListStudentInClass_2(class_name, year_str);
         listStudent.forEach((student, index) => {
             student.stt = index + 1;
             student.name = student.name[0];
@@ -49,18 +52,52 @@ class ClassPageController {
 
             student.dob = day + "/" + month + "/" + year;
         })
-        res.render('class/students', { ClassName: class_name, Teacher: "Lê Thị Ngọc Bích", class: _class, listStudent: listStudent });
+        res.render('class/students', {
+            ClassName: class_name,
+            Teacher: "Lê Thị Ngọc Bích",
+            class: _class,
+            listStudent: listStudent,
+            Years: list_year,
+            CurYear: year_str,
+            CurSem: sem_str
+        });
     }
 
     async loadCourseListPage(req, res) {
+        let list_year = await Model.getYears();
+        let year_str = req.query.year
+        let sem_str = req.query.semester
+
         let class_name = req.params.class_name;
-        res.render('class/courses', { ClassName: class_name, Teacher: "Lê Thị Ngọc Bích", StudentNumber: 100 });
+        res.render('class/courses',
+            {
+                ClassName: class_name,
+                Teacher: "Lê Thị Ngọc Bích",
+                StudentNumber: 100,
+                Years: list_year,
+                CurYear: year_str,
+                CurSem: sem_str
+            });
     }
 
     async loadCourseDetailPage(req, res) {
         let class_name = req.params.class_name;
         let course_name = req.params.course_name;
-        res.render('class/courses_detail', { ClassName: class_name, Teacher: "Lê Thị Ngọc Bích", StudentNumber: 100, CourseName: course_name });
+
+        let list_year = await Model.getYears();
+        let year_str = req.query.year
+        let sem_str = req.query.semester
+
+        res.render('class/courses_detail',
+            {
+                ClassName: class_name,
+                Teacher: "Lê Thị Ngọc Bích",
+                StudentNumber: 100,
+                CourseName: course_name,
+                Years: list_year,
+                CurYear: year_str,
+                CurSem: sem_str
+            });
     }
 
     async downloadStudentsOfClass_CSV(req, res) {
@@ -126,12 +163,12 @@ class ClassPageController {
     async importStudentRender(req, res) {
         var user = req.session.user;
 
-        let {class_name} = req.params;
+        let { class_name } = req.params;
         //TODO:get year and semester:
         const parseURL = url.parse(req.url, true);
         let year = parseURL.query.year;
         let semester = parseURL.query.semester;
- 
+
         year = year ? year : "2021-2022";
         semester = semester ? semester : 1;
 
@@ -139,7 +176,7 @@ class ClassPageController {
         let allClass = await mo.getAllClassInYear(year);
         let allClassName = allClass.map(_class => _class.name);
         //
-        res.render('class/import_students',  { user, year, semester, allClassName, class_name});
+        res.render('class/import_students', { user, year, semester, allClassName, class_name });
     }
 
     //for method post(/:class_name/import)
@@ -157,13 +194,13 @@ class ClassPageController {
         let allClassName = allClass.map(_class => _class.name);
         try {
             // TODO: load rule from database
-            
+
             var rule = await regulation.getRegulation(year);
             //
             var classChoosen = req.body.class.trim();
             console.log(classChoosen)
             var teacher = req.body.gvcn;
-            let classInfo = await mo.getClass(classChoosen,year);
+            let classInfo = await mo.getClass(classChoosen, year);
             let amountStudent = classInfo.amount_student;
             //
             var csvFileStudent = await mo.CSVFiletoJsonObject(req.files.danhsachhocsinh[0].buffer.toString('utf8'))
@@ -187,7 +224,7 @@ class ClassPageController {
                     for (let Student of validedData.listStudentInvalid) {
                         errors.push("Thông tin học sinh " + Student.name + " Không hợp lệ. (Lưu ý: Ngày sinh: mm/dd/yyyy)");
                     }
-                    res.render('class/import_students', { user, errors, allClassName,class_name: classChoosen })
+                    res.render('class/import_students', { user, errors, allClassName, class_name: classChoosen })
                     return;
                 }
                 success = true
