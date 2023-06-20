@@ -8,7 +8,7 @@ var storage = multer.memoryStorage();
 var upload = multer({ storage: storage });
 
 router.get('/:class_name/modify_student/:student_id', classController.getInfoStudent);
-router.post('/:class_name/modify_student/:student_id', classController.addStudent);
+router.post('/:class_name/modify_student/:student_id', classController.modifyStudent);
 router.get('/:class_name/import',classController.importStudentRender);
 router.post('/:class_name/import', upload.fields([{name: "danhsachhocsinh"}]),classController.importStudentHandle);
 router.get('/:class_name/course/:course_name',classController.loadCourseDetailPage);

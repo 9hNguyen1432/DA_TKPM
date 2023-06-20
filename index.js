@@ -19,18 +19,18 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, 'public')))
 
-//require("./config/hbs")(app);
+require("./config/hbs")(app);
 
-//HBS
-app.engine('hbs', hbs.engine({
-    extname: '.hbs',
-    defaultLayout: 'main',
-    layoutsDir: path.join(__dirname, '/views/layouts'),
-    partialsDir: [
-        path.join(__dirname, '/views/partials')
-    ],
-    helpers: helper_hbs,
-}))
+// //HBS
+// app.engine('hbs', hbs.engine({
+//     extname: '.hbs',
+//     defaultLayout: 'main',
+//     layoutsDir: path.join(__dirname, '/views/layouts'),
+//     partialsDir: [
+//         path.join(__dirname, '/views/partials')
+//     ],
+//     helpers: helper_hbs,
+// }))
 app.set("view engine", "hbs");
 
 //HTTP logger

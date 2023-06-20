@@ -15,7 +15,6 @@ class ClassPageController {
         let list_year = await Model.getYears();
         let year_str = req.query.year
         let sem_str = req.query.semester
-        console.log(list_year)
 
         // get class name
         let allClass = await mo.getAllClassInYear(year_str);
@@ -30,7 +29,6 @@ class ClassPageController {
         
         res.render('class/home', { Years: list_year, className, CurYear: year_str, CurSem: sem_str});
     }
-
 
     async loadStudentListPage(req, res) {
         let class_name = req.params.class_name;
@@ -97,7 +95,6 @@ class ClassPageController {
         const className = req.params.class_name;
         const studentId = req.params.student_id;
         const year = req.query.year;
-        console.log("Get info student with: " + className + " " + studentId + " " + year);
 
         const studentData = await student.getAStudent(studentId);
 
@@ -106,6 +103,23 @@ class ClassPageController {
 
     async addStudent(req, res) {
         await this.loadStudentListPage(req,res);
+    }
+
+    async modifyStudent(req,res){
+        let studentData = req.body;
+        if(studentData.gender == 'male'){
+            studentData.gender = "Nam";
+        }
+        else {
+            studentData.gender = "Nữ";
+        }
+        let studentId = req.params.student_id;
+        let className = req.params.class_name;
+        let year = req.query.year;
+
+        await student.modifyStudentInClassByID(studentId, studentData);
+
+        res.redirect(`/class/${className}`);
     }
 
     //for method get(/:class_name/import)
@@ -179,7 +193,7 @@ class ClassPageController {
                 success = true
                 //TODO save in database
                 var listStudent = validedData.listStudentValid
-                var id = await student.getTheNewestStuedentID(classChoosen, year);
+                var id = await student.getTheNewestStudentID(classChoosen, year);
                 await student.addListStudent(listStudent, id, classInfo);
 
                 res.render('class/import_students', { user, errors, allClassName, class_name: classChoosen })

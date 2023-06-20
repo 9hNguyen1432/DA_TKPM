@@ -5,8 +5,16 @@ document.querySelectorAll('.edit-button').forEach(button => {
         // Lấy giá trị ID từ thuộc tính của hàng
         const studentId = button.getAttribute('data-bs-mssv');
         const className = document.querySelector('#class-header').getAttribute('data-class-name');
-        const yearElement = document.querySelector('.dropdown-item.active');
         const currentYear = get_year_selected();
+        const formStudent = document.querySelector('#form-student');
+
+
+
+        const btnImportListStudent = document.querySelector('#btn-import-list-student');
+
+        if (btnImportListStudent) {
+            btnImportListStudent.style.display = 'none';
+        }
 
         // Thực hiện các tác vụ cần thiết với ID học sinh, ví dụ: truy vấn cơ sở dữ liệu để lấy thông tin học sinh
         let response = await get_information(studentId, className, currentYear);
@@ -17,6 +25,14 @@ document.querySelectorAll('.edit-button').forEach(button => {
         const month = dateObject.getMonth() + 1; // Tháng trong JavaScript được đánh số từ 0 (0 - 11)
         const year = dateObject.getFullYear();
         const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+
+
+        console.log(currentYear);
+        // Change action of form
+        if (formStudent) {
+            console.log(`/class/${className}/modify_student/${studentId}`);
+            formStudent.action = `/class/${className}/modify_student/${studentId}?year=${currentYear}`; 
+        }
 
         // Hiển thị thông tin học sinh trong modal
         var modal_form_student = document.getElementById('student_form');
@@ -41,7 +57,7 @@ document.querySelectorAll('.edit-button').forEach(button => {
 
         modal_student_birthday.value = formattedDate;
         modal_student_address.value = studentData.address === undefined ? "" : studentData.address;
-        modal_student_email.value = studentData.email  === undefined ? "" : studentData.email;
+        modal_student_email.value = studentData.email === undefined ? "" : studentData.email;
         modal_student_note.value = studentData.note === undefined ? "" : studentData.note;
     });
 });

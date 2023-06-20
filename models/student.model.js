@@ -41,8 +41,6 @@ addAStudent = async function (student) {
             let query_string = `SELECT * FROM STUDENT
                             WHERE id = '${id}'`;
             let result = (await conn).query(query_string);
-            console.log(await result);
-            console.log((await result).recordset);
             return (await result).recordset[0];
         },
         getTheNewestStudentID: async (_class, year) => {
@@ -94,4 +92,13 @@ addAStudent = async function (student) {
             } catch (error) {
             }
         },
+
+        modifyStudentInClassByID: async (idStudent, studentData) => {
+            let query_string = `UPDATE STUDENT 
+                                SET name = N'${studentData.student_name}', gender = N'${studentData.gender}', dob = '${studentData.birthday}',
+                                email = '${studentData.email}', address = N'${studentData.address}' 
+                                WHERE id = '${idStudent}'`;
+            let result = (await conn).query(query_string);
+            return result;
+        }
     }
