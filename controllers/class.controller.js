@@ -13,12 +13,12 @@ const regulation = require('../models/regulation.model')
 class ClassPageController {
     async loadPage(req, res) {
         let list_year = await Model.getYears();
+        let year_str = req.query.year
+        let sem_str = req.query.semester
         console.log(list_year)
-        //TODO: get year:
-        let year = "2021-2022";
 
         // get class name
-        let allClass = await mo.getAllClassInYear(year);
+        let allClass = await mo.getAllClassInYear(year_str);
         let allClassName = allClass.map(_class => _class.name);
 
         let className = {
@@ -28,7 +28,7 @@ class ClassPageController {
         }
 
         
-        res.render('class/home', { Years: list_year, className });
+        res.render('class/home', { Years: list_year, className, CurYear: year_str, CurSem: sem_str});
     }
 
 
