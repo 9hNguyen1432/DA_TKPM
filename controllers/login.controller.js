@@ -1,4 +1,8 @@
 const account = require('../models/account')
+const Ulti = require("../public/js/ulti");
+var info = Ulti.getCurYearSem();
+var semester = info[0]
+var curYear = info[1];
 
 class LoginPageController{
     async loadPage(req,res){
@@ -33,7 +37,7 @@ class LoginPageController{
     
                     req.session.save(function (err) {
                         if (err) return next(err)
-                        res.redirect('/class')
+                        res.redirect(`/class?year=${curYear}-${curYear+1}&semester=${semester}`)
                     })
                 })
             }
