@@ -3,28 +3,100 @@
 
 <div class="card shadow" style="border: 1px solid #D9D9D9; width: 50%; margin: 30px auto;
     padding-inline: 100px; padding-top: 30px;">
-    <form method="post" action="#">
-        <div class="d-flex justify-content-between">
-            <div class="d-flex">
-                <label for="age_min" class="form-label" style="width: 120px;">Tuổi tối thiểu:</label>
-                <input type="number" class="form-control text-center" id="age_min" style="width: 100px;">
+    <div class="card-body">
+        <form method="post" action="#">
+            <div class="d-flex mb-3">
+                <label for="year" class="col-form-label" style="margin-right: 15px;">Năm: </label>
+                <input class="text-center" type="text" class="form-control" id="year" value="{{year}}"
+                    style="display:block; width: 180px;" disabled>
             </div>
-            <div class="d-flex">
-                <label for="age_max" class="form-label" style="width: 120px;">Tuổi tối đa:</label>
-                <input type="number" class="form-control text-center" id="age_max" style="width: 100px;">
-            </div>
-        </div>
-        <div class="d-flex mt-3">
-            <label for="numberofstudent_max" class="form-label" style="width: 120px;">Sĩ số tối đa:</label>
-            <input type="number" class="form-control text-center" id="numberofstudent_max" style="width: 100px;">
-        </div>
-        <div class="d-flex mt-3">
-            <label for="benchmark" class="form-label" style="width: 120px;">Điểm chuẩn:</label>
-            <input type="number" class="form-control text-center" id="benchmark" style="width: 100px;">
-        </div>
-        <div class="d-flex justify-content-end mb-4 mt-5">
-            <button type="submit" class="btn btn-success px-4">Lưu</button>
-        </div>
+            <div class="row">
+                <div class="col-6 border p-2">
 
-    </form>
+                    <div class="m-3">
+                        <label for="minage">Độ tuổi tối tiểu: </label>
+                        <input type="number" class="form-control" id="minage" name="minAge">
+                    </div>
+                    <div class="m-3">
+                        <label for="maxage">Độ tuổi tối đa: </label>
+                        <input type="text" class="form-control" id="maxage" name="maxAge">
+                    </div>
+
+                </div>
+                <div class="col-6 border p-2">
+
+                    <div class="m-3">
+                        <label for="maxstudent">Số học sinh tối đa: </label>
+                        <input type="number" class="form-control" id="maxstudent" name="maxStudent">
+                    </div>
+                    <div class="m-3">
+                        <label for="score">Điểm chuẩn: </label>
+                        <input type="text" class="form-control" id="score" name="score">
+
+                    </div>
+                </div>
+            </div>
+            <div class="row border my-2">
+                <div class="col-4">
+                    <div class="m-3">
+                        <label for="numClass10">Số lớp 10: </label>
+                        <input type="number" class="form-control" id="numClass10" name="numClass10">
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="m-3">
+                        <label for="nameClass10">Tên các lớp 10: </label>
+                        <input type="text" class="form-control" id="nameClass10" name="nameClass10">
+                    </div>
+                </div>
+            </div>
+            <div class="row border my-2">
+                <div class="col-4">
+                    <div class="m-3">
+                        <label for="numClass11">Số lớp 11: </label>
+                        <input type="number" class="form-control" id="numClass11" name="numClass11">
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="m-3">
+                        <label for="nameClass11">Tên các lớp 11: </label>
+                        <input type="text" class="form-control" id="nameClass11" name="nameClass11">
+                    </div>
+                </div>
+            </div>
+            <div class="row border my-2">
+                <div class="col-4">
+                    <div class="m-3">
+                        <label for="numClass12">Số lớp 12: </label>
+                        <input type="number" class="form-control" id="numClass12" name="numClass12">
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="m-3">
+                        <label for="nameClass12">Tên các lớp 12: </label>
+                        <input type="text" class="form-control" id="nameClass12" name="nameClass12">
+                    </div>
+                </div>
+            </div>
+                        <div class="row border my-2">
+                <div class="col-4">
+                    <div class="m-3">
+                        <label for="numSubject">Số lớp 12: </label>
+                        <input type="number" class="form-control" id="numSubject" name="numSubject">
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="m-3">
+                        <label for="nameSubject">Tên các lớp 12: </label>
+                        <input type="text" class="form-control" id="nameSubject" name="nameSubject">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success">Xác
+                    nhận</button>
+            </div>
+        </form>
+    </div>
 </div>
