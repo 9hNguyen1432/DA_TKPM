@@ -26,8 +26,9 @@ class ClassPageController {
             class12: allClassName.filter(name => name.slice(0, 2) === "12"),
         }
 
+        const message = req.flash('message')[0];
 
-        res.render('class/home', { Years: list_year, className, CurYear: year_str, CurSem: sem_str });
+        res.render('class/home', { Years: list_year, className, CurYear: year_str, CurSem: sem_str,message });
     }
 
 

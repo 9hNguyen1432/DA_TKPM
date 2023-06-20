@@ -4,7 +4,7 @@ const routes = require('./routers');
 const path = require('path')
 const session = require('express-session');
 const morgan = require('morgan')
-
+const flash = require('connect-flash');
 
 // Router
 //const appRoute = require('./routers/app.r.js');
@@ -34,6 +34,8 @@ require("./config/hbs")(app);
 
 //HTTP logger
 app.use(morgan('dev'));
+
+app.use(flash());
 
 const oneDay = 1000 * 60 * 60 * 24;
 app.set('trust proxy', 1) // trust first proxy
