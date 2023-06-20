@@ -79,4 +79,20 @@ function get_year_selected() {
 }
 
 
+// Lắng nghe sự kiện click trên nút Xóa học sinh
+document.querySelectorAll('.delete-button').forEach(button => {
+    button.addEventListener('click', async () => {
+        // Lấy giá trị ID từ thuộc tính của hàng
+        const studentId = button.getAttribute('data-bs-mssv');
+        const className = document.querySelector('#class-header').getAttribute('data-class-name');
+        const currentYear = get_year_selected();
+        const modalDeleteStudent = document.querySelector('#form-delete');
+
+        // Change action of form
+        if (modalDeleteStudent) {
+            modalDeleteStudent.action = `/class/${className}/delete_student/${studentId}?year=${currentYear}`; 
+        }
+    });
+});
+
 

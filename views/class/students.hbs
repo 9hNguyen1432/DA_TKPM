@@ -137,8 +137,9 @@
                                         onclick="showModal(this)">Chỉnh sửa</button>
                                     {{!-- <a href="#" class="btn btn-success mx-3">Chỉnh sửa</a> --}}
                                     {{!-- <a href="#" class="btn btn-danger">Xóa</a> --}}
-                                    <a class="btn btn-danger" data-bs-toggle="modal" href="#deleteStudent"
-                                        role="button">Xóa</a>
+                                    <button class="btn btn-danger delete-button" data-bs-toggle="modal" href="#deleteStudent"
+                                        data-bs-mssv="{{this.id}}"
+                                        role="button">Xóa</button>
                                 </div>
                             </div>
                         </div>
@@ -260,10 +261,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="post" id="form-delete">
+                <form method="post" id="form-delete" action="">
                     <div class="m-3">
                         <label for="student-name">Nhập mật khẩu admin: </label>
-                        <input type="text" class="form-control mt-2" id="student-name" style="width: 350px;">
+                        <input type="text" class="form-control mt-2" id="student-name" name="admin_password" style="width: 350px;">
                     </div>
                 </form>
                 <div class="text-danger mx-3">

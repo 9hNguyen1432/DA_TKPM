@@ -122,6 +122,13 @@ class ClassPageController {
         res.redirect(`/class/${className}`);
     }
 
+    async deleteStudent(req,res){
+        let studentId = req.params.student_id;
+        let className = req.params.class_name;
+        let result = await student.deleteStudentByID(studentId);
+        res.redirect(`/class/${className}`);
+    }
+
     //for method get(/:class_name/import)
     async importStudentRender(req, res) {
         var user = req.session.user;

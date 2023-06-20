@@ -100,5 +100,13 @@ addAStudent = async function (student) {
                                 WHERE id = '${idStudent}'`;
             let result = (await conn).query(query_string);
             return result;
+        },
+
+        deleteStudentByID: async(idStudent) => {
+            let query_string = `DELETE FROM STUDENT WHERE id = '${idStudent}'`;
+            // TODO: CHECK ADMIN PASSWORD HERE
+
+            let result = (await conn).query(query_string);
+            return result;
         }
     }
