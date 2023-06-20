@@ -1,6 +1,11 @@
+const Ulti = require("../public/js/ulti");
+var info = Ulti.getCurYearSem();
+var semester = info[0]
+var curYear = info[1];
+
 function isAuthenticated (req, res, next) {
     if (req.session.user){
-        return res.redirect('/class')
+        return res.redirect(`/class?year=${curYear}-${curYear+1}&semester=${semester}`)
     }
     return next();
 }
