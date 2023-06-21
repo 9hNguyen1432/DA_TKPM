@@ -2,11 +2,12 @@ const csv = require('csvtojson')
 var conn = require('./connect.model').conn
 var util = require('./util.model')
 const regulation = require('./regulation.model');
+const sql = require('mssql/msnodesqlv8');
 
 exports.checkListStudent = async (listStudent, amountStudent, year) => {
     // TODO: load rule from database
     var rules = await regulation.getRegulation(year);
-    let numStudent= 0;
+    let numStudent = 0;
     // lish hoc sinh hop le (trong khoang tuoi quy dinh)
     var listStudentValid = [];
     //list hoc sinh khong hop le
@@ -97,4 +98,25 @@ exports.updateAmountStudent = async (_class, year, amountStudent) => {
     }).catch(err => {
         console.error('Lỗi truy vấn:', err);
     });
+}
+
+exports.addClass = async (year, grade, class_name, teacher) => {
+    try {
+        const pool = await conn;
+        const request = pool.request();
+        request.input('_year', sql.VarChar(10), year);
+        request.input('_grade', sql.Int, grade);
+        request.input('_class_name', sql.VarChar(10), class_name);
+        request.input('_teacher', sql.NVarChar(50), teacher);
+
+        const result = await request.execute('create_class');
+
+        // Xử lý kết quả trả về từ stored procedure
+        const output = result.recordset;
+
+        return output;
+    } catch (error) {
+        console.error('Lỗi truy vấn:', error);
+        throw error;
+    }
 }

@@ -10,6 +10,8 @@ const mo = require("../models/class.model")
 const url = require('url');
 const regulation = require('../models/regulation.model')
 
+const ClassModel = require("../models/class.model")
+
 class ClassPageController {
     async loadPage(req, res) {
         let list_year = await Model.getYears();
@@ -213,6 +215,25 @@ class ClassPageController {
         }
 
     }
+    async addClass (req, res){
+        let grade = req.body.grade;
+        let class_name = req.body.class_name;
+        let teacher = req.body.teacher
+        let year = req.query.year
+
+        console.log(year,class_name,teacher)
+
+        //reload
+        res.redirect(req.get('referer'));
+        
+        try{
+            await ClassModel.addClass(year, grade, class_name, teacher);
+        }catch(e){
+            console.log(e.message);
+        }
+        
+    }
+    
 }
 
 
