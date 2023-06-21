@@ -3,28 +3,204 @@
 
 <div class="card shadow" style="border: 1px solid #D9D9D9; width: 50%; margin: 30px auto;
     padding-inline: 100px; padding-top: 30px;">
-    <form method="post" action="#">
-        <div class="d-flex justify-content-between">
-            <div class="d-flex">
-                <label for="age_min" class="form-label" style="width: 120px;">Tuổi tối thiểu:</label>
-                <input type="number" class="form-control text-center" id="age_min" style="width: 100px;">
+    <div class="card-body">
+        <form method="post" action="/setting/edit?year={{CurYear}}&semester={{CurSem}}" id="myform">
+            <div class="d-flex mb-3">
+                <label for="year" class="col-form-label" style="margin-right: 15px;">Năm: </label>
+                <input class="text-center" type="text" class="form-control" id="year" name="_year" value="{{CurYear}}"
+                    style="display:block; width: 180px;" disabled>
             </div>
-            <div class="d-flex">
-                <label for="age_max" class="form-label" style="width: 120px;">Tuổi tối đa:</label>
-                <input type="number" class="form-control text-center" id="age_max" style="width: 100px;">
-            </div>
-        </div>
-        <div class="d-flex mt-3">
-            <label for="numberofstudent_max" class="form-label" style="width: 120px;">Sĩ số tối đa:</label>
-            <input type="number" class="form-control text-center" id="numberofstudent_max" style="width: 100px;">
-        </div>
-        <div class="d-flex mt-3">
-            <label for="benchmark" class="form-label" style="width: 120px;">Điểm chuẩn:</label>
-            <input type="number" class="form-control text-center" id="benchmark" style="width: 100px;">
-        </div>
-        <div class="d-flex justify-content-end mb-4 mt-5">
-            <button type="submit" class="btn btn-success px-4">Lưu</button>
-        </div>
+            <div class="row border">
+                <div class="col-6 p-2">
 
-    </form>
+                    <div class="m-3">
+                        <label for="minage">Độ tuổi tối tiểu: </label>
+                        <input type="number" class="form-control" id="minage" name="min_age" min="0" max="120"
+                            value="{{regulation.min_age}}">
+                    </div>
+                    <div class="m-3">
+                        <label for="maxage">Độ tuổi tối đa: </label>
+                        <input type="text" class="form-control" id="maxage" name="max_age" min="0" max="120"
+                            value="{{regulation.max_age}}">
+                    </div>
+
+                </div>
+                <div class="col-6 p-2">
+
+                    <div class="m-3">
+                        <label for="maxstudent">Số học sinh tối đa: </label>
+                        <input type="number" class="form-control" id="maxstudent" name="max_student" min="0"
+                            value="{{regulation.max_student}}">
+                    </div>
+                    <div class="m-3">
+                        <label for="score">Điểm chuẩn: </label>
+                        <input type="text" class="form-control" id="score" name="standard_score" min="0" max="10"
+                            value="{{regulation.standard_score}}">
+
+                    </div>
+                </div>
+            </div>
+            <div class="row border my-2">
+                <div class="col-4">
+                    <div class="m-3">
+                        <label for="numClass10">Số lớp 10: </label>
+                        <input type="number" class="form-control" id="numClass10" name="num_of_class_10"
+                            value="{{regulation.num_of_class_10}}">
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="m-3">
+                        <label for="nameClass10">Tên các lớp 10: </label>
+                        <input type="text" class="form-control" id="nameClass10" name="name_class_10"
+                            value="{{regulation.name_class_10}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row border my-2">
+                <div class="col-4">
+                    <div class="m-3">
+                        <label for="numClass11">Số lớp 11: </label>
+                        <input type="number" class="form-control" id="numClass11" name="num_of_class_11"
+                            value="{{regulation.num_of_class_11}}">
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="m-3">
+                        <label for="nameClass11">Tên các lớp 11: </label>
+                        <input type="text" class="form-control" id="nameClass11" name="name_class_11"
+                            value="{{regulation.name_class_11}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row border my-2">
+                <div class="col-4">
+                    <div class="m-3">
+                        <label for="numClass12">Số lớp 12: </label>
+                        <input type="number" class="form-control" id="numClass12" name="num_of_class_12"
+                            value="{{regulation.num_of_class_12}}">
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="m-3">
+                        <label for="nameClass12">Tên các lớp 12: </label>
+                        <input type="text" class="form-control" id="nameClass12" name="name_class_12"
+                            value="{{regulation.name_class_12}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row border my-2">
+                <div class="col-4">
+                    <div class="m-3">
+                        <label for="numSubject">Số Môn học: </label>
+                        <input type="number" class="form-control" id="numSubject" name="num_of_subject"
+                            value="{{regulation.num_of_subject}}">
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="m-3">
+                        <label for="nameSubject">Tên các Môn học: </label>
+                        <input type="text" class="form-control" id="nameSubject" name="name_of_subject"
+                            value="{{regulation.name_of_subject}}">
+                    </div>
+                </div>
+            </div>
+
+            <div id="warning" class="text-danger"></div>
+
+            <div class="modal-footer">
+                <button type="submit" onclick="validateForm(event)" class="btn btn-success">Xác
+                    nhận</button>
+            </div>
+        </form>
+        <script>
+            function validateForm(event) {
+                // Ngăn chặn hành vi mặc định của nút submit
+                event.preventDefault();
+
+                // Thực hiện kiểm tra dữ liệu
+                var isValid = true;
+                var minage = document.getElementById('minage').value;
+                var maxage = document.getElementById('maxage').value;
+                console.log(minage)
+                console.log(maxage)
+                if(maxage < minage){
+                    document.getElementById('warning').innerHTML = "Tuổi tối đa không nhỏ hơn tuổi tối thiểu!";
+                    return
+                }
+
+
+                var numClass10 = document.getElementById('numClass10').value;
+                var nameClass10 = document.getElementById('nameClass10').value;
+                isValid = isValid && isValidListClass(numClass10, nameClass10, "10");
+                if (!isValid) {
+                    document.getElementById('warning').innerHTML = "Thông tin các lớp 10 không hợp lệ, Chắc chắn rằng tên các lớp cách nhau bởi dấu \",\" và số lớp trùng với số lượng đã nêu.";
+                    return
+                }
+                var numClass11 = document.getElementById('numClass11').value;
+                var nameClass11 = document.getElementById('nameClass11').value;
+                isValid = isValid && isValidListClass(numClass11, nameClass11, "11");
+                if (!isValid) {
+                    document.getElementById('warning').innerHTML = "Tên các lớp 11 không hợp lệ, Chắc chắn rằng tên các lớp cách nhau bởi dấu \",\" và số lớp trùng với số lượng đã nêu.";
+                    return
+                }
+                var numClass12 = document.getElementById('numClass12').value;
+                var nameClass12 = document.getElementById('nameClass12').value;
+                isValid = isValid && isValidListClass(numClass12, nameClass12, "12");
+                if (!isValid) {
+                    document.getElementById('warning').innerHTML = "Tên các lớp 12 không hợp lệ, Chắc chắn rằng tên các lớp cách nhau bởi dấu \",\" và số lớp trùng với số lượng đã nêu.";
+                    return
+                }
+                var numSubject = document.getElementById('numSubject').value;
+                var nameSubject = document.getElementById('nameSubject').value;
+
+                isValid = isValid && isValidListSubject(numSubject, nameSubject);
+                if (!isValid) {
+                    document.getElementById('warning').innerHTML = "Tên các môn học không hợp lệ, Chắc chắn rằng tên các môn học cách nhau bởi dấu \",\" và số môn trùng với số lượng đã nêu.";
+                    return
+                }
+                // Nếu dữ liệu không hợp lệ, hủy bỏ sự kiện post
+                if (!isValid) {
+                    return;
+                }
+
+                // Nếu dữ liệu hợp lệ, tiếp tục gửi form
+                document.getElementById("myform").submit();
+            }
+            function isValidListClass(numOfClass, classNames, _class) {
+                try {
+                    if (numOfClass <= 0) {
+                        return false;
+                    }
+                    let listClassName = classNames.split(',');
+                    if (listClassName.length != numOfClass) {
+                        return false;
+                    }
+                    listClassName = listClassName.filter(element => element.trim().slice(0, 2) === _class);
+                    if (listClassName.length != numOfClass) {
+                        console.log("đầu ra");
+                        return false;
+                    }
+                    return true;
+                } catch {
+                    return false;
+                }
+
+            }
+            function isValidListSubject(numOfSubject, SubjectNames) {
+                try {
+                    if (numOfSubject <= 0) {
+                        return false;
+                    }
+                    let listSubject = SubjectNames.split(',');
+                    if (listSubject.length != numOfSubject) {
+                        return false;
+                    }
+                    return true;
+                } catch {
+                    return false;
+                }
+            }
+
+        </script>
+    </div>
 </div>

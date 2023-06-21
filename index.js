@@ -4,7 +4,6 @@ const routes = require('./routers');
 const path = require('path')
 const session = require('express-session');
 const morgan = require('morgan')
-const helper_hbs = require('./helper/hbs_helper')
 
 
 // Router
@@ -21,17 +20,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 require("./config/hbs")(app);
 
-// //HBS
-// app.engine('hbs', hbs.engine({
-//     extname: '.hbs',
-//     defaultLayout: 'main',
-//     layoutsDir: path.join(__dirname, '/views/layouts'),
-//     partialsDir: [
-//         path.join(__dirname, '/views/partials')
-//     ],
-//     helpers: helper_hbs,
-// }))
-app.set("view engine", "hbs");
 
 //HTTP logger
 app.use(morgan('dev'));
