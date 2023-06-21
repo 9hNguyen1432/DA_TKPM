@@ -223,15 +223,15 @@ class ClassPageController {
         let year = req.query.year
 
         console.log(year,class_name,teacher)
-
-        //reload
-        res.redirect(req.get('referer'));
         
         try{
             await ClassModel.addClass(year, grade, class_name, teacher);
         }catch(e){
             console.log(e.message);
         }
+
+        //reload
+        res.redirect(req.get('referer'));
     }
     
     async deleteClass (req, res){
