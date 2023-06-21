@@ -5,7 +5,6 @@ const path = require('path')
 const session = require('express-session');
 const morgan = require('morgan')
 const flash = require('connect-flash');
-const helper_hbs = require('./helper/hbs_helper')
 
 // Router
 //const appRoute = require('./routers/app.r.js');
