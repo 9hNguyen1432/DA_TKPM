@@ -8,9 +8,11 @@ const Class = require('../models/class.model');
 const subject = require('../models/subject.model')
 const mo = require("../models/class.model")
 const url = require('url');
-const regulation = require('../models/regulation.model')
+const regulation = require('../models/regulation.model');
+const account = require('../models/account');
 
 class ClassPageController {
+
     async loadPage(req, res) {
         let list_year = await Model.getYears();
         let year_str = req.query.year
@@ -29,7 +31,6 @@ class ClassPageController {
 
         res.render('class/home', { Years: list_year, className, CurYear: year_str, CurSem: sem_str });
     }
-
 
     async loadStudentListPage(req, res) {
         let list_year = await Model.getYears();
@@ -100,8 +101,9 @@ class ClassPageController {
                 CurSem: sem_str
             });
     }
+
     async downloadStudentsOfClass_CSV(req, res) {
-        const data = await student.getListStudentInClass("12A1", "2021-2022")
+        const data = await student.getListStudentInClass_2("12A1", "2021-2022")
 
         // Convert the data to CSV format
         const csv = DataHelper.convertToCsv(data);
@@ -128,6 +130,72 @@ class ClassPageController {
         res.send(csv);
     }
 
+    async getInfoStudent(req, res) {
+        const className = req.params.class_name;
+        const studentId = req.params.student_id;
+        const year = req.query.year;
+
+        const studentData = await student.getAStudent(studentId);
+
+        res.send(studentData);
+    }
+
+    async addStudent(req, res) {
+        //add student here
+        let studentData = req.body;
+        let className = req.params.class_name;
+        let year = req.query.year;
+        let classinfo = await mo.getClass(className,year);
+        let maxID = await studentData.getMaxID();
+        var rule = await regulation.getRegulation(year);
+
+        let amountStudent = classInfo.amount_student;
+        if(amountStudent >= rule.max_student){
+            // TODO: so hoc sinh vuot qua quy dinh
+            res.redirect(`/class/${className}`);
+            return;
+        }
+        let curId = maxID + 1;
+        studentData.id = curId;
+        studentData.class_id = classinfo.id;
+        await student.addAStudent(studentData);
+        res.redirect(`/class/${className}`);
+    }
+
+    async modifyStudent(req,res){
+        let studentData = req.body;
+        if(studentData.gender == 'male'){
+            studentData.gender = "Nam";
+        }
+        else {
+            studentData.gender = "Nữ";
+        }
+        let studentId = req.params.student_id;
+        let className = req.params.class_name;
+        let year = req.query.year;
+
+        await student.modifyStudentInClassByID(studentId, studentData);
+
+        res.redirect(`/class/${className}`);
+    }
+
+    async deleteStudent(req,res){
+        let studentId = req.params.student_id;
+        let className = req.params.class_name;
+        let {admin_password} = req.body;
+        const user = req.session.user;
+        const isRightPassword = await account.checkPassword(user.username, admin_password);
+
+        let error = "";
+        if(isRightPassword){
+            let result = await student.deleteStudentByID(studentId);
+        }
+        else {
+            error = "Mật khẩu không chính xác";
+        }
+        res.redirect(`/class/${className}`);
+    }
+
     //for method get(/:class_name/import)
     async importStudentRender(req, res) {
         var user = req.session.user;
@@ -147,6 +215,7 @@ class ClassPageController {
         //
         res.render('class/import_students', { user, year, semester, allClassName, class_name });
     }
+
     //for method post(/:class_name/import)
     async importStudentHandle(req, res, next) {
         // console.log(req.files)
@@ -198,7 +267,7 @@ class ClassPageController {
                 success = true
                 //TODO save in database
                 var listStudent = validedData.listStudentValid
-                var id = await student.getTheNewestStuedentID(classChoosen, year);
+                var id = await student.getTheNewestStudentID(classChoosen, year);
                 await student.addListStudent(listStudent, id, classInfo);
 
                 res.render('class/import_students', { user, errors, allClassName, class_name: classChoosen })

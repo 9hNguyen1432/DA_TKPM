@@ -1,3 +1,4 @@
+const student = require('../models/student.model')
 const Model = require("../models/year.model")
 
 class ClassPageController{
@@ -9,7 +10,16 @@ class ClassPageController{
     }
 
     async loadSearchResultStudent(req,res){
-        let searchResult = [];
+        const {type_search , search_input} = req.body;
+        let searchResult;
+
+        if(type_search === "mssv"){
+            searchResult = student.getStudentById(search_input);
+        }
+        else if(type_search === "name"){
+            searchResult = student.getStudentByName(search_input);
+        }
+
         res.render('search/searchStudent',{students:searchResult});
     }
 }
