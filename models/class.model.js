@@ -120,3 +120,22 @@ exports.addClass = async (year, grade, class_name, teacher) => {
         throw error;
     }
 }
+
+exports.deleteClass = async (year, class_name) => {
+    try {
+        const pool = await conn;
+        const request = pool.request();
+        request.input('_year', sql.VarChar(10), year);
+        request.input('_class_name', sql.VarChar(10), class_name);
+
+        const result = await request.execute('delete_class');
+
+        // Xử lý kết quả trả về từ stored procedure
+        const output = result.recordset;
+
+        return output;
+    } catch (error) {
+        console.error('Lỗi truy vấn:', error);
+        throw error;
+    }
+}

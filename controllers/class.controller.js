@@ -11,6 +11,7 @@ const url = require('url');
 const regulation = require('../models/regulation.model')
 
 const ClassModel = require("../models/class.model")
+const AccModel = require('../models/account')
 
 class ClassPageController {
     async loadPage(req, res) {
@@ -231,10 +232,28 @@ class ClassPageController {
         }catch(e){
             console.log(e.message);
         }
-        
     }
     
-}
+    async deleteClass (req, res){
+        let password = req.body.password;
 
+        let class_name = req.query.class;
+        let year = req.query.year
+        let sem = req.query.semester
+
+        //check password here nè TT
+        
+        
+        //khối
+        let grade = class_name.slice(0,2);
+
+        res.redirect(`/class?year=${year}&semester=${sem}`)
+        try{
+            await ClassModel.deleteClass(year, class_name);
+        }catch(e){
+            console.log(e.message);
+        }
+    }
+}
 
 module.exports = new ClassPageController;

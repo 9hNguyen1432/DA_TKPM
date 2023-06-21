@@ -268,8 +268,7 @@
 </div>
 {{!-- END DELETE STUDENT --}}
 
-{{!-- DELETE CLASS --}}
-<!-- Modal -->
+{{!-- DELETE CLASS MODAL --}}
 <div class="modal fade" id="deleteClass" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -278,10 +277,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="post" id="form-delete-class">
+                <form action="/class/delete_class?year={{CurYear}}&semester={{CurSem}}&class={{ClassName}}" method="post" id="form-delete-class">
                     <div class="m-3">
-                        <label for="student-name">Nhập mật khẩu admin: </label>
-                        <input type="text" class="form-control mt-2" id="student-name" style="width: 350px;">
+                        <label for="password">Nhập mật khẩu admin: </label>
+                        <input type="password" class="form-control mt-2" id="password" name="password" style="width: 350px;">
                     </div>
                 </form>
                 <div class="text-danger mx-3">
