@@ -277,7 +277,7 @@ INSERT INTO PARAMETERS (
 -- add class procedure
 CREATE PROCEDURE create_class
 (
-    @_year VARCHAR(10),
+    @_year VARCHAR(64),
 	@_grade INT,
 	@_class_name VARCHAR(10),
     @_teacher NVARCHAR(50)
@@ -287,28 +287,30 @@ BEGIN
 	--tạo id
 	--khai báo biến
     DECLARE @id INT
+	DECLARE @name VARCHAR(10)
 	DECLARE @max_id INT
 	DECLARE @new_id INT
 
 	-- Khai báo con trỏ
 	DECLARE _cursor CURSOR FOR
-	SELECT id FROM CLASS
+	SELECT id,name FROM CLASS
 
 	-- Mở con trỏ
 	OPEN _cursor
 
 	-- Lấy dòng đầu tiên
-	FETCH NEXT FROM _cursor INTO @id
+	FETCH NEXT FROM _cursor INTO @id,@name
 	SET @max_id=@id
 
 	-- Duyệt qua các dòng trong bảng
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
+		IF @name=@_class_name
+			RETURN null
 		IF @max_id<@id
 			SET @max_id=@id
-
 		-- Lấy dòng tiếp theo
-		FETCH NEXT FROM _cursor INTO @id
+		FETCH NEXT FROM _cursor INTO @id,@name
 	END
 
 	-- Đóng con trỏ
