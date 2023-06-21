@@ -7,6 +7,7 @@ var multer = require('multer')
 var storage = multer.memoryStorage();
 var upload = multer({ storage: storage });
 
+router.post('/:class_name/add_a_student', classController.addStudent);
 router.post('/:class_name/delete_student/:student_id', classController.deleteStudent);
 router.get('/:class_name/modify_student/:student_id', classController.getInfoStudent);
 router.post('/:class_name/modify_student/:student_id', classController.modifyStudent);

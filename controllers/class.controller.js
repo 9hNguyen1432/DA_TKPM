@@ -9,7 +9,7 @@ const subject = require('../models/subject.model')
 const mo = require("../models/class.model")
 const url = require('url');
 const regulation = require('../models/regulation.model');
-const account = require('../models/account')
+const account = require('../models/account');
 
 class ClassPageController {
 
@@ -105,7 +105,25 @@ class ClassPageController {
     }
 
     async addStudent(req, res) {
-        await this.loadStudentListPage(req,res);
+        //add student here
+        let studentData = req.body;
+        let className = req.params.class_name;
+        let year = req.query.year;
+        let classinfo = await mo.getClass(className,year);
+        let maxID = await studentData.getMaxID();
+        var rule = await regulation.getRegulation(year);
+
+        let amountStudent = classInfo.amount_student;
+        if(amountStudent >= rule.max_student){
+            // TODO: so hoc sinh vuot qua quy dinh
+            res.redirect(`/class/${className}`);
+            return;
+        }
+        let curId = maxID + 1;
+        studentData.id = curId;
+        studentData.class_id = classinfo.id;
+        await student.addAStudent(studentData);
+        res.redirect(`/class/${className}`);
     }
 
     async modifyStudent(req,res){

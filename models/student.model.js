@@ -95,7 +95,7 @@ addAStudent = async function (student) {
 
         modifyStudentInClassByID: async (idStudent, studentData) => {
             let query_string = `UPDATE STUDENT 
-                                SET name = N'${studentData.student_name}', gender = N'${studentData.gender}', dob = '${studentData.birthday}',
+                                SET name = N'${studentData.student_name}', gender = N'${studentData.gender}', dob = '${studentData.dob}',
                                 email = '${studentData.email}', address = N'${studentData.address}' 
                                 WHERE id = '${idStudent}'`;
             let result = (await conn).query(query_string);
@@ -104,9 +104,16 @@ addAStudent = async function (student) {
 
         deleteStudentByID: async(idStudent) => {
             let query_string = `DELETE FROM STUDENT WHERE id = '${idStudent}'`;
-            // TODO: CHECK ADMIN PASSWORD HERE
-
             let result = (await conn).query(query_string);
             return result;
+        },
+
+        getMaxID: async()=>{
+            let query_string = `SELECT MAX(CAST(id AS INT)) AS max_id FROM STUDENT;`
+            let result = (await conn).query(query_string);
+            if(result !== undefined){
+                return (await result).recordset[0].max_id;
+            }
+            return -1;
         }
     }

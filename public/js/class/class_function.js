@@ -7,9 +7,6 @@ document.querySelectorAll('.edit-button').forEach(button => {
         const className = document.querySelector('#class-header').getAttribute('data-class-name');
         const currentYear = get_year_selected();
         const formStudent = document.querySelector('#form-student');
-
-
-
         const btnImportListStudent = document.querySelector('#btn-import-list-student');
 
         if (btnImportListStudent) {
@@ -27,10 +24,8 @@ document.querySelectorAll('.edit-button').forEach(button => {
         const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 
 
-        console.log(currentYear);
         // Change action of form
         if (formStudent) {
-            console.log(`/class/${className}/modify_student/${studentId}`);
             formStudent.action = `/class/${className}/modify_student/${studentId}?year=${currentYear}`;
         }
 
@@ -95,12 +90,36 @@ document.querySelectorAll('.delete-button').forEach(button => {
     });
 });
 
-const message = sessionStorage.getItem('toast');
-if (message) {
-    console.log(message);
-    var toast = new bootstrap.Toast(toastLiveExample);
-    toast.show();
-}
+// Lắng nghe sự kiện click trên nút THÊM HỌC SINH
+document.getElementById('btn_add_student').addEventListener('click', async () => {
+    // reset date in input field
+    var modal_form_student = document.getElementById('student_form');
+    var modal_student_title = modal_form_student.querySelector('#form-student-title');
+    modal_student_title.textContent = "TIẾP NHẬN HỌC SINH";
+
+    var modal_student_name = modal_form_student.querySelector('#form-student-name');
+    var modal_student_gender_male = modal_form_student.querySelector('#male');
+    var modal_student_birthday = modal_form_student.querySelector('#birthday');
+    var modal_student_address = modal_form_student.querySelector('#address');
+    var modal_student_email = modal_form_student.querySelector('#email');
+    var modal_student_note = modal_form_student.querySelector('#note');
+
+    modal_student_name.value = "";
+    modal_student_gender_male.checked = true;
+    modal_student_birthday.value = "";
+    modal_student_address.value = "";
+    modal_student_email.value = "";
+    modal_student_note.value = "";
+    // end reset
+
+    const formStudent = document.querySelector('#form-student');
+    // Change action of form
+    if (formStudent) {
+        const currentSelectedYear = get_year_selected();
+        const className = document.querySelector('#class-header').getAttribute('data-class-name');
+        formStudent.action = `/class/${className}/add_a_student?year=${currentSelectedYear}`;
+    }
+})
 
 
 
