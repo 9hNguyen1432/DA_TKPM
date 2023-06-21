@@ -31,7 +31,7 @@ document.querySelectorAll('.edit-button').forEach(button => {
         // Change action of form
         if (formStudent) {
             console.log(`/class/${className}/modify_student/${studentId}`);
-            formStudent.action = `/class/${className}/modify_student/${studentId}?year=${currentYear}`; 
+            formStudent.action = `/class/${className}/modify_student/${studentId}?year=${currentYear}`;
         }
 
         // Hiển thị thông tin học sinh trong modal
@@ -90,9 +90,17 @@ document.querySelectorAll('.delete-button').forEach(button => {
 
         // Change action of form
         if (modalDeleteStudent) {
-            modalDeleteStudent.action = `/class/${className}/delete_student/${studentId}?year=${currentYear}`; 
+            modalDeleteStudent.action = `/class/${className}/delete_student/${studentId}?year=${currentYear}`;
         }
     });
 });
+
+const message = sessionStorage.getItem('toast');
+if (message) {
+    console.log(message);
+    var toast = new bootstrap.Toast(toastLiveExample);
+    toast.show();
+}
+
 
 

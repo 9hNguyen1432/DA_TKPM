@@ -12,6 +12,7 @@ const regulation = require('../models/regulation.model');
 const account = require('../models/account')
 
 class ClassPageController {
+
     async loadPage(req, res) {
         let list_year = await Model.getYears();
         let year_str = req.query.year
@@ -50,7 +51,8 @@ class ClassPageController {
 
             student.dob = day + "/" + month + "/" + year;
         })
-        res.render('class/students', { ClassName: class_name, Teacher: "Lê Thị Ngọc Bích", class: _class, listStudent: listStudent });
+
+        res.render('class/students', {ClassName: class_name, Teacher: "Lê Thị Ngọc Bích", class: _class, listStudent: listStudent });
     }
 
     async loadCourseListPage(req, res) {
@@ -127,12 +129,16 @@ class ClassPageController {
         let studentId = req.params.student_id;
         let className = req.params.class_name;
         let {admin_password} = req.body;
-        const session = req.session.user;
-        console.log("user: " + session);
-        console.log("Username: " + JSON.stringify(req.session));
-        
-        // const user_account = account.user(username);
-        // let result = await student.deleteStudentByID(studentId);
+        const user = req.session.user;
+        const isRightPassword = await account.checkPassword(user.username, admin_password);
+
+        let error = "";
+        if(isRightPassword){
+            let result = await student.deleteStudentByID(studentId);
+        }
+        else {
+            error = "Mật khẩu không chính xác";
+        }
         res.redirect(`/class/${className}`);
     }
 
