@@ -277,8 +277,7 @@ INSERT INTO PARAMETERS (
 -- add class procedure
 CREATE PROCEDURE create_class
 (
-	
-    @_year VARCHAR(64),
+    @_year VARCHAR(10),
 	@_grade INT,
 	@_class_name VARCHAR(10),
     @_teacher NVARCHAR(50)
