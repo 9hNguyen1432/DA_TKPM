@@ -19,6 +19,7 @@
   "homepage": "https://github.com/heoquaycutekhung/DA_TKPM#readme",
   "dependencies": {
     "bootstrap-icons": "^1.10.2",
+    "connect-flash": "^0.1.1",
     "cors": "^2.8.5",
     "csv-parser": "^3.0.0",
     "csv-writer": "^1.6.0",

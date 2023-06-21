@@ -1,5 +1,7 @@
 <script rel="stylesheet" type="text/javascript" src="/js/script.js"></script>
 
+
+
 <nav id="header" class="navbar form-inline px-4 shadow d-{{header}}
     shadow-sm" style="border-radius: 0 0 20px 20px; ">
     <div class="d-flex">
@@ -71,7 +73,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="setting/add_year" method="post" id="addYearForm">
+                <form action="/setting/add_year?year={{CurYear}}&semester={{CurSem}}" method="post" id="addYearForm">
                     <div class="d-flex my-3">
                         <label for="start_year" class="form-label mt-1" style="width: 120px;">Năm bắt đầu :</label>
                         <input type="number" class="form-control text-center" id="start_year" name="start_year"
@@ -85,5 +87,12 @@
         </div>
     </div>
 </div>
+{{#if message}}
+<div class="alert alert-secondary alert-dismissible fade show position-absolute top-0 start-50 translate-middle shadow m-4 z-3" role="alert"
+    style="width:300px">
+    {{message}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/if}}
 
 <script rel="stylesheet" type="text/javascript" src="/js/script.js"></script>

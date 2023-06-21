@@ -109,7 +109,9 @@ document.addEventListener("DOMContentLoaded", function () {
     activeSem(document.getElementById("semmenu-select"))
 });
 
-
+setTimeout(function () {
+    $('.alert').alert('close');
+}, 5000);
 
 
 

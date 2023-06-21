@@ -28,16 +28,29 @@ class SettingPageController {
         console.log(regulation);
         let temp = await regulations.addRegulation(regulation);
 
-        res.render('setting/setting', {regulation, Years: list_year, CurYear: year_str, CurSem: sem_str});
+        res.render('setting/setting', {regulation, Years: list_year, CurYear: year_str, CurSem: sem_str });
     }
 
     async addYear(req, res) {
         let start_year = req.body.start_year;
         let end_year = parseInt(start_year) + 1;
+        console.log(start_year)
+
+        let cur_year = req.query.year
+        let cur_sem = req.query.semester
+
+        var mess = ""
+        try {
+            await Model.addYear(start_year, end_year)
+            req.flash('message', 'Action Successful.');
+        }
+        catch (e) {
+            req.flash('message', 'Action Failed !!!');
+        }
 
         await yearModel.addYear(start_year,end_year)
 
-        res.redirect('/')
+        res.redirect(`/`)
     }
 }
 

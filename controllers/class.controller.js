@@ -11,6 +11,9 @@ const url = require('url');
 const regulation = require('../models/regulation.model');
 const account = require('../models/account');
 
+const ClassModel = require("../models/class.model")
+const AccModel = require('../models/account')
+
 class ClassPageController {
 
     async loadPage(req, res) {
@@ -28,8 +31,9 @@ class ClassPageController {
             class12: allClassName.filter(name => name.slice(0, 2) === "12"),
         }
 
+        const message = req.flash('message')[0];
 
-        res.render('class/home', { Years: list_year, className, CurYear: year_str, CurSem: sem_str });
+        res.render('class/home', { Years: list_year, className, CurYear: year_str, CurSem: sem_str,message });
     }
 
     async loadStudentListPage(req, res) {
@@ -281,7 +285,41 @@ class ClassPageController {
         }
 
     }
-}
+    async addClass (req, res){
+        let grade = req.body.grade;
+        let class_name = req.body.class_name;
+        let teacher = req.body.teacher
+        let year = req.query.year
 
+        console.log(year,class_name,teacher)
+        
+        try{
+            await ClassModel.addClass(year, grade, class_name, teacher);
+        }catch(e){
+            console.log(e.message);
+        }
+
+        //reload
+        res.redirect(req.get('referer'));
+    }
+    
+    async deleteClass (req, res){
+        let password = req.body.password;
+
+        let class_name = req.query.class;
+        let year = req.query.year
+        let sem = req.query.semester
+
+        //check password here nè TT
+        
+        
+        try{
+            await ClassModel.deleteClass(year, class_name);
+        }catch(e){
+            console.log(e.message);
+        }
+        res.redirect(`/class?year=${year}&semester=${sem}`)
+    }
+}
 
 module.exports = new ClassPageController;
