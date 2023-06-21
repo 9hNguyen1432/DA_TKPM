@@ -244,15 +244,12 @@ class ClassPageController {
         //check password here nè TT
         
         
-        //khối
-        let grade = class_name.slice(0,2);
-
-        res.redirect(`/class?year=${year}&semester=${sem}`)
         try{
             await ClassModel.deleteClass(year, class_name);
         }catch(e){
             console.log(e.message);
         }
+        res.redirect(`/class?year=${year}&semester=${sem}`)
     }
 }
 
