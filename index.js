@@ -7,7 +7,6 @@ const morgan = require('morgan')
 const flash = require('connect-flash');
 const helper_hbs = require('./helper/hbs_helper')
 
-
 // Router
 //const appRoute = require('./routers/app.r.js');
 // End Router
@@ -22,7 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 require("./config/hbs")(app);
 
-// //HBS
+//HBS
 // app.engine('hbs', hbs.engine({
 //     extname: '.hbs',
 //     defaultLayout: 'main',
@@ -32,7 +31,7 @@ require("./config/hbs")(app);
 //     ],
 //     helpers: helper_hbs,
 // }))
-app.set("view engine", "hbs");
+// app.set("view engine", "hbs");
 
 //HTTP logger
 app.use(morgan('dev'));

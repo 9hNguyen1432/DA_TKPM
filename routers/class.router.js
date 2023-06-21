@@ -16,4 +16,7 @@ router.get('/',isNotAuthenticated,classController.loadPage);
 router.get('/:class_name/export',isNotAuthenticated,classController.downloadStudentsOfClass_CSV);
 router.get('/class/:class_name/course/:course_name/download-transcript',isNotAuthenticated, classController.downloadTranscriptOfSubject_CSV);
 
+router.post('/add_class',isNotAuthenticated,classController.addClass)
+router.post('/delete_class',isNotAuthenticated,classController.deleteClass)
+
 module.exports = router;
