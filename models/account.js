@@ -23,8 +23,8 @@ module.exports = {
     user: async(username) =>{
         try{
             var query_string = `SELECT * FROM ACCOUNT WHERE username = '${username}'`
-            let user = (await conn).query(query_string)
-        return (await user).recordset;
+            let user = (await conn).query(query_string);
+            return (await user).recordset[0];
         }
         catch (error) {
             console.error(error);

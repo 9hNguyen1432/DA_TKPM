@@ -28,12 +28,13 @@ class LoginPageController{
 
             }else{
                 
-                const user = account.user(username)
+                const user = await account.user(username)
                 req.session.regenerate(function (err) {
                     if (err) next(err)
                     req.session.user = {
                         ...user,
                     };
+
     
                     req.session.save(function (err) {
                         if (err) return next(err)

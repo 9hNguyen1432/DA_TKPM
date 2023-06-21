@@ -8,7 +8,8 @@ const Class = require('../models/class.model');
 const subject = require('../models/subject.model')
 const mo = require("../models/class.model")
 const url = require('url');
-const regulation = require('../models/regulation.model')
+const regulation = require('../models/regulation.model');
+const account = require('../models/account')
 
 class ClassPageController {
     async loadPage(req, res) {
@@ -125,7 +126,13 @@ class ClassPageController {
     async deleteStudent(req,res){
         let studentId = req.params.student_id;
         let className = req.params.class_name;
-        let result = await student.deleteStudentByID(studentId);
+        let {admin_password} = req.body;
+        const session = req.session.user;
+        console.log("user: " + session);
+        console.log("Username: " + JSON.stringify(req.session));
+        
+        // const user_account = account.user(username);
+        // let result = await student.deleteStudentByID(studentId);
         res.redirect(`/class/${className}`);
     }
 
