@@ -277,7 +277,7 @@ INSERT INTO PARAMETERS (
 -- add class procedure
 CREATE PROCEDURE create_class
 (
-    @_year VARCHAR(64),
+    @_year VARCHAR(10),
 	@_grade INT,
 	@_class_name VARCHAR(10),
     @_teacher NVARCHAR(50)
@@ -294,6 +294,7 @@ BEGIN
 	-- Khai báo con trỏ
 	DECLARE _cursor CURSOR FOR
 	SELECT id,name FROM CLASS
+	WHERE _year=@_year
 
 	-- Mở con trỏ
 	OPEN _cursor
@@ -351,3 +352,48 @@ END
 --drop procedure create_class
 --EXEC create_class '2021-2022', 11, '11C4', N'Lê Thị Ngọc Bích'
 --select * from CLASS
+
+-- delete class procedure
+CREATE PROCEDURE delete_class
+(
+    @_year VARCHAR(10),
+	@_class_name VARCHAR(10)
+)
+AS
+BEGIN
+	--khai báo biến
+	DECLARE @id INT
+	DECLARE @name VARCHAR(10)
+
+	-- Khai báo con trỏ
+	DECLARE _cursor CURSOR FOR
+	SELECT id,name FROM CLASS
+	WHERE _year=@_year
+
+	-- Mở con trỏ
+	OPEN _cursor
+
+	-- Lấy dòng đầu tiên
+	FETCH NEXT FROM _cursor INTO @id,@name
+
+	-- Duyệt qua các dòng trong bảng
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		IF @name=@_class_name
+			BREAK
+
+		-- Lấy dòng tiếp theo
+		FETCH NEXT FROM _cursor INTO @id,@name
+	END
+
+	-- Đóng con trỏ
+	CLOSE _cursor
+	DEALLOCATE _cursor
+
+	--delete
+	DELETE FROM CLASS WHERE id=@id
+END
+
+-- drop procedure delete_class
+-- EXEC delete_class'2021-2022','11a4'
+-- select * from CLASS
