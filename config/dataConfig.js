@@ -1,9 +1,12 @@
 // information to connect to database
 var config = {
-    server: "PANDA\\SQLEXPRESS01",
-    user: "sa",
-    password: "1",
+    server: "TOAINGUYEN\\SQLEXPRESS",
+    user: "toainguyenvan",
+    password: "toainguyenvan",
     database: "QLHSC3",
+    options: {
+        trustedConnection: true,
+    },
     driver: "msnodesqlv8",
 }
 

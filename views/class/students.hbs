@@ -1,5 +1,6 @@
 <div class="container-fluid">
-    <h5 class="card py-2 shadow-sm" style="width: 200px; text-align: center; margin: 15px auto; border-radius: 10px;">
+    <h5 id="class-header" data-class-name="{{ClassName}}" class="card py-2 shadow-sm"
+        style="width: 200px; text-align: center; margin: 15px auto; border-radius: 10px;">
         {{ClassName}}</h5></span>
     <div class="d-flex justify-content-between align-items-end" style="margin-inline: 100px; margin-top: -30px;">
         <div>
@@ -35,9 +36,19 @@
                                     <div style="width: 100px;">Giới tính: </div>
                                     <div class="mx-1" style="text-align: left;">{{this.gender}}</div>
                                 </div>
-                                <div class="d-flex">
-                                    <div style="width: 100px;">Ngày sinh: </div>
-                                    <div class="mx-1" style="text-align: left;">{{this.dob}}</div>
+
+                                <div style="text-align: end; margin-top: -5px; margin-bottom: 5px; margin-right: 5px;">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                        data-bs-target="#viewStudentDetailModal" data-bs-mssv="{{this.id}}"
+                                        onclick="showModal(this)">Xem chi tiết</button>
+                                    <button type="button" class="btn btn-success edit-button" data-bs-toggle="modal"
+                                        data-bs-target="#student_form" data-bs-mssv="{{this.id}}"
+                                        onclick="showModal(this)">Chỉnh sửa</button>
+                                    {{!-- <a href="#" class="btn btn-success mx-3">Chỉnh sửa</a> --}}
+                                    {{!-- <a href="#" class="btn btn-danger">Xóa</a> --}}
+                                    <button class="btn btn-danger delete-button" data-bs-toggle="modal" href="#deleteStudent"
+                                        data-bs-mssv="{{this.id}}"
+                                        role="button">Xóa</button>
                                 </div>
                             </div>
 
@@ -145,7 +156,7 @@
 
     </div>
     <div class="d-flex justify-content-center">
-        <button class="mt-3  btn btn-success me-5" type="button" data-bs-toggle="modal" data-bs-target="#addStudent">
+        <button id="btn_add_student" class="mt-3  btn btn-success me-5" type="button" data-bs-toggle="modal" data-bs-target="#student_form">
             Thêm học sinh
         </button>
         <button class="mt-3  btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#deleteClass">
@@ -156,48 +167,50 @@
 </div>
 
 {{!-- FORM ADD STUDENT --}}
-<div class="modal fade" id="addStudent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="student_form" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <div></div>
                 <h5 class="card py-2 shadow-sm"
-                    style="width: 200px; text-align: center; margin: 0px auto; border-radius: 10px;">
+                    style="width: 300px; text-align: center; margin: 0px auto; border-radius: 10px;"
+                    id="form-student-title">
                     Tiếp nhận học sinh</h5></span>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                     style="margin-left: 0;"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="form-student" method="post" action="">
                     <div class="d-flex">
                         <label for="class-name" class="col-form-label" style="margin-right: 15px;">Lớp: </label>
                         <input class="text-center" type="text" class="form-control" id="class-name"
                             value="{{ClassName}}" style="display:block; width: 120px;" disabled>
 
-                        <a href="/class/{{ClassName}}/import" type="button"
+                        <a id="btn-import-list-student" href="/class/{{ClassName}}/import" type="button"
                             class="btn btn-secondary float-right ms-auto">Import danh sách từ file</a>
                     </div>
 
                     <div class="d-flex border mt-3">
                         <div class="border-end">
                             <div class="m-3">
-                                <label for="student-name">Họ và tên: </label>
-                                <input type="text" class="form-control" id="student-name" style="width: 350px;">
+                                <label for="form-student-name">Họ và tên: </label>
+                                <input type="text" class="form-control" id="form-student-name" name="student_name"
+                                    style="width: 350px;">
                             </div>
 
                             <div class="d-flex m-3">
                                 <label for="student-name" style="margin-right: 15px;">Giới tính: </label>
 
                                 <div class="form-check d-block" style="margin-right: 15px;">
-                                    <input class="form-check-input" type="radio" name="gender" id="male">
+                                    <input class="form-check-input" type="radio" name="gender" id="male" value="male" checked>
                                     <label class="form-check-label" for="male">
                                         Nam
                                     </label>
                                 </div>
 
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="gender" id="femail" checked>
-                                    <label class="form-check-label" for="femail">
+                                    <input class="form-check-input" type="radio" name="gender" id="female" value="female">
+                                    <label class="form-check-label" for="female">
                                         Nữ
                                     </label>
                                 </div>
@@ -205,32 +218,32 @@
 
                             <div class="m-3">
                                 <label for="student-name">Ngày sinh: </label>
-                                <input type="date" class="form-control" id="birthday">
+                                <input type="date" class="form-control" id="birthday" name="dob">
                             </div>
 
                             <div class="m-3">
                                 <label for="student-name">Địa chỉ: </label>
-                                <input type="text" class="form-control" id="address">
+                                <input type="text" class="form-control" id="address" name="address">
                             </div>
 
                         </div>
 
                         <div>
                             <div class="m-3">
-                                <label for="phone">Email: </label>
-                                <input type="text" class="form-control" id="phone" style="width: 350px;">
+                                <label for="email">Email: </label>
+                                <input type="text" class="form-control" id="email" style="width: 350px;" name="email">
                             </div>
 
                             <div class="m-3">
                                 <label for="note">Ghi chú: </label>
-                                <textarea class="form-control" id="note" rows="3"></textarea>
+                                <textarea class="form-control" id="note" rows="3" name="note"></textarea>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success">Xác
+                <button type="submit" class="btn btn-success" form="form-student">Xác
                     nhận</button>
             </div>
         </div>
@@ -249,10 +262,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="post" id="form-delete">
+                <form method="post" id="form-delete" action="">
                     <div class="m-3">
                         <label for="student-name">Nhập mật khẩu admin: </label>
-                        <input type="text" class="form-control mt-2" id="student-name" style="width: 350px;">
+                        <input type="text" class="form-control mt-2" id="student-name" name="admin_password" style="width: 350px;">
                     </div>
                 </form>
                 <div class="text-danger mx-3">
@@ -296,7 +309,8 @@
 </div>
 {{!-- END DELETE CLASS --}}
 
-
+{{!-- DETAIL INFORMATION STUDENT --}}
+{{!-- Modal --}}
 <div class="modal fade mt-1" id="viewStudentDetailModal" tabindex="-1" aria-labelledby="viewStudentDetailModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -466,3 +480,21 @@
         </div>
     </div>
 </div>
+{{!-- END DETAIL INFO STUDENT --}}
+
+
+
+{{!-- TOAST --}}
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <img src="..." class="rounded me-2" alt="...">
+      <strong class="me-auto">Bootstrap</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      Hello, world! This is a toast message.
+    </div>
+  </div>
+</div>
+{{!-- END TOAST --}}

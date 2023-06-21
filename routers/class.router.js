@@ -7,6 +7,10 @@ var multer = require('multer')
 var storage = multer.memoryStorage();
 var upload = multer({ storage: storage });
 
+router.post('/:class_name/add_a_student',isNotAuthenticated, classController.addStudent);
+router.post('/:class_name/delete_student/:student_id',isNotAuthenticated, classController.deleteStudent);
+router.get('/:class_name/modify_student/:student_id',isNotAuthenticated, classController.getInfoStudent);
+router.post('/:class_name/modify_student/:student_id',isNotAuthenticated, classController.modifyStudent);
 router.get('/:class_name/import',isNotAuthenticated,classController.importStudentRender);
 router.post('/:class_name/import',isNotAuthenticated, upload.fields([{name: "danhsachhocsinh"}]),classController.importStudentHandle);
 router.get('/:class_name/course/:course_name',isNotAuthenticated,classController.loadCourseDetailPage);
@@ -14,9 +18,8 @@ router.get('/:class_name/course',isNotAuthenticated,classController.loadCourseLi
 router.get('/:class_name',isNotAuthenticated,classController.loadStudentListPage);
 router.get('/',isNotAuthenticated,classController.loadPage);
 router.get('/:class_name/export',isNotAuthenticated,classController.downloadStudentsOfClass_CSV);
-router.get('/class/:class_name/course/:course_name/download-transcript',isNotAuthenticated, classController.downloadTranscriptOfSubject_CSV);
+router.get('/:class_name/course/:course_name/download-transcript',isNotAuthenticated, classController.downloadTranscriptOfSubject_CSV);
 
 router.post('/add_class',isNotAuthenticated,classController.addClass)
 router.post('/delete_class',isNotAuthenticated,classController.deleteClass)
-
 module.exports = router;
