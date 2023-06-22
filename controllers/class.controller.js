@@ -13,6 +13,7 @@ const account = require('../models/account');
 
 const ClassModel = require("../models/class.model")
 const AccModel = require('../models/account')
+var crypto = require('crypto')
 
 class ClassPageController {
 
@@ -33,7 +34,7 @@ class ClassPageController {
 
         const message = req.flash('message')[0];
 
-        res.render('class/home', { Years: list_year, className, CurYear: year_str, CurSem: sem_str,message });
+        res.render('class/home', { Years: list_year, className, CurYear: year_str, CurSem: sem_str, message });
     }
 
     async loadStudentListPage(req, res) {
@@ -58,6 +59,9 @@ class ClassPageController {
 
             student.dob = day + "/" + month + "/" + year;
         })
+
+        const message = req.flash('message')[0];
+
         res.render('class/students', {
             ClassName: class_name,
             Teacher: "Lê Thị Ngọc Bích",
@@ -65,7 +69,8 @@ class ClassPageController {
             listStudent: listStudent,
             Years: list_year,
             CurYear: year_str,
-            CurSem: sem_str
+            CurSem: sem_str,
+            message
         });
     }
 
@@ -149,12 +154,12 @@ class ClassPageController {
         let studentData = req.body;
         let className = req.params.class_name;
         let year = req.query.year;
-        let classinfo = await mo.getClass(className,year);
+        let classinfo = await mo.getClass(className, year);
         let maxID = await studentData.getMaxID();
         var rule = await regulation.getRegulation(year);
 
         let amountStudent = classInfo.amount_student;
-        if(amountStudent >= rule.max_student){
+        if (amountStudent >= rule.max_student) {
             // TODO: so hoc sinh vuot qua quy dinh
             res.redirect(`/class/${className}`);
             return;
@@ -166,9 +171,9 @@ class ClassPageController {
         res.redirect(`/class/${className}`);
     }
 
-    async modifyStudent(req,res){
+    async modifyStudent(req, res) {
         let studentData = req.body;
-        if(studentData.gender == 'male'){
+        if (studentData.gender == 'male') {
             studentData.gender = "Nam";
         }
         else {
@@ -183,15 +188,15 @@ class ClassPageController {
         res.redirect(`/class/${className}`);
     }
 
-    async deleteStudent(req,res){
+    async deleteStudent(req, res) {
         let studentId = req.params.student_id;
         let className = req.params.class_name;
-        let {admin_password} = req.body;
+        let { admin_password } = req.body;
         const user = req.session.user;
         const isRightPassword = await account.checkPassword(user.username, admin_password);
 
         let error = "";
-        if(isRightPassword){
+        if (isRightPassword) {
             let result = await student.deleteStudentByID(studentId);
         }
         else {
@@ -285,40 +290,50 @@ class ClassPageController {
         }
 
     }
-    async addClass (req, res){
+    async addClass(req, res) {
         let grade = req.body.grade;
-        let class_name = req.body.class_name;
+        let class_name = req.body.class_name.toUpperCase();
         let teacher = req.body.teacher
         let year = req.query.year
 
-        console.log(year,class_name,teacher)
-        
-        try{
+        try {
             await ClassModel.addClass(year, grade, class_name, teacher);
-        }catch(e){
+            req.flash('message', `Thành công: Đã thêm lớp ${class_name}`);
+        } catch (e) {
             console.log(e.message);
+            req.flash('message', `Thất bại: ${class_name} tên lớp học bị trùng.`);
         }
 
         //reload
         res.redirect(req.get('referer'));
     }
-    
-    async deleteClass (req, res){
+
+    async deleteClass(req, res) {
         let password = req.body.password;
 
         let class_name = req.query.class;
         let year = req.query.year
         let sem = req.query.semester
 
-        //check password here nè TT
-        
-        
-        try{
-            await ClassModel.deleteClass(year, class_name);
-        }catch(e){
-            console.log(e.message);
+        //check password
+        let accPass = req.session.user.password
+        var crypto_pass = crypto.createHash('md5').update(password).digest('hex');
+        if (crypto_pass.toUpperCase() == accPass) {
+            try {
+                await ClassModel.deleteClass(year, class_name);
+                req.flash('message', `Thành công: Đã xóa lớp ${class_name}`);
+                res.redirect(`/class?year=${year}&semester=${sem}`)
+            } catch (e) {
+                console.log(e.message);
+                req.flash('message', `Thất bại: Không thể xóa lớp ${class_name} vì đã có thông tin về học sinh, môn học ...`);
+                //reload
+                res.redirect(req.get('referer'));
+            }
+        } else {
+            req.flash('message', 'Thất bại: Mật khẩu không đúng.');
+            //reload
+            res.redirect(req.get('referer'));
         }
-        res.redirect(`/class?year=${year}&semester=${sem}`)
     }
 }
 
