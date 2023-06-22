@@ -103,6 +103,7 @@ function activeSem(item) {
 
 }
 
+
 document.addEventListener("DOMContentLoaded", function () {
     console.log("hihi")
     activeYear(document.getElementById("yearmenu-dropdown"));
@@ -113,5 +114,25 @@ setTimeout(function () {
     $('.alert').alert('close');
 }, 5000);
 
+function validateAddClassForm() {
+    var result = true;
+
+    let class_name = document.forms["form-add-class"]["class_name"].value;
+    let grade = document.forms["form-add-class"]["grade"].value;
+    let grade_in_name = class_name.slice(0, 2)
+    console.log(class_name,grade,grade_in_name)
+    if (grade_in_name != grade) {
+        $('#class_name_span').text("Hai ký tự đầu phải trùng với khối học.")
+        result = false;
+    }
+
+    let teacher = document.forms["form-add-class"]["teacher"].value;
+    if(teacher==""){
+        $('#teacher_span').text("Không được để trống.")
+        result = false;
+    }
+
+    return result;
+}
 
 
