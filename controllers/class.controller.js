@@ -33,13 +33,13 @@ class ClassPageController {
 
         const message = req.flash('message')[0];
 
-        res.render('class/home', { Years: list_year, className, CurYear: year_str, CurSem: sem_str,message });
+        res.render('class/home', { Years: list_year, className, CurYear: year_str, CurSem: sem_str, message });
     }
 
     async loadStudentListPage(req, res) {
         let list_year = await Model.getYears();
-        let year_str = req.query.year
-        let sem_str = req.query.semester
+        let year_str = await req.query.year;
+        let sem_str = await req.query.semester;
 
         let class_name = req.params.class_name;
         const _class = await Class.getClass(class_name, year_str).amount_student;
@@ -149,12 +149,12 @@ class ClassPageController {
         let studentData = req.body;
         let className = req.params.class_name;
         let year = req.query.year;
-        let classinfo = await mo.getClass(className,year);
+        let classinfo = await mo.getClass(className, year);
         let maxID = await studentData.getMaxID();
         var rule = await regulation.getRegulation(year);
 
         let amountStudent = classInfo.amount_student;
-        if(amountStudent >= rule.max_student){
+        if (amountStudent >= rule.max_student) {
             // TODO: so hoc sinh vuot qua quy dinh
             res.redirect(`/class/${className}`);
             return;
@@ -166,9 +166,9 @@ class ClassPageController {
         res.redirect(`/class/${className}`);
     }
 
-    async modifyStudent(req,res){
+    async modifyStudent(req, res) {
         let studentData = req.body;
-        if(studentData.gender == 'male'){
+        if (studentData.gender == 'male') {
             studentData.gender = "Nam";
         }
         else {
@@ -183,15 +183,15 @@ class ClassPageController {
         res.redirect(`/class/${className}`);
     }
 
-    async deleteStudent(req,res){
+    async deleteStudent(req, res) {
         let studentId = req.params.student_id;
         let className = req.params.class_name;
-        let {admin_password} = req.body;
+        let { admin_password } = req.body;
         const user = req.session.user;
         const isRightPassword = await account.checkPassword(user.username, admin_password);
 
         let error = "";
-        if(isRightPassword){
+        if (isRightPassword) {
             let result = await student.deleteStudentByID(studentId);
         }
         else {
@@ -202,53 +202,53 @@ class ClassPageController {
 
     //for method get(/:class_name/import)
     async importStudentRender(req, res) {
+        let list_year = await Model.getYears();
+        let year_str = req.query.year
+        let sem_str = req.query.semester
+
         var user = req.session.user;
 
         let { class_name } = req.params;
-        //TODO:get year and semester:
-        const parseURL = url.parse(req.url, true);
-        let year = parseURL.query.year;
-        let semester = parseURL.query.semester;
-
-        year = year ? year : "2021-2022";
-        semester = semester ? semester : 1;
 
         //get current class
-        let allClass = await mo.getAllClassInYear(year);
+        let allClass = await mo.getAllClassInYear(year_str);
         let allClassName = allClass.map(_class => _class.name);
         //
-        res.render('class/import_students', { user, year, semester, allClassName, class_name });
+        res.render('class/import_students', {
+            user,
+            allClassName,
+            class_name,
+            Years: list_year,
+            CurYear: year_str,
+            CurSem: sem_str
+        });
     }
 
     //for method post(/:class_name/import)
     async importStudentHandle(req, res, next) {
-        // console.log(req.files)
         var user = req.session.user
-        //
-        let year = "2021-2022";
-        let semester = 1;
-        //
+        let list_year = await Model.getYears();
+        let year_str = req.query.year
+        let sem_str = req.query.semester
+
         //TODO get current class
 
-        //
-        let allClass = await mo.getAllClassInYear(year);
+        let allClass = await mo.getAllClassInYear(year_str);
         let allClassName = allClass.map(_class => _class.name);
+        var classChoosen = req.body.class.trim();
         try {
             // TODO: load rule from database
 
-            var rule = await regulation.getRegulation(year);
+            var rule = await regulation.getRegulation(year_str);
             //
-            var classChoosen = req.body.class.trim();
-            console.log(classChoosen)
+
             var teacher = req.body.gvcn;
-            let classInfo = await mo.getClass(classChoosen, year);
+            let classInfo = await mo.getClass(classChoosen, year_str);
             let amountStudent = classInfo.amount_student;
             //
             var csvFileStudent = await mo.CSVFiletoJsonObject(req.files.danhsachhocsinh[0].buffer.toString('utf8'))
-            var validedData = await mo.checkListStudent(csvFileStudent, amountStudent, year);
+            var validedData = await mo.checkListStudent(csvFileStudent, amountStudent, year_str);
             var errors = [];
-            console.log(validedData)
-
             var success = false
             if (validedData.constrainNumOfStudents === false) {
                 errors.push("Số học sinh của lớp không hợp lệ (tối đa " + rule.max_student + ")");
@@ -257,7 +257,15 @@ class ClassPageController {
                         errors.push("Thông tin học sinh " + Student.name + " Không hợp lệ. (Lưu ý: Ngày sinh: mm/dd/yyyy)");
                     }
                 }
-                res.render('class/import_students', { user, errors, allClassName, class_name: classChoosen })
+                res.render('class/import_students', {
+                    user,
+                    errors,
+                    allClassName,
+                    class_name: classChoosen,
+                    Years: list_year,
+                    CurYear: year_str,
+                    CurSem: sem_str
+                })
             }
 
             else {
@@ -265,45 +273,74 @@ class ClassPageController {
                     for (let Student of validedData.listStudentInvalid) {
                         errors.push("Thông tin học sinh " + Student.name + " Không hợp lệ. (Lưu ý: Ngày sinh: mm/dd/yyyy)");
                     }
-                    res.render('class/import_students', { user, errors, allClassName, class_name: classChoosen })
+                    res.render('class/import_students', {
+                        user,
+                        errors,
+                        allClassName,
+                        class_name: classChoosen,
+                        Years: list_year,
+                        CurYear: year_str,
+                        CurSem: sem_str
+                    })
                     return;
                 }
                 success = true
                 //TODO save in database
                 var listStudent = validedData.listStudentValid
-                var id = await student.getTheNewestStudentID(classChoosen, year);
+                var id = await student.getTheNewestStudentID(classChoosen, year_str);
                 await student.addListStudent(listStudent, id, classInfo);
-
-                res.render('class/import_students', { user, errors, allClassName, class_name: classChoosen })
+                res.render('class/import_students', {
+                    user,
+                    errors,
+                    allClassName,
+                    class_name: classChoosen,
+                    Years: list_year,
+                    CurYear: year_str,
+                    CurSem: sem_str,
+                    success
+                })
             }
 
         }
         catch (err) {
             console.log(err)
-            res.render('class/import_students', { user, errors, allClassName })
+            res.render('class/import_students', {
+                user, errors, allClassName,
+                class_name: classChoosen,
+                Years: list_year,
+                CurYear: year_str,
+                CurSem: sem_str,
+            })
 
         }
 
     }
-    async addClass (req, res){
+
+    async importScoreRender(req, res) {
+
+    }
+    async importScoreHandle(req, res) {
+
+    }
+    async addClass(req, res) {
         let grade = req.body.grade;
         let class_name = req.body.class_name;
         let teacher = req.body.teacher
         let year = req.query.year
 
-        console.log(year,class_name,teacher)
-        
-        try{
+        console.log(year, class_name, teacher)
+
+        try {
             await ClassModel.addClass(year, grade, class_name, teacher);
-        }catch(e){
+        } catch (e) {
             console.log(e.message);
         }
 
         //reload
         res.redirect(req.get('referer'));
     }
-    
-    async deleteClass (req, res){
+
+    async deleteClass(req, res) {
         let password = req.body.password;
 
         let class_name = req.query.class;
@@ -311,11 +348,11 @@ class ClassPageController {
         let sem = req.query.semester
 
         //check password here nè TT
-        
-        
-        try{
+
+
+        try {
             await ClassModel.deleteClass(year, class_name);
-        }catch(e){
+        } catch (e) {
             console.log(e.message);
         }
         res.redirect(`/class?year=${year}&semester=${sem}`)

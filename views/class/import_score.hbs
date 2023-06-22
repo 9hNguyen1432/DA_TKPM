@@ -4,7 +4,7 @@
     <div class="container p-100">
         <div class="row">
             <div class="col-5 mx-auto ">
-                <h5 class="text-center bg-light shadow rounded-3 py-3 mt-3 text-dark">THÊM DANH SÁCH LỚP HỌC</h5>
+                <h5 class="text-center bg-light shadow rounded-3 py-3 mt-3 text-dark">Thêm danh sách điểm</h5>
             </div>
 
         </div>
@@ -16,7 +16,7 @@
                 <div class="card border-0 shadow rounded-3 my-5">
 
                     <div class="card-body p-4 p-sm-5">
-                        <form class="g-3" action="/class/{{class_name}}/import?year={{CurYear}}&semester={{CurSem}}" method="post" enctype="multipart/form-data">
+                        <form class="g-3" action="/class/{{class_name}}/course/{{subject_name}}/import?year={{CurYear}}&semester={{CurSem}}" method="post" enctype="multipart/form-data">
                             <div class="row mb-4">
                                 <div class="col-6">
                                     <label for="class" class="form-label">Lớp</label>
@@ -29,16 +29,19 @@
 
 
                                 <div class="col-6">
-                                    <label for="input_teacher" class="d-block mb-2">Giáo viên chủ nhiệm</label>
-                                    <input type="text" name="gvcn" class="form-control w-100" id="input_teacher" value=""
-                                        placeholder="Giáo viên chủ nhiệm" required>
+                                    <label for="subject" class="form-label">Lớp</label>
+                                    <select id="subject" name="subject" class="form-select form-control" aria-label="Default select example">
+                                        {{#rendercombolist allSubject subject_name}}
+                                        {{this}}
+                                        {{/rendercombolist}}
+                                    </select>
                                 </div>
                             </div>
 
                             <fieldset class="row mb-3">
                                 <div class="col-md-6 mb-2 my-auto">
                                     <label for="btntaimau" class="form-label d-block">Tải mẫu</label>
-                                    <a href="/resources/mau_danh_sach_hoc_sinh_them_vao_lop.csv"
+                                    <a href="/resources/mau_import_diem.csv"
                                         download="mau_danh_sach_hoc_sinh_them_vao_lop.csv">
                                         <button type="button" class=" btn btn-success" id="btntaimau">Tải
                                             mẫu danh sách (.csv)</button>
@@ -50,60 +53,6 @@
                                         id="fileDS" accept=".csv" enctype="multipart/form-data" required>
                                 </div>
                             </fieldset>
-
-                            {{!-- xu lý hiện cầu thủ nếu prevew
-                            <div class="card mt-2">
-                                <div class="card-header">
-                                    <div class="row">
-                                        <div class="col-sm-2 my-auto">
-                                            <div class=" row">
-                                                <p>Hình Ảnh</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2 border-end my-auto">
-                                            CMND/CCCD
-                                        </div>
-                                        <div class="col-sm-3 border-start my-auto">
-                                            Họ tên
-                                        </div>
-                                        <div class="col-sm-2 border-start border-end my-auto">
-                                            Ngày sinh
-                                        </div>
-                                        <div class="col-sm-3 mx-auto my-auto">
-                                            Quê quán
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <div class="card-body mt-1">
-                                    <div class="row">
-                                        <div class="col-sm-2 my-auto">
-                                            <div class=" row">
-                                                <img src="https://upload.wikimedia.org/wikipedia/vi/4/43/Binh_Dinh_FC_logo.svg"
-                                                    alt="">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2 border-end my-auto">
-                                            <p>20120320</p>
-                                        </div>
-                                        <div class="col-sm-3 border-start my-auto">
-                                            <p>Nguyễn Hữu Chính</p>
-                                        </div>
-                                        <div class="col-sm-2 border-start border-end my-auto">
-                                            <p>14/03/2002</p>
-                                        </div>
-                                        <div class="col-sm-3 mx-auto my-auto">
-                                            <p>Thế Thạnh 2 - Ân Thạnh - Hoài Ân - Bình Định</p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div> --}}
-
-
-                            <!-- (B) PICK CSV FILE -->
-
 
                             <!-- (C) GENERATE HTML TABLE HERE -->
 
@@ -166,7 +115,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel"> THÔNG BÁO </h5>
+                        <h5 class="modal-title" id="exampleModalLabel">THÔNG BÁO</h5>
                         <a href="/manage/register-club">
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </a>
@@ -179,12 +128,12 @@
                         </div>
                     </div>
                     {{/each}}
-                    <div class="modal-body text-success">
-                        Bạn đã import danh sách lớp {{class_name}} thành công.
+                    <div class="modal-body">
+                        Bạn đã import danh sách điểm môn {{subject_name}} của lớp {{class_name}} thành công.
                     </div>
                     <div class="modal-footer">
-                        <a href="/class/{{class_name}}?year={{CurYear}}&semester={{CurSem}}">
-                            <button type="button" class="btn btn-primary">OK</button>
+                        <a href="/class/{{class_name}}/course/{{subject_name}}">
+                            <button type="button" class="btn btn-primary">Trang chủ</button>
                         </a>
 
                     </div>
