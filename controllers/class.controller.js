@@ -13,6 +13,7 @@ const account = require('../models/account');
 
 const ClassModel = require("../models/class.model")
 const AccModel = require('../models/account')
+var crypto = require('crypto')
 
 class ClassPageController {
 
@@ -58,6 +59,9 @@ class ClassPageController {
 
             student.dob = day + "/" + month + "/" + year;
         })
+
+        const message = req.flash('message')[0];
+
         res.render('class/students', {
             ClassName: class_name,
             Teacher: "Lê Thị Ngọc Bích",
@@ -65,7 +69,8 @@ class ClassPageController {
             listStudent: listStudent,
             Years: list_year,
             CurYear: year_str,
-            CurSem: sem_str
+            CurSem: sem_str,
+            message
         });
     }
 
@@ -324,16 +329,16 @@ class ClassPageController {
     }
     async addClass(req, res) {
         let grade = req.body.grade;
-        let class_name = req.body.class_name;
+        let class_name = req.body.class_name.toUpperCase();
         let teacher = req.body.teacher
         let year = req.query.year
 
-        console.log(year, class_name, teacher)
-
         try {
             await ClassModel.addClass(year, grade, class_name, teacher);
+            req.flash('message', `Thành công: Đã thêm lớp ${class_name}`);
         } catch (e) {
             console.log(e.message);
+            req.flash('message', `Thất bại: ${class_name} tên lớp học bị trùng.`);
         }
 
         //reload
@@ -347,15 +352,25 @@ class ClassPageController {
         let year = req.query.year
         let sem = req.query.semester
 
-        //check password here nè TT
-
-
-        try {
-            await ClassModel.deleteClass(year, class_name);
-        } catch (e) {
-            console.log(e.message);
+        //check password
+        let accPass = req.session.user.password
+        var crypto_pass = crypto.createHash('md5').update(password).digest('hex');
+        if (crypto_pass.toUpperCase() == accPass) {
+            try {
+                await ClassModel.deleteClass(year, class_name);
+                req.flash('message', `Thành công: Đã xóa lớp ${class_name}`);
+                res.redirect(`/class?year=${year}&semester=${sem}`)
+            } catch (e) {
+                console.log(e.message);
+                req.flash('message', `Thất bại: Không thể xóa lớp ${class_name} vì đã có thông tin về học sinh, môn học ...`);
+                //reload
+                res.redirect(req.get('referer'));
+            }
+        } else {
+            req.flash('message', 'Thất bại: Mật khẩu không đúng.');
+            //reload
+            res.redirect(req.get('referer'));
         }
-        res.redirect(`/class?year=${year}&semester=${sem}`)
     }
 }
 
