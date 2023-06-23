@@ -115,5 +115,34 @@ addAStudent = async function (student) {
                 return (await result).recordset[0].max_id;
             }
             return -1;
+        },
+
+        getInfoStudentById_Search: async(idStudent, year)=>{
+            let query_string = `SELECT Student.name AS student_name, Class.name AS class_name,
+                                AVG(CASE WHEN Result._semester = 1 THEN Result.mark ELSE NULL END) AS avg_mark_semester1,
+                                AVG(CASE WHEN Result._semester = 2 THEN Result.mark ELSE NULL END) AS avg_mark_semester2
+                                FROM Student
+                                JOIN Class ON Student.class_id = Class.id
+                                JOIN Result ON Result.student_id = Student.id
+                                WHERE Result._year = '${year}' AND Student.id = '${idStudent}'
+                                GROUP BY Student.id, Student.name, Class.name`;
+
+            let result = (await conn).query(query_string);
+            console.log(await result);
+            return result;
+        },
+
+        getInfoStudentByName_Search: async(studentName, year)=>{
+            const query_string = `SELECT Student.name AS student_name, Class.name AS class_name,
+                                    AVG(CASE WHEN Result._semester = 1 THEN Result.mark ELSE NULL END) AS avg_mark_semester1,
+                                    AVG(CASE WHEN Result._semester = 2 THEN Result.mark ELSE NULL END) AS avg_mark_semester2
+                                    FROM Student
+                                    JOIN Class ON Student.class_id = Class.id
+                                    JOIN Result ON Result.student_id = Student.id
+                                    WHERE Student.name LIKE '%${studentName}%' AND Result._year = '${year}'
+                                    GROUP BY Student.id = Student.name, Class.name`;
+            let result = (await conn).query(query_string);
+            console.log(result);
+            return result;
         }
     }
