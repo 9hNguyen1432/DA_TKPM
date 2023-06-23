@@ -36,20 +36,6 @@
                                     <div style="width: 100px;">Giới tính: </div>
                                     <div class="mx-1" style="text-align: left;">{{this.gender}}</div>
                                 </div>
-
-                                <div style="text-align: end; margin-top: -5px; margin-bottom: 5px; margin-right: 5px;">
-                                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                                        data-bs-target="#viewStudentDetailModal" data-bs-mssv="{{this.id}}"
-                                        onclick="showModal(this)">Xem chi tiết</button>
-                                    <button type="button" class="btn btn-success edit-button" data-bs-toggle="modal"
-                                        data-bs-target="#student_form" data-bs-mssv="{{this.id}}"
-                                        onclick="showModal(this)">Chỉnh sửa</button>
-                                    {{!-- <a href="#" class="btn btn-success mx-3">Chỉnh sửa</a> --}}
-                                    {{!-- <a href="#" class="btn btn-danger">Xóa</a> --}}
-                                    <button class="btn btn-danger delete-button" data-bs-toggle="modal" href="#deleteStudent"
-                                        data-bs-mssv="{{this.id}}"
-                                        role="button">Xóa</button>
-                                </div>
                             </div>
 
                             <div class="d-flex" style="width: 50%;">
@@ -138,14 +124,14 @@
 
                         <div style="text-align: end; margin-top: -5px; margin-bottom: 5px; margin-right: 5px;">
                             <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                                data-bs-target="#viewStudentDetailModal" data-bs-mssv="mssv nè"
+                                data-bs-target="#viewStudentDetailModal" data-bs-mssv="{{this.id}}"
                                 onclick="showModal(this)">Xem chi tiết</button>
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                                data-bs-target="#addStudent" data-bs-mssv="mssv nè" onclick="showModal(this)">Chỉnh
+                            <button type="button" class="btn btn-success edit-button" data-bs-toggle="modal"
+                                data-bs-target="#addStudent" data-bs-mssv="{{this.id}}" onclick="showModal(this)">Chỉnh
                                 sửa</button>
                             {{!-- <a href="#" class="btn btn-success mx-3">Chỉnh sửa</a> --}}
                             {{!-- <a href="#" class="btn btn-danger">Xóa</a> --}}
-                            <a class="btn btn-danger" data-bs-toggle="modal" href="#deleteStudent" role="button">Xóa</a>
+                            <a class="btn btn-danger delete-button" data-bs-mssv="{{this.id}}" data-bs-toggle="modal" href="#deleteStudent" role="button">Xóa</a>
                         </div>
                     </div>
 
@@ -194,7 +180,7 @@
                         <div class="border-end">
                             <div class="m-3">
                                 <label for="form-student-name">Họ và tên: </label>
-                                <input type="text" class="form-control" id="form-student-name" name="student_name"
+                                <input type="text" class="form-control" id="form-student-name" name="name"
                                     style="width: 350px;">
                             </div>
 
@@ -273,7 +259,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="delete-button btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                 <button type="submit" form="form-delete" class="btn btn-danger">Xác nhận xóa</button>
             </div>
         </div>

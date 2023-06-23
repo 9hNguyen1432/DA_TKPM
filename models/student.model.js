@@ -95,7 +95,7 @@ addAStudent = async function (student) {
 
         modifyStudentInClassByID: async (idStudent, studentData) => {
             let query_string = `UPDATE STUDENT 
-                                SET name = N'${studentData.student_name}', gender = N'${studentData.gender}', dob = '${studentData.dob}',
+                                SET name = N'${studentData.name}', gender = N'${studentData.gender}', dob = '${studentData.dob}',
                                 email = '${studentData.email}', address = N'${studentData.address}' 
                                 WHERE id = '${idStudent}'`;
             let result = (await conn).query(query_string);

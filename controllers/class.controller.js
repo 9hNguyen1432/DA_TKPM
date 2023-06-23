@@ -39,11 +39,11 @@ class ClassPageController {
 
     async loadStudentListPage(req, res) {
         let list_year = await Model.getYears();
-        let year_str = await req.query.year;
-        let sem_str = await req.query.semester;
-
+        let year_str = req.query.year
+        let sem_str = req.query.semester
         let class_name = req.params.class_name;
-        const _class = await Class.getClass(class_name, year_str).amount_student;
+
+        const amountStudent = await Class.getClass(class_name, year_str).amount_student;
         var listStudent = await student.getListStudentInClass_2(class_name, year_str);
         listStudent.forEach((student, index) => {
             student.stt = index + 1;
@@ -60,17 +60,17 @@ class ClassPageController {
             student.dob = day + "/" + month + "/" + year;
         })
 
-        const message = req.flash('message')[0];
+        const message = await req.flash('message');
 
         res.render('class/students', {
             ClassName: class_name,
             Teacher: "Lê Thị Ngọc Bích",
-            class: _class,
+            class: amountStudent,
             listStudent: listStudent,
             Years: list_year,
             CurYear: year_str,
             CurSem: sem_str,
-            message
+            message : message
         });
     }
 
@@ -154,21 +154,31 @@ class ClassPageController {
         let studentData = req.body;
         let className = req.params.class_name;
         let year = req.query.year;
-        let classinfo = await mo.getClass(className, year);
-        let maxID = await studentData.getMaxID();
+        let semester = req.query.semester;
+
+        let classinfo = await mo.getClass(className,year);
+        let maxID = await student.getMaxID();
         var rule = await regulation.getRegulation(year);
 
-        let amountStudent = classInfo.amount_student;
-        if (amountStudent >= rule.max_student) {
+        let amountStudent = classinfo.amount_student;
+        if(amountStudent >= rule.max_student){
             // TODO: so hoc sinh vuot qua quy dinh
-            res.redirect(`/class/${className}`);
-            return;
+            req.flash('message', `Số học sinh đã là tối đa (${rule.max_student}).`);
+            res.redirect(`/class/${className}?year=${year}&semester=${semester}`);
         }
         let curId = maxID + 1;
         studentData.id = curId;
         studentData.class_id = classinfo.id;
+        if(studentData.gender == 'male'){
+            studentData.gender = "Nam";
+        }
+        else {
+            studentData.gender = "Nữ";
+        }
         await student.addAStudent(studentData);
-        res.redirect(`/class/${className}`);
+
+        req.flash('message', `Thêm học sinh thành công.`);
+        res.redirect(`/class/${className}?year=${year}&semester=${semester}`);
     }
 
     async modifyStudent(req, res) {
@@ -182,10 +192,11 @@ class ClassPageController {
         let studentId = req.params.student_id;
         let className = req.params.class_name;
         let year = req.query.year;
+        let semester = req.query.semester;
 
         await student.modifyStudentInClassByID(studentId, studentData);
 
-        res.redirect(`/class/${className}`);
+        res.redirect(`/class/${className}?year=${year}&semester=${semester}`);
     }
 
     async deleteStudent(req, res) {
@@ -193,16 +204,18 @@ class ClassPageController {
         let className = req.params.class_name;
         let { admin_password } = req.body;
         const user = req.session.user;
+        const year = req.query.year;
+        const semester = req.query.semester;
+
         const isRightPassword = await account.checkPassword(user.username, admin_password);
 
-        let error = "";
-        if (isRightPassword) {
+        if(isRightPassword){
             let result = await student.deleteStudentByID(studentId);
         }
         else {
-            error = "Mật khẩu không chính xác";
+            req.flash('message', `Mật khẩu không đúng.`);
         }
-        res.redirect(`/class/${className}`);
+        res.redirect(`/class/${className}?year=${year}&semester=${semester}`);
     }
 
     //for method get(/:class_name/import)
