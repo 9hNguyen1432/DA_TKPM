@@ -397,3 +397,16 @@ END
 -- drop procedure delete_class
 -- EXEC delete_class'2021-2022','11a4'
 -- select * from CLASS
+
+CREATE PROCEDURE get_courses_of_class
+(
+    @_year VARCHAR(10),
+	@_class_name VARCHAR(10)
+)
+AS
+BEGIN
+	SELECT * FROM CLASS C join CLASS_SUBJECT CS ON C.id=CS.class_id
+	join SUBJECT S ON S.id = CS.subject_id
+	WHERE C._year= @_year
+	AND C.name= @_class_name
+END
