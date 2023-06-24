@@ -41,5 +41,27 @@ module.exports = {
         } catch (error) {
             
         }
+    },
+
+    getAllSubjectInYear: async(_year) => {
+        try {
+            var query_string = `SELECT * FROM SUBJECT WHERE _year = '${_year}'`;
+            let result = (await conn).query(query_string);
+            return (await result).recordset;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    },
+
+    getSubjectWithNameInYear: async(name, _year) => {
+        try {
+            var query_string = `SELECT * FROM SUBJECT WHERE name ='${name}' and _year = '${_year}'`;
+            let result = (await conn).query(query_string);
+            return (await result).recordset[0];
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
     }
 }
