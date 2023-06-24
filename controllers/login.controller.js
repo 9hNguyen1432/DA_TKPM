@@ -11,7 +11,6 @@ class LoginPageController{
 
     async logIn(req, res, next){
         const {username , password} = req.body;
-
         let errors =[]
 
         if(!username || !password){
@@ -29,20 +28,20 @@ class LoginPageController{
             }else{
                 
                 const user = await account.user(username)
+                
                 req.session.regenerate(function (err) {
                     if (err) next(err)
                     req.session.user = {
                         ...user,
                     };
-
-    
+  
                     req.session.save(function (err) {
                         if (err) return next(err)
                         res.redirect(`/class?year=${curYear}-${curYear+1}&semester=${semester}`)
                     })
                 })
+    
             }
-           
         }
     }
 
