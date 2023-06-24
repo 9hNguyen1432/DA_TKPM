@@ -10,14 +10,17 @@ module.exports = {
         }
     },
 
-    getTranscriptOfSubject: async(idSubject, idClass) => {
+    getTranscriptOfSubject: async(subjectName, className, year, semester) => {
         try {
-            let query_string = `SELECT * FROM SUBJECT sj, EXAM ex, EXAMRESULT er, STUDENT st'
-                            + 'WHERE sj.ID = ex.SubjectID AND er.ExamID = ex.ID'
-                            + 'AND er.StudentID = st.ID'
-                            + 'AND ex.ClassID = '${idClass}' AND sj.ID = '${idSubject}'`;
+            let query_string = `SELECT *
+                                FROM SUBJECT sj, EXAM ex, EXAM_RESULT er, STUDENT st, CLASS cl
+                                WHERE sj.id = ex.subject_id AND er.exam_id = ex.id
+                                AND er.student_id = st.id
+                                AND ex.class_id = cl.id
+                                AND cl.name = '${className}' AND sj.name = '${subjectName}'
+                                AND sj._year = '${year}' AND ex._semester = '${semester}'`;
             let result = (await conn).query(query_string);
-            return (await result);
+            return (await result).recordset;
         } catch (error) {
             
         }

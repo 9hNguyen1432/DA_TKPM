@@ -26,7 +26,8 @@ addAStudent = async function (student) {
                                     FROM Student
                                     JOIN Class ON Student.class_id = Class.id
                                     JOIN Result ON Result.student_id = Student.id
-                                    WHERE Result._year = '${year}' AND Class.name = '${className}'`;
+                                    WHERE Result._year = '${year}' AND Class.name = '${className}'
+                                    GROUP BY Student.name, Class.name`;
                 let result = (await conn).query(query_string);
                 return (await result).recordset;
             } catch (error) {
@@ -113,15 +114,6 @@ addAStudent = async function (student) {
             let query_string = `DELETE FROM STUDENT WHERE id = '${idStudent}'`;
             let result = (await conn).query(query_string);
             return result;
-        },
-
-        getMaxID: async () => {
-            let query_string = `SELECT MAX(CAST(id AS INT)) AS max_id FROM STUDENT;`
-            let result = (await conn).query(query_string);
-            if (result !== undefined) {
-                return (await result).recordset[0].max_id;
-            }
-            return -1;
         },
 
         getInfoStudentById_Search: async (idStudent, year) => {

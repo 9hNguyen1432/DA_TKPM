@@ -116,6 +116,11 @@ class ClassPageController {
         const className = req.params.class_name;
         const year = req.query.year;
         const data = await student.getInfoListStudentInClassToDownload(className, year);
+        if(data === undefined)
+        {
+            console.log("CANNOT GET DATA");
+            return;
+        }
         // Định nghĩa các trường (columns) cần xuất ra trong file CSV
         const fields = ['Name', 'Class', 'TrungBinhHK1', 'TrungBinhHK2'];
 
@@ -133,17 +138,26 @@ class ClassPageController {
     }
 
     async downloadTranscriptOfSubject_CSV(req, res) {
-        const data = await subject.getTranscriptOfSubject("Toan", "10A1");
+        const className = req.params.class_name;
+        const year = req.query.year;
+        const semester = req.query.semester;
+        const subjectName = req.query.subject;
+        const data = await subject.getTranscriptOfSubject(subjectName, className,year, semester);
 
-        // Convert the data to CSV format
-        const csv = DataHelper.convertToCsv(data);
+        // Định nghĩa các trường (columns) cần xuất ra trong file CSV
+        const fields = ['Name', 'Mark', 'Diem15Phut', 'Diem1Tiet', "DiemCuoiKi"];
 
-        // Set the response headers
-        res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-        res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(filename)}"; filename*=UTF-8''${encodeURIComponent(filename)}`);
+        // Biến đổi dữ liệu JSON thành chuỗi CSV
+        let csvData = '';
+        data.forEach(item => {
+            const row = fields.map(field => item[field]).join(',');
+            csvData += row + '\n';
+        });
 
-        // Send the CSV data to the client
-        res.send(csv);
+        csvData = "\ufeff" + fields.join(',') + "\n" + csvData;
+        const jsonData = JSON.stringify(csvData);
+
+        res.send(jsonData);
     }
 
     async getInfoStudent(req, res) {
@@ -164,16 +178,14 @@ class ClassPageController {
         let semester = req.query.semester;
 
         let classinfo = await mo.getClass(className, year);
-        let maxID = await student.getMaxID();
+        let curId = await student.getTheNewestStudentID(className,year);
         var rule = await regulation.getRegulation(year);
 
         let amountStudent = classinfo.amount_student;
         if (amountStudent >= rule.max_student) {
-            // TODO: so hoc sinh vuot qua quy dinh
             req.flash('message', `Số học sinh đã là tối đa (${rule.max_student}).`);
             res.redirect(`/class/${className}?year=${year}&semester=${semester}`);
         }
-        let curId = maxID + 1;
         studentData.id = curId;
         studentData.class_id = classinfo.id;
         if (studentData.gender == 'male') {
