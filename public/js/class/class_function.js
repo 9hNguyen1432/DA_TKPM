@@ -121,5 +121,88 @@ document.getElementById('btn_add_student').addEventListener('click', async () =>
     }
 })
 
+// Xem chi tiết học sinh
+
+document.querySelectorAll('.view-student').forEach(button => {
+    button.addEventListener('click', async () => {
+        // Lấy giá trị ID từ thuộc tính của hàng
+        const studentId = button.getAttribute('data-bs-mssv');
+        const className = document.querySelector('#class-header').getAttribute('data-class-name');
+        const currentYear = get_year_selected();
+        const formStudent = document.getElementById('viewStudentDetailModal');
+
+        // lấy thông tin học sinh
+        let response = await getStudentInformations(studentId, className, currentYear);
+        let student = await response.json();
+
+        formStudent.querySelector('#name').innerHTML =student.name
+        formStudent.querySelector('#gender').innerHTML =student.gender
+        formStudent.querySelector('#dob').innerHTML =student.dob
+        formStudent.querySelector('#address').innerHTML =student.address
+
+        //TODO: get summary score with semester
+
+        // TODO: Get student's score with semester and year from database
+        const scores = [{stt: 1 , subject: 'Toán', sc1: 9, sc2: 5, sc3: 10},
+        {stt: 2 , subject: 'Lý', sc1: 9, sc2: 5, sc3: 10},
+        {stt: 3 , subject: 'Hóa', sc1: 9, sc2: 5, sc3: 10},
+        {stt: 4 , subject: 'Sinh', sc1: 9, sc2: 5, sc3: 10},
+        {stt: 5 , subject: 'Sử', sc1: 9, sc2: 5, sc3: 10},
+        {stt: 6 , subject: 'Địa', sc1: 9, sc2: 5, sc3: 10},
+        {stt: 7 , subject: 'Văn', sc1: 9, sc2: 5, sc3: 10},
+        {stt: 8 , subject: 'Anh', sc1: 9, sc2: 5, sc3: 10}, ]
 
 
+        const scores2 = [{stt: 1 , subject: 'Toán', sc1: 1, sc2: 1, sc3: 10},
+        {stt: 2 , subject: 'Lý', sc1: 1, sc2: 1, sc3: 10},
+        {stt: 3 , subject: 'Hóa', sc1: 1, sc2: 1, sc3: 10},
+        {stt: 4 , subject: 'Sinh',sc1: 1, sc2: 1, sc3: 10},
+        {stt: 5 , subject: 'Sử', sc1: 1, sc2: 1, sc3: 10},
+        {stt: 6 , subject: 'Địa', sc1: 1, sc2: 1, sc3: 10},
+        {stt: 7 , subject: 'Văn', sc1: 1, sc2: 1, sc3: 10},
+        {stt: 8 , subject: 'Anh', sc1: 9, sc2: 5, sc3: 10}, ] 
+        const tableScore = document.querySelector('#table-score-of-student tbody');
+        
+        const scoreSemester1 = formStudent.querySelector('#score-hk1');
+        const scoreSemester2 = formStudent.querySelector('#score-hk2');
+
+        showListScore(scores, tableScore);
+        scoreSemester1.style.color = 'red';
+        scoreSemester2.style.color = 'gray';
+        scoreSemester1.addEventListener('click', function() {
+            scoreSemester1.style.color = 'red';
+            scoreSemester2.style.color = 'gray';
+            showListScore(scores, tableScore);
+          });
+          
+          scoreSemester2.addEventListener('click', function() {
+            scoreSemester1.style.color = 'gray';
+            scoreSemester2.style.color = 'red';
+            showListScore(scores2, tableScore);
+          });
+        
+       
+    })
+        
+});
+
+async function showListScore(scores, tableScore)
+{
+    tableScore.innerHTML = '';
+    scores.forEach(score => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <th scope="row">${score.stt}</th>
+          <td>${score.subject}</td>
+          <td>${score.sc1}</td>
+          <td>${score.sc2}</td>
+          <td>${score.sc3}</td>
+        `;
+        tableScore.appendChild(row);
+    });
+}
+async function getStudentInformations(studentId, _class, year){
+    console.log(studentId,_class,year);
+    let student = await fetch(`/class/${_class}/student/${studentId}?year=${year}`);
+    return await student;
+};

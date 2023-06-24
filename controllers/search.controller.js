@@ -14,10 +14,10 @@ class ClassPageController{
         let searchResult;
 
         if(type_search === "mssv"){
-            searchResult = student.getStudentById(search_input);
+            //searchResult = student.getStudentById(search_input);
         }
         else if(type_search === "name"){
-            searchResult = student.getStudentByName(search_input);
+           // searchResult = student.getStudentByName(search_input);
         }
 
         res.render('search/searchStudent',{students:searchResult});
