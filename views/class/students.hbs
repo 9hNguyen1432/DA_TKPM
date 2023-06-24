@@ -9,7 +9,7 @@
             <a href="/class/{{ClassName}}/course?year={{CurYear}}&semester={{CurSem}}" style="text-decoration: underline; color: gray;">Danh sách môn học</a>
         </div>
         <div>
-            <div>GVCN: {{Teacher}}</div>
+            <div>GVCN: {{class.teacher}}</div>
             <div>Sĩ số: {{class.amount_student}}</div>
         </div>
     </div>
@@ -27,7 +27,7 @@
                 <div id="collapse_{{this.id}}" class="accordion-collapse collapse" data-bs-parent="#AccordionFlush_{{this.id}}">
                     <div class="accordion-body">
                         <div class="d-flex justify-content-between">
-                            <div style="margin-top: -7px; margin-left: 280px;">
+                            <div style=" margin-left: 280px;">
                                 <div class="d-flex">
                                     <div style="width: 100px;">Mã số : </div>
                                     <div class="mx-1" style="text-align: left;">{{this.id}}</div>
@@ -36,6 +36,11 @@
                                     <div style="width: 100px;">Giới tính: </div>
                                     <div class="mx-1" style="text-align: left;">{{this.gender}}</div>
                                 </div>
+                                 <div class="d-flex">
+                                    <div style="width: 100px;">Ngày sinh: </div>
+                                    <div class="mx-1" style="text-align: left;">{{this.dob}}</div>
+                                </div>
+
                             </div>
 
                             <div class="d-flex" style="width: 50%;">
@@ -122,17 +127,19 @@
                             </table>
                         </div>
 
-                        <div style="text-align: end; margin-top: -5px; margin-bottom: 5px; margin-right: 5px;">
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                                data-bs-target="#viewStudentDetailModal" data-bs-mssv="{{this.id}}"
-                                onclick="showModal(this)">Xem chi tiết</button>
-                            <button type="button" class="btn btn-success edit-button" data-bs-toggle="modal"
-                                data-bs-target="#addStudent" data-bs-mssv="{{this.id}}" onclick="showModal(this)">Chỉnh
-                                sửa</button>
-                            {{!-- <a href="#" class="btn btn-success mx-3">Chỉnh sửa</a> --}}
-                            {{!-- <a href="#" class="btn btn-danger">Xóa</a> --}}
-                            <a class="btn btn-danger delete-button" data-bs-mssv="{{this.id}}" data-bs-toggle="modal" href="#deleteStudent" role="button">Xóa</a>
-                        </div>
+                          <div style="text-align: end; margin-top: -5px; margin-bottom: 5px; margin-right: 5px;">
+                                    <button type="button" class="btn btn-success view-student" data-bs-toggle="modal"
+                                        data-bs-target="#viewStudentDetailModal" data-bs-mssv="{{this.id}}"
+                                        onclick="showModal(this)">Xem chi tiết</button>
+                                    <button type="button" class="btn btn-success edit-button" data-bs-toggle="modal"
+                                        data-bs-target="#student_form" data-bs-mssv="{{this.stt}}"
+                                        onclick="showModal(this)">Chỉnh sửa</button>
+                                    {{!-- <a href="#" class="btn btn-success mx-3">Chỉnh sửa</a> --}}
+                                    {{!-- <a href="#" class="btn btn-danger">Xóa</a> --}}
+                                    <button class="btn btn-danger delete-button" data-bs-toggle="modal" href="#deleteStudent"
+                                        data-bs-mssv="{{this.id}}"
+                                        role="button">Xóa</button>
+                            </div>
                     </div>
 
                 </div>
@@ -315,19 +322,19 @@
                             <div>
                                 <div class="d-flex">
                                     <div style="width: 100px;">Họ và tên :</div>
-                                    <div class="mx-1" style="text-align: left;">Lê Thị Ngọc Bích</div>
+                                    <div class="mx-1" id ="name" style="text-align: left;"></div>
                                 </div>
                                 <div class="d-flex">
                                     <div style="width: 100px;">Giới tính :</div>
-                                    <div class="mx-1" style="text-align: left;">Nữ</div>
+                                    <div class="mx-1" id ="gender" style="text-align: left;"></div>
                                 </div>
                                 <div class="d-flex">
                                     <div style="width: 100px;">Ngày sinh :</div>
-                                    <div class="mx-1" style="text-align: left;">10/04/2002</div>
+                                    <div class="mx-1" id ="dob" style="text-align: left;"></div>
                                 </div>
                                 <div class="d-flex">
                                     <div style="width: 100px;">Địa chỉ :</div>
-                                    <div class="mx-1" style="text-align: left;">Thủ Đức, Hồ Chí Minh</div>
+                                    <div class="mx-1" id = "address"style="text-align: left;"></div>
                                 </div>
                             </div>
 
@@ -359,14 +366,14 @@
                 <div class="my-2 d-flex">
                     Bảng điểm
                     <div class="mx-3">
-                        <a href="#" style="text-decoration: underline; color: red;">HK1</a>
+                        <a id = "score-hk1" href="#" style="text-decoration: underline; color: red;">HK1</a>
                         |
-                        <a href="#" style="text-decoration: underline; color: gray;">HK2</a>
+                        <a id = "score-hk2"  href="#" style="text-decoration: underline; color: gray;">HK2</a>
                     </div>
 
                 </div>
                 <div class="table-responsive" style="height: 350px; margin-inline: 20px; border: 1px solid #f1f1f1;">
-                    <table class="table table-bordered table-sm" id="table-score-of-student">
+                    <table class="table table-bordered table-sm" id="table-score-of-student" >
                         <thead>
                             <tr>
                                 <th scope="col" class="col-1">STT</th>
@@ -377,88 +384,8 @@
                             </tr>
                         </thead>
                         <tbody data-bs-spy="scroll" data-bs-smooth-scroll="true">
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td colspan="2">Larry the Bird</td>
-                                <td colspan="2">@twitter</td>
-                            </tr>
+                         
+                            
                         </tbody>
                     </table>
                 </div>
