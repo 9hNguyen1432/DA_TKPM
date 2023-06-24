@@ -1,4 +1,3 @@
-
 // Lắng nghe sự kiện click trên nút chỉnh sửa
 document.querySelectorAll('.edit-button').forEach(button => {
     button.addEventListener('click', async () => {
@@ -76,7 +75,7 @@ function get_year_selected() {
     return currentYear;
 }
 
-function get_semester_selected(){
+function get_semester_selected() {
     const semesterElement = document.getElementById('semmenu-select');
     let currentSemester;
     try {
@@ -138,4 +137,17 @@ document.getElementById('btn_add_student').addEventListener('click', async () =>
 })
 
 
-
+//Lắng nghe sự kiện click trên nút Xuất danh sách học sinh
+document.getElementById('btn_export_students').addEventListener('click', () => {
+    const year = get_year_selected();
+    const semester = get_semester_selected();
+    const className = document.querySelector('#class-header').getAttribute('data-class-name');
+    fetch(`/class/${className}/export/list_student?year=${year}&semester=${semester}`)
+        .then(response => response.json())
+        .then(csvData => {
+            // Tạo đối tượng Blob từ chuỗi CSV
+            const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+            // Tải file CSV với tên file và mã hóa Unicode đúng cách
+            saveAs(blob, `students_${className}.csv`);
+        });
+})

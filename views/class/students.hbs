@@ -142,6 +142,9 @@
 
     </div>
     <div class="d-flex justify-content-center">
+        <button id="btn_export_students" class="mt-3  btn btn-success me-5" type="button" href="/{{ClassName}}/export/list_student">
+            Xuất danh sách học sinh
+        </button>
         <button id="btn_add_student" class="mt-3  btn btn-success me-5" type="button" data-bs-toggle="modal" data-bs-target="#student_form">
             Thêm học sinh
         </button>
@@ -467,20 +470,3 @@
     </div>
 </div>
 {{!-- END DETAIL INFO STUDENT --}}
-
-
-
-{{!-- TOAST --}}
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header">
-      <img src="..." class="rounded me-2" alt="...">
-      <strong class="me-auto">Bootstrap</strong>
-      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-    <div class="toast-body">
-      Hello, world! This is a toast message.
-    </div>
-  </div>
-</div>
-{{!-- END TOAST --}}

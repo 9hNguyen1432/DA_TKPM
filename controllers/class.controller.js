@@ -14,6 +14,8 @@ const account = require('../models/account');
 const ClassModel = require("../models/class.model")
 const AccModel = require('../models/account')
 var crypto = require('crypto')
+const iconv = require('iconv-lite');
+const json2csv = require('json2csv').parse;
 
 class ClassPageController {
 
@@ -70,7 +72,7 @@ class ClassPageController {
             Years: list_year,
             CurYear: year_str,
             CurSem: sem_str,
-            message : message
+            message: message
         });
     }
 
@@ -112,17 +114,24 @@ class ClassPageController {
     }
 
     async downloadStudentsOfClass_CSV(req, res) {
-        const data = await student.getListStudentInClass_2("12A1", "2021-2022")
 
-        // Convert the data to CSV format
-        const csv = DataHelper.convertToCsv(data);
+        const className = req.params.class_name;
+        const year = req.query.year;
+        const data = await student.getInfoListStudentInClassToDownload(className, year);
+        // Định nghĩa các trường (columns) cần xuất ra trong file CSV
+        const fields = ['Name', 'Class', 'TrungBinhHK1', 'TrungBinhHK2'];
 
-        // Set the response headers
-        res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-        res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(filename)}"; filename*=UTF-8''${encodeURIComponent(filename)}`);
+        // Biến đổi dữ liệu JSON thành chuỗi CSV
+        let csvData = '';
+        data.forEach(item => {
+            const row = fields.map(field => item[field]).join(',');
+            csvData += row + '\n';
+        });
 
-        // Send the CSV data to the client
-        res.send(csv);
+        csvData = "\ufeff" + fields.join(',') + "\n" + csvData;
+        const jsonData = JSON.stringify(csvData);
+
+        res.send(jsonData);
     }
 
     async downloadTranscriptOfSubject_CSV(req, res) {
@@ -156,12 +165,12 @@ class ClassPageController {
         let year = req.query.year;
         let semester = req.query.semester;
 
-        let classinfo = await mo.getClass(className,year);
+        let classinfo = await mo.getClass(className, year);
         let maxID = await student.getMaxID();
         var rule = await regulation.getRegulation(year);
 
         let amountStudent = classinfo.amount_student;
-        if(amountStudent >= rule.max_student){
+        if (amountStudent >= rule.max_student) {
             // TODO: so hoc sinh vuot qua quy dinh
             req.flash('message', `Số học sinh đã là tối đa (${rule.max_student}).`);
             res.redirect(`/class/${className}?year=${year}&semester=${semester}`);
@@ -169,7 +178,7 @@ class ClassPageController {
         let curId = maxID + 1;
         studentData.id = curId;
         studentData.class_id = classinfo.id;
-        if(studentData.gender == 'male'){
+        if (studentData.gender == 'male') {
             studentData.gender = "Nam";
         }
         else {
@@ -209,7 +218,7 @@ class ClassPageController {
 
         const isRightPassword = await account.checkPassword(user.username, admin_password);
 
-        if(isRightPassword){
+        if (isRightPassword) {
             let result = await student.deleteStudentByID(studentId);
         }
         else {
