@@ -116,23 +116,20 @@ class ClassPageController {
         const className = req.params.class_name;
         const year = req.query.year;
         const data = await student.getInfoListStudentInClassToDownload(className, year);
-        if(data === undefined)
-        {
-            console.log("CANNOT GET DATA");
-            return;
-        }
-        // Định nghĩa các trường (columns) cần xuất ra trong file CSV
-        const fields = ['Name', 'Class', 'TrungBinhHK1', 'TrungBinhHK2'];
+        // // Định nghĩa các trường (columns) cần xuất ra trong file CSV
+        // const fields = ['Name', 'Class', 'TrungBinhHK1', 'TrungBinhHK2'];
 
-        // Biến đổi dữ liệu JSON thành chuỗi CSV
-        let csvData = '';
-        data.forEach(item => {
-            const row = fields.map(field => item[field]).join(',');
-            csvData += row + '\n';
-        });
+        // // Biến đổi dữ liệu JSON thành chuỗi CSV
+        // let csvData = '';
+        // data.forEach(item => {
+        //     const row = fields.map(field => item[field]).join(',');
+        //     csvData += row + '\n';
+        // });
 
-        csvData = "\ufeff" + fields.join(',') + "\n" + csvData;
-        const jsonData = JSON.stringify(csvData);
+        // csvData = "\ufeff" + fields.join(',') + "\n" + csvData;
+        // const jsonData = JSON.stringify(csvData);
+
+        let jsonData = convertToCSVFormat(data);
 
         res.send(jsonData);
     }
@@ -144,18 +141,20 @@ class ClassPageController {
         const subjectName = req.query.subject;
         const data = await subject.getTranscriptOfSubject(subjectName, className,year, semester);
 
-        // Định nghĩa các trường (columns) cần xuất ra trong file CSV
-        const fields = ['Name', 'Mark', 'Diem15Phut', 'Diem1Tiet', "DiemCuoiKi"];
+        // // Định nghĩa các trường (columns) cần xuất ra trong file CSV
+        // const fields = ['Name', 'Mark', 'Diem15Phut', 'Diem1Tiet', "DiemCuoiKi"];
 
-        // Biến đổi dữ liệu JSON thành chuỗi CSV
-        let csvData = '';
-        data.forEach(item => {
-            const row = fields.map(field => item[field]).join(',');
-            csvData += row + '\n';
-        });
+        // // Biến đổi dữ liệu JSON thành chuỗi CSV
+        // let csvData = '';
+        // data.forEach(item => {
+        //     const row = fields.map(field => item[field]).join(',');
+        //     csvData += row + '\n';
+        // });
 
-        csvData = "\ufeff" + fields.join(',') + "\n" + csvData;
-        const jsonData = JSON.stringify(csvData);
+        // csvData = "\ufeff" + fields.join(',') + "\n" + csvData;
+        // const jsonData = JSON.stringify(csvData);
+
+        let jsonData = convertToCSVFormat(data);
 
         res.send(jsonData);
     }
@@ -425,6 +424,27 @@ class ClassPageController {
             res.redirect(req.get('referer'));
         }
     }
+}
+
+function convertToCSVFormat(data){
+    if(data === undefined || data.length == 0){
+        return "";
+    }
+
+    let fields = Object.keys(data[0]);
+    console.log(fields);
+
+    // Biến đổi dữ liệu JSON thành chuỗi CSV
+    let csvData = '';
+    data.forEach(item => {
+        const row = fields.map(field => item[field]).join(',');
+        csvData += row + '\n';
+    });
+
+    csvData = "\ufeff" + fields.join(',') + "\n" + csvData;
+    const jsonData = JSON.stringify(csvData);
+
+    return jsonData;
 }
 
 module.exports = new ClassPageController;
