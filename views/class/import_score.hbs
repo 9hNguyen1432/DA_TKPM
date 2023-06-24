@@ -1,5 +1,6 @@
 <script defer src="/js/csv.js"></script>
-<script defer src="/js/1b-read-csv.js"></script>
+<script defer src="/js/csvRenderAndCheckForImportScore.js"></script>
+<script>window.onload = function () { sessionStorage.setItem("StudentList", {{ class_name }})}</script>
 <div id="import_student">
     <div class="container p-100">
         <div class="row">
@@ -16,11 +17,14 @@
                 <div class="card border-0 shadow rounded-3 my-5">
 
                     <div class="card-body p-4 p-sm-5">
-                        <form class="g-3" action="/class/{{class_name}}/course/{{subject_name}}/import?year={{CurYear}}&semester={{CurSem}}" method="post" enctype="multipart/form-data">
+                        <form class="g-3" id="myform"
+                            action="/class/{{class_name}}/course/{{subject_name}}/import?year={{CurYear}}&semester={{CurSem}}"
+                            method="post" enctype="multipart/form-data">
                             <div class="row mb-4">
                                 <div class="col-6">
                                     <label for="class" class="form-label">Lớp</label>
-                                    <select id="class" name="class" class="form-select form-control" aria-label="Default select example">
+                                    <select id="class" name="class" class="form-select form-control"
+                                        aria-label="Default select example">
                                         {{#rendercombolist allClassName class_name}}
                                         {{this}}
                                         {{/rendercombolist}}
@@ -30,8 +34,9 @@
 
                                 <div class="col-6">
                                     <label for="subject" class="form-label">Lớp</label>
-                                    <select id="subject" name="subject" class="form-select form-control" aria-label="Default select example">
-                                        {{#rendercombolist allSubject subject_name}}
+                                    <select id="subject" name="subject" class="form-select form-control"
+                                        aria-label="Default select example">
+                                        {{#rendercombolist allSubjectName subject_name}}
                                         {{this}}
                                         {{/rendercombolist}}
                                     </select>
@@ -49,7 +54,7 @@
                                 </div>
                                 <div class="col-md-6 mb-2 my-auto mx-auto">
                                     <label for="fileDS" class="form-label">Tải danh sách lên</label>
-                                    <input class="form-control  form-floating" type="file" name="danhsachhocsinh"
+                                    <input class="form-control  form-floating" type="file" name="importscore"
                                         id="fileDS" accept=".csv" enctype="multipart/form-data" required>
                                 </div>
                             </fieldset>
@@ -71,21 +76,16 @@
                                 </table>
                             </div>
                             {{!-- ERROR --}}
-                            {{#each errors}}
-                            <div>
-                                <div style="color: red; padding: 5px 0">
-                                    * {{this}}
-                                </div>
-                            </div>
-                            {{/each}}
+                            <div id="warning" class="text-danger"></div>
                             {{!-- END ERROR --}}
                             <div class="d-flex justify-content-center">
-                                <button name="btn_DKGD" value="register"
-                                    class="btn btn-success btn-login text-uppercase fw-bold" type="submit">ĐĂNG
-                                    KÝ</button>
+                                <button
+                                    class="btn btn-success btn-login text-uppercase fw-bold" type="submit" 
+                                    onclick="validatedForm(event, this)">Import</button>
                             </div>
                             <!-- Button trigger modal -->
                         </form>
+
                     </div>
                 </div>
                 {{/if}}
@@ -116,7 +116,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">THÔNG BÁO</h5>
-                        <a href="/manage/register-club">
+                        <a href="/class/{{class_name}}?year={{CurYear}}&semester={{CurSem}}">
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </a>
 
@@ -132,7 +132,7 @@
                         Bạn đã import danh sách điểm môn {{subject_name}} của lớp {{class_name}} thành công.
                     </div>
                     <div class="modal-footer">
-                        <a href="/class/{{class_name}}/course/{{subject_name}}">
+                        <a href="/class/{{class_name}}?year={{CurYear}}&semester={{CurSem}}">
                             <button type="button" class="btn btn-primary">Trang chủ</button>
                         </a>
 

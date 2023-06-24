@@ -70,7 +70,7 @@ class ClassPageController {
             Years: list_year,
             CurYear: year_str,
             CurSem: sem_str,
-            message : message
+            message: message
         });
     }
 
@@ -156,12 +156,12 @@ class ClassPageController {
         let year = req.query.year;
         let semester = req.query.semester;
 
-        let classinfo = await mo.getClass(className,year);
+        let classinfo = await mo.getClass(className, year);
         let maxID = await student.getMaxID();
         var rule = await regulation.getRegulation(year);
 
         let amountStudent = classinfo.amount_student;
-        if(amountStudent >= rule.max_student){
+        if (amountStudent >= rule.max_student) {
             // TODO: so hoc sinh vuot qua quy dinh
             req.flash('message', `Số học sinh đã là tối đa (${rule.max_student}).`);
             res.redirect(`/class/${className}?year=${year}&semester=${semester}`);
@@ -169,7 +169,7 @@ class ClassPageController {
         let curId = maxID + 1;
         studentData.id = curId;
         studentData.class_id = classinfo.id;
-        if(studentData.gender == 'male'){
+        if (studentData.gender == 'male') {
             studentData.gender = "Nam";
         }
         else {
@@ -209,7 +209,7 @@ class ClassPageController {
 
         const isRightPassword = await account.checkPassword(user.username, admin_password);
 
-        if(isRightPassword){
+        if (isRightPassword) {
             let result = await student.deleteStudentByID(studentId);
         }
         else {
@@ -264,7 +264,7 @@ class ClassPageController {
             let classInfo = await mo.getClass(classChoosen, year_str);
             let amountStudent = classInfo.amount_student;
             //
-            var csvFileStudent = await mo.CSVFiletoJsonObject(req.files.danhsachhocsinh[0].buffer.toString('utf8'))
+            var csvFileStudent = await mo.CSVFiletoJsonObject(req.files.danhsachhocsinh[0].buffer.toString('utf8'), ['stt', 'name', 'gender', 'DOB', 'address'])
             var validedData = await mo.checkListStudent(csvFileStudent, amountStudent, year_str);
             var errors = [];
             var success = false
@@ -333,11 +333,98 @@ class ClassPageController {
         }
 
     }
+    async getListStudentData(req, res) {
+        let params = req.params;
+        let class_name = params.class_name;
+        let year_str = req.query.year;
+        var listStudent = await student.getListStudentInClass_2(class_name, year_str);
+        let listStudentWithIdAndName = listStudent.map(e => { return { id: e.id[0], fullName: e.name[0] } });
+        res.send(listStudentWithIdAndName);
+    }
 
     async importScoreRender(req, res) {
+        var user = req.session.user
+        let list_year = await Model.getYears();
+        let year_str = req.query.year
+        let sem_str = req.query.semester
+
+        let params = req.params;
+        let class_name = params.class_name;
+
+
+
+        console.log(params);
+        //get current class
+        let allClass = await mo.getAllClassInYear(year_str);
+        let allClassName = allClass.map(_class => _class.name);
+        console.log(allClassName);
+        var listStudent = await student.getListStudentInClass_2(class_name, year_str);
+        let listStudentWithIdAndName = listStudent.map(e => { return { id: e.id[0], fullName: e.name[0] } });
+
+        let allSubject = await subject.getAllSubjectInYear(year_str);
+        let allSubjectName = allSubject.map(e => e.name);
+
+
+
+
+        res.render('class/import_score', {
+            user,
+            allClassName,
+            class_name: params.class_name,
+            allSubjectName,
+            subject_name: params.course_name,
+            Years: list_year,
+            CurYear: year_str,
+            CurSem: sem_str,
+            listStudent: listStudentWithIdAndName
+        })
 
     }
     async importScoreHandle(req, res) {
+
+        var user = req.session.user
+        let list_year = await Model.getYears();
+        let year_str = req.query.year
+        let sem_str = req.query.semester
+
+        let params = req.params;
+        let class_name = req.body.class.trim();
+        let subject_name = req.body.subject.trim();
+
+        let allClass = await mo.getAllClassInYear(year_str);
+        let allClassName = allClass.map(_class => _class.name);
+        let allSubject = await subject.getAllSubjectInYear(year_str);
+        let allSubjectName = allSubject.map(e => e.name);
+
+        let classInfo = await mo.getClass(class_name, year_str);
+        let subjectInfo = await subject.getSubjectWithNameInYear(subject_name, year_str);
+
+        try {
+            //
+            var csvFileScore = await mo.CSVFiletoJsonObject(req.files.importscore[0].buffer.toString('utf8'), ['id', 'name', 'muoilam', 'mottiet', 'hocky']);
+            //TODO save in database
+            await mo.saveListScore(csvFileScore, classInfo, subjectInfo, sem_str.trim(), year_str.trim());
+
+            var success = true
+            res.render('class/import_score', {
+                user,
+                allClassName,
+                class_name: params.class_name,
+                allSubjectName,
+                subject_name: params.course_name,
+                Years: list_year,
+                CurYear: year_str,
+                CurSem: sem_str,
+                success
+            })
+
+
+        }
+        catch (err) {
+            console.log(err)
+            res.render('class/home')
+
+        }
 
     }
     async addClass(req, res) {
