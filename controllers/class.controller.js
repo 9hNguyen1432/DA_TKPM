@@ -70,7 +70,7 @@ class ClassPageController {
             Years: list_year,
             CurYear: year_str,
             CurSem: sem_str,
-            message : message
+            message: message
         });
     }
 
@@ -80,7 +80,7 @@ class ClassPageController {
         let class_name = req.params.class_name;
         let year = req.query.year
         let semester = req.query.semester
-        let list_course=null
+        let list_course = null
         let class_info = null
 
         try {
@@ -97,7 +97,7 @@ class ClassPageController {
                 Years: list_year,
                 CurYear: year,
                 CurSem: semester,
-                ListCourse : list_course,
+                ListCourse: list_course,
                 Class: class_info
             });
     }
@@ -110,16 +110,36 @@ class ClassPageController {
         let year_str = req.query.year
         let sem_str = req.query.semester
 
-        res.render('class/courses_detail',
+        const data = [
             {
-                ClassName: class_name,
-                Teacher: "Lê Thị Ngọc Bích",
-                StudentNumber: 100,
-                CourseName: course_name,
-                Years: list_year,
-                CurYear: year_str,
-                CurSem: sem_str
-            });
+                STT: 1,
+                Name: "Lê Thị Ngọc Bích",
+                Test_15min: 10.0,
+                Test_45min: 9.5,
+                Final: 9.8
+            },
+            {
+                STT: 1,
+                Name: "Lê Thị Ngọc Bích",
+                Test_15min: 10.0,
+                Test_45min: 9.5,
+                Final: 9.8
+            }
+        ];
+
+        res.setHeader('Content-Type', 'application/json');
+        res.json(data);
+
+        // res.render('class/courses_detail',
+        //     {
+        //         ClassName: class_name,
+        //         Teacher: "Lê Thị Ngọc Bích",
+        //         StudentNumber: 100,
+        //         CourseName: course_name,
+        //         Years: list_year,
+        //         CurYear: year_str,
+        //         CurSem: sem_str
+        //     });
     }
 
     async downloadStudentsOfClass_CSV(req, res) {
@@ -167,12 +187,12 @@ class ClassPageController {
         let year = req.query.year;
         let semester = req.query.semester;
 
-        let classinfo = await mo.getClass(className,year);
+        let classinfo = await mo.getClass(className, year);
         let maxID = await student.getMaxID();
         var rule = await regulation.getRegulation(year);
 
         let amountStudent = classinfo.amount_student;
-        if(amountStudent >= rule.max_student){
+        if (amountStudent >= rule.max_student) {
             // TODO: so hoc sinh vuot qua quy dinh
             req.flash('message', `Số học sinh đã là tối đa (${rule.max_student}).`);
             res.redirect(`/class/${className}?year=${year}&semester=${semester}`);
@@ -180,7 +200,7 @@ class ClassPageController {
         let curId = maxID + 1;
         studentData.id = curId;
         studentData.class_id = classinfo.id;
-        if(studentData.gender == 'male'){
+        if (studentData.gender == 'male') {
             studentData.gender = "Nam";
         }
         else {
@@ -220,7 +240,7 @@ class ClassPageController {
 
         const isRightPassword = await account.checkPassword(user.username, admin_password);
 
-        if(isRightPassword){
+        if (isRightPassword) {
             let result = await student.deleteStudentByID(studentId);
         }
         else {

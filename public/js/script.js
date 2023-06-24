@@ -10,6 +10,8 @@ function changeYear(item) {
     // $(parent).prev().text(content)
     // console.log(content)
     var new_year = $(item).text();
+    $('#yearmenu-dropdown').attr("data-year", new_year)
+
     var cur_sem = $('#semmenu-select').val();
     var url = window.location.href;
     var controller = url.split('?')[0];
@@ -120,14 +122,14 @@ function validateAddClassForm() {
     let class_name = document.forms["form-add-class"]["class_name"].value;
     let grade = document.forms["form-add-class"]["grade"].value;
     let grade_in_name = class_name.slice(0, 2)
-    console.log(class_name,grade,grade_in_name)
+    console.log(class_name, grade, grade_in_name)
     if (grade_in_name != grade) {
         $('#class_name_span').text("Hai ký tự đầu phải trùng với khối học.")
         result = false;
     }
 
     let teacher = document.forms["form-add-class"]["teacher"].value;
-    if(teacher==""){
+    if (teacher == "") {
         $('#teacher_span').text("Không được để trống.")
         result = false;
     }
@@ -135,4 +137,42 @@ function validateAddClassForm() {
     return result;
 }
 
+function viewCourseDetail(item) {
+    let cur_year = $('#yearmenu-dropdown').attr("data-year");
+    let cur_semester = $('#semmenu-select').val();
+    let cur_class = $(item).attr("data-class")
+    let course_name = $(item).attr("data-course")
+    $('#course_name').text("Môn : " + course_name)
+
+    $('#courses_detail_table tbody tr').remove();
+    $('#courses_detail_table tbody div').remove();
+
+    $.ajax({
+        type: "get",
+        url: "/class/" + cur_class + "/course/" + course_name + "?year=" + cur_year + "&semester=" + cur_semester,
+        data: {
+        },
+        success: function (data) {
+            for (let i = 0; i < data.length; i++) {
+                var newRow = $('<tr>');
+                // Add cells to the new row
+                newRow.append($(`<th scope="row">`).text(data[i].STT));
+                newRow.append($('<td>').text(data[i].Name));
+                newRow.append($('<td>').text(data[i].Test_15min));
+                newRow.append($('<td>').text(data[i].Test_45min));
+                newRow.append($('<td>').text(data[i].Final));
+                // Add the new row to the table body
+                $('#courses_detail_table tbody').append(newRow);
+            }
+        },
+        error: function (res) {
+            var notice = $('<div>').text("Dữ liệu không tồn tại !")
+            $('#courses_detail_table tbody').append(notice)
+        }
+    });
+}
+
+function viewFirstCourse() {
+
+}
 
