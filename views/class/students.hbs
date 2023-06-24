@@ -40,6 +40,7 @@
                                     <div style="width: 100px;">Ngày sinh: </div>
                                     <div class="mx-1" style="text-align: left;">{{this.dob}}</div>
                                 </div>
+
                             </div>
 
                             <div class="d-flex" style="width: 50%;">
@@ -178,7 +179,7 @@
                         <input class="text-center" type="text" class="form-control" id="class-name"
                             value="{{ClassName}}" style="display:block; width: 120px;" disabled>
 
-                        <a id="btn-import-list-student" href="/class/{{ClassName}}/import" type="button"
+                        <a id="btn-import-list-student" href="/class/{{ClassName}}/import?year={{CurYear}}&semester={{CurSem}}" type="button"
                             class="btn btn-secondary float-right ms-auto">Import danh sách từ file</a>
                     </div>
 
@@ -186,7 +187,7 @@
                         <div class="border-end">
                             <div class="m-3">
                                 <label for="form-student-name">Họ và tên: </label>
-                                <input type="text" class="form-control" id="form-student-name" name="student_name"
+                                <input type="text" class="form-control" id="form-student-name" name="name"
                                     style="width: 350px;">
                             </div>
 
@@ -265,7 +266,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="delete-button btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                 <button type="submit" form="form-delete" class="btn btn-danger">Xác nhận xóa</button>
             </div>
         </div>

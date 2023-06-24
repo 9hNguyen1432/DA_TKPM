@@ -17,7 +17,9 @@ exports.checkListStudent = async (listStudent, amountStudent, year) => {
     for (let Student of listStudent) {
         try {
             let age = util.getAge(Student.DOB);
+            console.log(age)
             let checkValidMonth = util.checkValidMonth(Student.DOB);
+            console.log(checkValidMonth);
             if (util.isBetween(age, rules.min_age, rules.max_age) && checkValidMonth) {
                 Student.DOB = util.changFormatDayMMDD(Student.DOB);
                 listStudentValid.push(Student)
