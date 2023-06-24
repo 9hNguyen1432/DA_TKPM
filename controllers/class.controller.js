@@ -19,7 +19,7 @@ const json2csv = require('json2csv').parse;
 
 class ClassPageController {
 
-    async loadPage(req, res) {
+    async loadPage(req, res) { 
         let list_year = await Model.getYears();
         let year_str = req.query.year
         let sem_str = req.query.semester
@@ -44,8 +44,7 @@ class ClassPageController {
         let year_str = req.query.year
         let sem_str = req.query.semester
         let class_name = req.params.class_name;
-
-        const amountStudent = await Class.getClass(class_name, year_str).amount_student;
+        const _class = await Class.getClass(class_name, year_str);
         var listStudent = await student.getListStudentInClass_2(class_name, year_str);
         listStudent.forEach((student, index) => {
             student.stt = index + 1;
@@ -66,8 +65,7 @@ class ClassPageController {
 
         res.render('class/students', {
             ClassName: class_name,
-            Teacher: "Lê Thị Ngọc Bích",
-            class: amountStudent,
+            class: _class,
             listStudent: listStudent,
             Years: list_year,
             CurYear: year_str,
@@ -226,6 +224,27 @@ class ClassPageController {
         }
         res.redirect(`/class/${className}?year=${year}&semester=${semester}`);
     }
+    async getStudent(req,res){
+        let studentId = req.params.student_id;
+        let className = req.params.class_name;
+        let year = req.query.year;
+
+        const _student = await student.getAStudent(studentId);
+
+        var date = new Date(_student.dob.toString());
+        var day = date.getDate();
+        var month = date.getMonth() + 1; // Tháng trong JavaScript bắt đầu từ 0
+        var yearBirth = date.getFullYear();
+        day = (day < 10) ? "0" + day : day;
+        month = (month < 10) ? "0" + month : month;
+        _student.dob = day + "/" + month + "/" + yearBirth;
+
+        res.send(_student);
+
+        //TODO: Get score with semester in year 
+
+    }
+
 
     //for method get(/:class_name/import)
     async importStudentRender(req, res) {
