@@ -43,7 +43,7 @@ class ClassPageController {
         let sem_str = req.query.semester
         let class_name = req.params.class_name;
 
-        const amountStudent = await Class.getClass(class_name, year_str).amount_student;
+        const class_info = await Class.getClass(class_name, year_str);
         var listStudent = await student.getListStudentInClass_2(class_name, year_str);
         listStudent.forEach((student, index) => {
             student.stt = index + 1;
@@ -65,7 +65,7 @@ class ClassPageController {
         res.render('class/students', {
             ClassName: class_name,
             Teacher: "Lê Thị Ngọc Bích",
-            class: amountStudent,
+            Class: class_info,
             listStudent: listStudent,
             Years: list_year,
             CurYear: year_str,
@@ -76,18 +76,29 @@ class ClassPageController {
 
     async loadCourseListPage(req, res) {
         let list_year = await Model.getYears();
-        let year_str = req.query.year
-        let sem_str = req.query.semester
 
         let class_name = req.params.class_name;
+        let year = req.query.year
+        let semester = req.query.semester
+        let list_course=null
+        let class_info = null
+
+        try {
+            list_course = await ClassModel.getAllCourseInYear(year);
+            class_info = await ClassModel.getClass(class_name, year)
+        } catch (e) {
+            console.log(e.message);
+        }
+        console.log(list_course)
         res.render('class/courses',
             {
                 ClassName: class_name,
-                Teacher: "Lê Thị Ngọc Bích",
                 StudentNumber: 100,
                 Years: list_year,
-                CurYear: year_str,
-                CurSem: sem_str
+                CurYear: year,
+                CurSem: semester,
+                ListCourse : list_course,
+                Class: class_info
             });
     }
 
