@@ -227,6 +227,7 @@ class ClassPageController {
             studentData.gender = "Nữ";
         }
         await student.addAStudent(studentData);
+        await mo.updateAmountStudent(className, year, classinfo.amount_student + 1);
 
         req.flash('message', `Thêm học sinh thành công.`);
         res.redirect(`/class/${className}?year=${year}&semester=${semester}`);
@@ -262,6 +263,9 @@ class ClassPageController {
 
         if (isRightPassword) {
             let result = await student.deleteStudentByID(studentId);
+            // Cap nhat si so cho lop
+            let classinfo = await mo.getClass(className, year);
+            mo.updateAmountStudent(className,year,classinfo.amount_student - 1);
         }
         else {
             req.flash('message', `Mật khẩu không đúng.`);

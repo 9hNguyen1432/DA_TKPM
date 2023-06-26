@@ -9,15 +9,11 @@
                     width: 70px; padding-left: 20px;">
                     <option value="" selected style="font-size: 13px;">1</option>
                     <option value="" style="font-size: 13px;">2</option>
-                    <option value="" style="font-size: 13px;">All</option>
+                    <option value="" style="font-size: 13px;">Cả năm</option>
                 </select>
             </div>
         </div>
         <div class="text-end me-5" style="width: 10%;">
-            <button type="button" class="btn btn-success shadow" data-bs-toggle="modal"
-                data-bs-target="#modify-class-name" style="font-weight: bold; width:130px;">
-                Xem
-            </button>
         </div>
     </div>
     <div class="card my-2 mx-5" style="background-color: #D9D9D9; height: 510px; border-radius: 10px;">
@@ -34,88 +30,15 @@
                     </tr>
                 </thead>
                 <tbody data-bs-spy="scroll" data-bs-smooth-scroll="true">
+                    {{#each listSummary}}
                     <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
+                        <th scope="row">{{this.stt}}</th>
+                        <td>{{this.class}}</td>
+                        <td>{{this.amount_student}}</td>
+                        <td>{{this.quantity_reached}}</td>
+                        <td>{{this.ratio}}</td>
                     </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td colspan="2">Larry the Bird</td>
-                        <td colspan="2">@twitter</td>
-                    </tr>
+                    {{/each}}
                 </tbody>
             </table>
         </div>
