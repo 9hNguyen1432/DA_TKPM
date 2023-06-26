@@ -1,4 +1,6 @@
+
 <div>
+
     <h5 class="card py-2 shadow-sm" style="width: 400px; text-align: center; margin: 15px auto; border-radius: 10px;">
         BÁO CÁO TỔNG KẾT MÔN</h5>
     <div class="d-flex justify-content-between">
@@ -6,22 +8,26 @@
             <div class="d-flex" style="margin-right: 350px;">
                 <div class="mt-1" style="font-size: 13px;">Khối: </div>
                 <div class="mx-2">
-                    <select id="select_sum_subject_grade" name="select_grade" class="py-1 fw-bold" aria-label=".form-select-lg example" style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9; 
-                    width: 70px; padding-left: 20px;">
-                        <option value="10" selected style="font-size: 13px;">10</option>
-                        <option value="11" style="font-size: 13px;">11</option>
-                        <option value="12" style="font-size: 13px;">12</option>
+                    <select id="select_sum_subject_grade" name="select_grade" class="py-1 fw-bold"
+                        aria-label=".form-select-lg example" style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9;
+                    width: 100px;">
+                        <option class="text-center" value="all" selected style="font-size: 13px;">Tất cả</option>
+                        <option class="text-center" value="10" style="font-size: 13px;">10</option>
+                        <option class="text-center" value="11" style="font-size: 13px;">11</option>
+                        <option class="text-center" value="12" style="font-size: 13px;">12</option>
                     </select>
                 </div>
             </div>
             <div class="d-flex">
                 <div class="mt-1" style="font-size: 13px;">Môn học: </div>
-                
+
                 <div class="mx-2">
-                    <select id="select_sum_subject_name" name="select_subject" class="py-1 fw-bold" aria-label=".form-select-lg example" style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9; 
+                    <select id="select_sum_subject_name" name="select_subject" class="py-1 fw-bold"
+                        aria-label=".form-select-lg example" style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9; 
                     width: 200px; text-align: center;">
                         {{#each listCourse}}
-                            <option value="{{this.name}}" {{#if @first}}selected{{/if}} style="font-size: 13px;">{{this.name}}</option>
+                        <option value="{{this.name}}" {{#if @first}}selected{{/if}} style="font-size: 13px;">
+                            {{this.name}}</option>
                         {{/each}}
                     </select>
                 </div>
@@ -41,47 +47,14 @@
                         <th scope="col">Tỷ lệ</th>
                     </tr>
                 </thead>
-                <tbody data-bs-spy="scroll" data-bs-smooth-scroll="true">
-                    {{#each tongkets}}
-                    <tr>
-                        <th scope="row">{{this.stt}}</th>
-                        <td>{{this.class}}</td>
-                        <td>{{this.siso}}</td>
-                        <td>{{this.soluongdat}}</td>
-                        <td>{{this.tyle}}</td>
-                    </tr>
-                    {{/each}}
+                <tbody id = "summarytable" data-bs-spy="scroll" data-bs-smooth-scroll="true">
+
                 </tbody>
             </table>
         </div>
 
     </div>
+    <script defer src="/js/subject/tongketmonhoc.js"></script>
 </div>
 
 
-{{!-- MODIFY CLASS NAME --}}
-<div class="modal fade" id="modify-class-name" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
-    tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalToggleLabel">Chỉnh sửa lớp học</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="form-add-class" method="post">
-                    <div>
-                        <label for="class-name" class="d-block">Tên môn học: </label>
-                        <input type="text" value="Anh Văn" style="width: 100%;" class="mt-2 p-1">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                <button type="submit" form="form-delete" class="btn btn-success" formtarget="form-add-class">Xác
-                    nhận</button>
-            </div>
-        </div>
-    </div>
-</div>
-{{!-- END MODIFY CLASS NAME --}}
