@@ -1,13 +1,10 @@
 // information to connect to database
 var config = {
-    server: "TOAINGUYEN\\SQLEXPRESS",
-    user: "toainguyenvan",
-    password: "toainguyenvan",
+    server: "LAPTOP-GAU8P18F\\SQLEXPRESS02",
+    user: "sa",
+    password: "123",
     database: "QLHSC3",
-    options: {
-        trustedConnection: true,
-    },
-    driver: "msnodesqlv8",
+    driver: "msnodesqlv8"
 }
 
 //password
