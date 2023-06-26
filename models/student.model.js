@@ -20,7 +20,7 @@ addAStudent = async function (student) {
         addAStudent,
         getInfoListStudentInClassToDownload: async (className, year) => {
             try {
-                let query_string = `SELECT  st.id as ID, st.name AS Name, st.gender ad Gender, st.dob as Birthday, 
+                let query_string = `SELECT  st.id as ID, st.name AS Name, st.gender as Gender, st.dob as Birthday, 
                                             st.email as Email, st.address as Address,
                                             AVG(CASE WHEN rs._semester = 1 THEN rs.mark ELSE NULL END) AS TrungBinhHK1,
                                             AVG(CASE WHEN rs._semester = 2 THEN rs.mark ELSE NULL END) AS TrungBinhHK2
