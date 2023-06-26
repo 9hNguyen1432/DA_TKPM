@@ -186,6 +186,7 @@ function viewCourseDetail(item) {
     });
 }
 
+
 function viewFirstCourse() {
 
 }
