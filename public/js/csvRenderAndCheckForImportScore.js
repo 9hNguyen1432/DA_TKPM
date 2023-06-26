@@ -45,7 +45,6 @@ selectElement.addEventListener('change', async function (event) {
 
 function validatedForm(event) {
 
-<<<<<<< Updated upstream
   // // var class_name = JSON.parse(event.target.getAttribute('data-class'));
   // const arrayString = parentElement.dataset.set;
   // console.log('Array String:', arrayString);
@@ -54,16 +53,6 @@ function validatedForm(event) {
   // Ngăn chặn hành vi mặc định của nút submit
   event.preventDefault();
   console.log(data);
-=======
-    // // var class_name = JSON.parse(event.target.getAttribute('data-class'));
-    // const arrayString = parentElement.dataset.set;
-    // console.log('Array String:', arrayString);
-    // const listStudent = JSON.parse(arrayString);
-    // console.log('Array:', listStudent);
-    // Ngăn chặn hành vi mặc định của nút submit
-    event.preventDefault();
-    console.log(data);
->>>>>>> Stashed changes
 
   let isValided = true;
 
@@ -189,7 +178,6 @@ function convertToCSVFormat(data) {
   csvData = "\ufeff" + fields.join(',') + "\n" + csvData;
   return csvData;
 }
-
 
 
 
