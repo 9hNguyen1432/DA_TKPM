@@ -144,8 +144,20 @@ function viewCourseDetail(item) {
     let course_name = $(item).attr("data-course")
     $('#course_name').text("Môn : " + course_name)
 
+    let import_link = $('#import_link').attr('href');
+    let new_link_1 = import_link.replace("CourseName",course_name)
+    $('#import_link').attr('href',new_link_1)
+
+    let dowloadTranscript_link = $('#dowloadTranscript_link').attr('href');
+    let new_link_2 = dowloadTranscript_link.replace("CourseName",course_name)
+    $('#dowloadTranscript_link').attr('href',new_link_2)
+
     $('#courses_detail_table tbody tr').remove();
     $('#courses_detail_table tbody div').remove();
+
+    if($('#transcript').css('visibility')=="hidden"){
+        $('#transcript').css('visibility',"visible")
+    }
 
     $.ajax({
         type: "get",
