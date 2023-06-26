@@ -40,9 +40,9 @@ $(document).ready(function () {
     var text_year = $(item_year).find('.active').text()
     $(item_year).prev().text(text_year)
 
-    // var item_seme = $('#semestermenu-dropdown')
-    // var text = $(item_seme).find('.active').text()
-    // $(item_seme).prev().text(text)
+    var item_seme = $('#summary-semester-dropdown')
+    var text = $(item_seme).find('.active').text()
+    $(item_seme).prev().text(text)
 
     // var item_class = $('#classmenu-dropdown')
     // var text = $(item_class).find('.active').text()
@@ -81,7 +81,7 @@ function activeYear(item) {
     for (var i = 0; i < child_list.length; i++) {
         var child = child_list.eq(i);
         var year = child.text();
-        if (year === cur_year) {
+        if (year == cur_year) {
             child.addClass('active');
             break;
         }
@@ -96,7 +96,7 @@ function activeSem(item) {
     for (var i = 0; i < child_list.length; i++) {
         var child = child_list.eq(i);
         var child_sem = child.val();
-        if (child_sem === semester) {
+        if (child_sem == semester) {
             child.attr("selected", "selected")
             console.log(child_sem)
             break;
@@ -105,11 +105,29 @@ function activeSem(item) {
 
 }
 
+function activeSemesterInSummary(item) {
+
+    var cur_sem = $(item).attr('data-semester')
+    var child_list = $(item).children();
+    console.log(cur_sem)
+    for (var i = 0; i < child_list.length; i++) {
+        var child = child_list.eq(i);
+        var year = child.text();
+        if (year == cur_sem) {
+            child.addClass('active');
+            break;
+        }
+    }
+
+}
+
 
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("hihi")
     activeYear(document.getElementById("yearmenu-dropdown"));
     activeSem(document.getElementById("semmenu-select"))
+    let item = document.getElementById("summary-semester-dropdown")
+    if (item !== undefined && item !== null)
+        activeSemesterInSummary(item)
 });
 
 setTimeout(function () {
@@ -145,18 +163,18 @@ function viewCourseDetail(item) {
     $('#course_name').text("Môn : " + course_name)
 
     let import_link = $('#import_link').attr('href');
-    let new_link_1 = import_link.replace("CourseName",course_name)
-    $('#import_link').attr('href',new_link_1)
+    let new_link_1 = import_link.replace("CourseName", course_name)
+    $('#import_link').attr('href', new_link_1)
 
     let dowloadTranscript_link = $('#dowloadTranscript_link').attr('href');
-    let new_link_2 = dowloadTranscript_link.replace("CourseName",course_name)
-    $('#dowloadTranscript_link').attr('href',new_link_2)
+    let new_link_2 = dowloadTranscript_link.replace("CourseName", course_name)
+    $('#dowloadTranscript_link').attr('href', new_link_2)
 
     $('#courses_detail_table tbody tr').remove();
     $('#courses_detail_table tbody div').remove();
 
-    if($('#transcript').css('visibility')=="hidden"){
-        $('#transcript').css('visibility',"visible")
+    if ($('#transcript').css('visibility') == "hidden") {
+        $('#transcript').css('visibility', "visible")
     }
 
     $.ajax({
