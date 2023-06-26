@@ -1,16 +1,27 @@
 var conn = require('./connect.model').conn
 
-
+async function getAnSubjectResult(student_id, subject_id, _semester, _year){
+    try {
+        var query_string = `SELECT * FROM RESULT WHERE student_id = '${student_id}' and
+        subject_id = '${subject_id}' and _semester = '${_semester}' and _year = '${_year}'`
+        console.log(query_string)
+        let result = (await conn).query(query_string);
+        return (await result).recordset[0];
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
 module.exports = {
-    getInfoOfSubject: async(idSubject, idClass) => {
+    getInfoOfSubject: async (idSubject, idClass) => {
         try {
 
         } catch (error) {
-            
+
         }
     },
 
-    getTranscriptOfSubject: async(subjectName, className, year, semester) => {
+    getTranscriptOfSubject: async (subjectName, className, year, semester) => {
         try {
             //TODO: 
             let query_string = `SELECT 
@@ -39,11 +50,11 @@ module.exports = {
             let result = (await conn).query(query_string);
             return (await result).recordset;
         } catch (error) {
-            
+
         }
     },
 
-    getAllSubjectInYear: async(_year) => {
+    getAllSubjectInYear: async (_year) => {
         try {
             var query_string = `SELECT * FROM SUBJECT WHERE _year = '${_year}'`;
             let result = (await conn).query(query_string);
@@ -54,7 +65,7 @@ module.exports = {
         }
     },
 
-    getSubjectWithNameInYear: async(name, _year) => {
+    getSubjectWithNameInYear: async (name, _year) => {
         try {
             var query_string = `SELECT * FROM SUBJECT WHERE name = N'${name}' and _year = '${_year}'`;
             let result = (await conn).query(query_string);
@@ -62,6 +73,25 @@ module.exports = {
         } catch (error) {
             console.error(error);
             return null;
+        }
+    },
+
+    addAResultOfSubject: async (student_id, subject_id, _semester, _year, mark) => {
+        const pool = await conn;
+        try {
+            if (await getAnSubjectResult(student_id, subject_id, _semester, _year)) {
+                let query_string = `delete from RESULT where student_id = '${student_id}' and
+                subject_id = '${subject_id}' and _semester = '${_semester}' and _year = '${_year}'`
+                console.log(query_string)
+                await pool.request().query(query_string);
+            }
+
+            let query_string = `insert into RESULT (student_id, subject_id, _semester, _year, mark)
+            values('${student_id}','${subject_id}','${_semester}','${_year}','${mark}')`
+            console.log(query_string);
+            return await pool.request().query(query_string);
+        } catch (err) {
+            console.error(err)
         }
     }
 }
