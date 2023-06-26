@@ -5,62 +5,27 @@
         <div class="d-flex justify-content-center" style="width: 90%;">
             <div class="d-flex" style="margin-right: 350px;">
                 <div class="mt-1" style="font-size: 13px;">Khối: </div>
-                {{!-- <div class="dropdown mx-2">
-                    <button type="button" class="btn dropdown-toggle py-1 fw-bold" data-bs-toggle="dropdown"
-                        aria-expanded="false" style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9;
-                    width: 100px;">
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end" id="classmenu-dropdown" style="width: 100px;">
-                        <button class="dropdown-item active" onclick="changeItem_DD(this)"
-                            style="font-size: 12px; text-align: center;">12C1</button>
-                        <button class="dropdown-item" onclick="changeItem_DD(this)"
-                            style="font-size: 12px; text-align: center;">12C2</button>
-                        <button class="dropdown-item" onclick="changeItem_DD(this)"
-                            style="font-size: 12px; text-align: center;">12C3</button>
-                    </div>
-                </div> --}}
                 <div class="mx-2">
-                    <select class="py-1 fw-bold" aria-label=".form-select-lg example" style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9; 
+                    <select id="select_sum_subject_grade" name="select_grade" class="py-1 fw-bold" aria-label=".form-select-lg example" style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9; 
                     width: 70px; padding-left: 20px;">
-                        <option value="" selected style="font-size: 13px;">10</option>
-                        <option value="" style="font-size: 13px;">11</option>
-                        <option value="" style="font-size: 13px;">12</option>
+                        <option value="10" selected style="font-size: 13px;">10</option>
+                        <option value="11" style="font-size: 13px;">11</option>
+                        <option value="12" style="font-size: 13px;">12</option>
                     </select>
                 </div>
             </div>
             <div class="d-flex">
                 <div class="mt-1" style="font-size: 13px;">Môn học: </div>
-                {{!-- <div class="dropdown mx-2">
-                    <button type="button" class="btn dropdown-toggle py-1 fw-bold" data-bs-toggle="dropdown"
-                        aria-expanded="false" style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9;
-                    width: 200px;">
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end" id="coursemenu-dropdown" style="width: 200px;">
-                        <button class="dropdown-item active" onclick="changeItem_DD(this)"
-                            style="font-size: 12px; text-align: center;">Anh văn</button>
-                        <button class="dropdown-item" onclick="changeItem_DD(this)"
-                            style="font-size: 12px; text-align: center;">Ngữ văn</button>
-                        <button class="dropdown-item" onclick="changeItem_DD(this)"
-                            style="font-size: 12px; text-align: center;">Thể dục</button>
-                    </div>
-                </div> --}}
+                
                 <div class="mx-2">
-                    <select class="py-1 fw-bold" aria-label=".form-select-lg example" style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9; 
+                    <select id="select_sum_subject_name" name="select_subject" class="py-1 fw-bold" aria-label=".form-select-lg example" style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9; 
                     width: 200px; text-align: center;">
-                        <option value="" selected style="font-size: 13px;">Anh văn</option>
-                        <option value="" style="font-size: 13px;">Ngữ văn</option>
-                        <option value="" style="font-size: 13px;">Thể dục</option>
+                        {{#each listCourse}}
+                            <option value="{{this.name}}" {{#if @first}}selected{{/if}} style="font-size: 13px;">{{this.name}}</option>
+                        {{/each}}
                     </select>
                 </div>
             </div>
-
-
-        </div>
-        <div class="text-end me-5" style="width: 10%;">
-            <button type="button" class="btn btn-success shadow" data-bs-toggle="modal"
-                data-bs-target="#modify-class-name" style="font-weight: bold; width:130px;">
-                Xem
-            </button>
         </div>
     </div>
     <div class="card my-2 mx-5" style="background-color: #D9D9D9; height: 510px; border-radius: 10px;">
@@ -77,88 +42,15 @@
                     </tr>
                 </thead>
                 <tbody data-bs-spy="scroll" data-bs-smooth-scroll="true">
+                    {{#each tongkets}}
                     <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
+                        <th scope="row">{{this.stt}}</th>
+                        <td>{{this.class}}</td>
+                        <td>{{this.siso}}</td>
+                        <td>{{this.soluongdat}}</td>
+                        <td>{{this.tyle}}</td>
                     </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td colspan="2">Larry the Bird</td>
-                        <td colspan="2">@twitter</td>
-                    </tr>
+                    {{/each}}
                 </tbody>
             </table>
         </div>

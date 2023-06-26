@@ -63,5 +63,17 @@ module.exports = {
             console.error(error);
             return null;
         }
+    },
+
+    getSummarySubject: async(grade, subjectName, year, semester) => {
+
+    },
+
+    getSummaryOfClass: async(className, _year, _semester) => {
+        
+    },
+
+    getSummaryOfStudentInAnSubject: async(idStudent, idClass, idSubject, semester) => {
+        
     }
 }
