@@ -132,8 +132,7 @@ addAStudent = async function (student) {
                                 GROUP BY Student.id, Student.name, Class.name`;
 
             let result = (await conn).query(query_string);
-            console.log(await result);
-            return result;
+            return (await result).recordset;
         },
 
         getInfoStudentByName_Search: async (studentName, year) => {
@@ -144,10 +143,10 @@ addAStudent = async function (student) {
                                     JOIN Class ON Student.class_id = Class.id
                                     JOIN Result ON Result.student_id = Student.id
                                     WHERE Student.name LIKE '%${studentName}%' AND Result._year = '${year}'
-                                    GROUP BY Student.id = Student.name, Class.name`;
+                                    GROUP BY Student.id ,Student.name, Class.name`;
             let result = (await conn).query(query_string);
             console.log(result);
-            return result;
+            return (await result).recordset;
         },
         getSummaryAllSubjectOfStudent: async(studentID, semester, year) => {
             const queryString =`select SB.name as subject, AVG(ER.mark) as DTB  from EXAM_RESULT ER, EXAM EX, SUBJECT sb  

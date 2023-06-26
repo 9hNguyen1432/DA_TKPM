@@ -1,16 +1,18 @@
 // information to connect to database
 var config = {
-    server: "LAPTOP-GAU8P18F\\SQLEXPRESS02",
-    user: "sa",
-    password: "123",
+    server: "TOAINGUYEN\\SQLEXPRESS",
+    user: "toainguyenvan",
+    password: "toainguyenvan",
     database: "QLHSC3",
-    driver: "msnodesqlv8"
+    options: {
+        trustedConnection: true,
+    },
+    driver: "msnodesqlv8",
 }
 
 //password
-//NB: PANDA\\SQLEXPRESS01 - 1
+//NB: 1
 //HC: 123456
 //TT: 123
 module.exports = config;
-
 
