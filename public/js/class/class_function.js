@@ -1,3 +1,4 @@
+
 // Lắng nghe sự kiện click trên nút chỉnh sửa
 document.querySelectorAll('.edit-button').forEach(button => {
     button.addEventListener('click', async () => {
@@ -104,6 +105,7 @@ document.querySelectorAll('.delete-button').forEach(button => {
     });
 });
 
+
 // Lắng nghe sự kiện click trên nút THÊM HỌC SINH
 document.getElementById('btn_add_student').addEventListener('click', async () => {
     // reset date in input field
@@ -149,51 +151,39 @@ document.querySelectorAll('.view-student').forEach(button => {
         // lấy thông tin học sinh
         let response = await getStudentInformations(studentId, className, currentYear);
         let student = await response.json();
-
         formStudent.querySelector('#name').innerHTML =student.name
         formStudent.querySelector('#gender').innerHTML =student.gender
         formStudent.querySelector('#dob').innerHTML =student.dob
         formStudent.querySelector('#address').innerHTML =student.address
+        formStudent.querySelector('#score1-summary').innerHTML = student.scoreSemester[0].DTB
+        if( student.scoreSemester[1]){
+            formStudent.querySelector('#score2-summary').innerHTML = student.scoreSemester[1].DTB 
+        }
+        if(student.scoreYear.DTB){
+            formStudent.querySelector('#score-summary').innerHTML = student.scoreYear.DTB
+        }
+       
 
-        //TODO: get summary score with semester
-
-        // TODO: Get student's score with semester and year from database
-        const scores = [{stt: 1 , subject: 'Toán', sc1: 9, sc2: 5, sc3: 10},
-        {stt: 2 , subject: 'Lý', sc1: 9, sc2: 5, sc3: 10},
-        {stt: 3 , subject: 'Hóa', sc1: 9, sc2: 5, sc3: 10},
-        {stt: 4 , subject: 'Sinh', sc1: 9, sc2: 5, sc3: 10},
-        {stt: 5 , subject: 'Sử', sc1: 9, sc2: 5, sc3: 10},
-        {stt: 6 , subject: 'Địa', sc1: 9, sc2: 5, sc3: 10},
-        {stt: 7 , subject: 'Văn', sc1: 9, sc2: 5, sc3: 10},
-        {stt: 8 , subject: 'Anh', sc1: 9, sc2: 5, sc3: 10}, ]
-
-
-        const scores2 = [{stt: 1 , subject: 'Toán', sc1: 1, sc2: 1, sc3: 10},
-        {stt: 2 , subject: 'Lý', sc1: 1, sc2: 1, sc3: 10},
-        {stt: 3 , subject: 'Hóa', sc1: 1, sc2: 1, sc3: 10},
-        {stt: 4 , subject: 'Sinh',sc1: 1, sc2: 1, sc3: 10},
-        {stt: 5 , subject: 'Sử', sc1: 1, sc2: 1, sc3: 10},
-        {stt: 6 , subject: 'Địa', sc1: 1, sc2: 1, sc3: 10},
-        {stt: 7 , subject: 'Văn', sc1: 1, sc2: 1, sc3: 10},
-        {stt: 8 , subject: 'Anh', sc1: 9, sc2: 5, sc3: 10}, ] 
         const tableScore = document.querySelector('#table-score-of-student tbody');
-        
-        const scoreSemester1 = formStudent.querySelector('#score-hk1');
-        const scoreSemester2 = formStudent.querySelector('#score-hk2');
 
-        showListScore(scores, tableScore);
-        scoreSemester1.style.color = 'red';
-        scoreSemester2.style.color = 'gray';
-        scoreSemester1.addEventListener('click', function() {
-            scoreSemester1.style.color = 'red';
-            scoreSemester2.style.color = 'gray';
-            showListScore(scores, tableScore);
+        const btnSemester1 = formStudent.querySelector('#score-hk1');
+        const btnSemester2 = formStudent.querySelector('#score-hk2');
+
+        console.log(student)
+
+        showListScore(student.scoreDetail1, tableScore);
+        btnSemester1.style.color = 'red';
+        btnSemester2.style.color = 'gray';
+        btnSemester1.addEventListener('click', function() {
+            btnSemester1.style.color = 'red';
+            btnSemester2.style.color = 'gray';
+            showListScore(student.scoreDetail1, tableScore);
           });
           
-          scoreSemester2.addEventListener('click', function() {
-            scoreSemester1.style.color = 'gray';
-            scoreSemester2.style.color = 'red';
-            showListScore(scores2, tableScore);
+          btnSemester2.addEventListener('click', function() {
+            btnSemester1.style.color = 'gray';
+            btnSemester2.style.color = 'red';
+            showListScore(student.scoreDetail2, tableScore);
           });
         
        
@@ -207,11 +197,11 @@ async function showListScore(scores, tableScore)
     scores.forEach(score => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <th scope="row">${score.stt}</th>
-          <td>${score.subject}</td>
-          <td>${score.sc1}</td>
-          <td>${score.sc2}</td>
-          <td>${score.sc3}</td>
+          <th scope="row">${score.ID}</th>
+          <td>${score.Name}</td>
+          <td>${score.exam_15}</td>
+          <td>${score.exam_45}</td>
+          <td>${score.exam_Sem}</td>
         `;
         tableScore.appendChild(row);
     });
@@ -237,3 +227,9 @@ document.getElementById('btn_export_students').addEventListener('click', () => {
             saveAs(blob, `students_${className}.csv`);
         });
 })
+
+
+
+
+
+

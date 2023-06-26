@@ -12,7 +12,7 @@ const regulation = require('../models/regulation.model');
 const account = require('../models/account');
 
 const ClassModel = require("../models/class.model")
-const AccModel = require('../models/account')
+const SubjectModel = require("../models/subject.model")
 var crypto = require('crypto')
 const iconv = require('iconv-lite');
 const json2csv = require('json2csv').parse;
@@ -47,23 +47,32 @@ class ClassPageController {
 
         const class_info = await Class.getClass(class_name, year_str);
         var listStudent = await student.getListStudentInClass_2(class_name, year_str);
-        listStudent.forEach((student, index) => {
-            student.stt = index + 1;
-            student.name = student.name[0];
-            student.id = student.id[0];
-
-            var date = new Date(student.dob.toString());
-            var day = date.getDate();
-            var month = date.getMonth() + 1; // Tháng trong JavaScript bắt đầu từ 0
-            var year = date.getFullYear();
+        for (let i = 0; i < listStudent.length; i++) {
+            let _student = listStudent[i];
+            _student.stt = i + 1;
+            _student.name = _student.name[0];
+            _student.id = _student.id[0];
+          
+            let date = new Date(_student.dob.toString());
+            let day = date.getDate();
+            let month = date.getMonth() + 1; // Tháng trong JavaScript bắt đầu từ 0
+            let year = date.getFullYear();
             day = (day < 10) ? "0" + day : day;
             month = (month < 10) ? "0" + month : month;
+            _student.dob = day + "/" + month + "/" + year;
+            _student.summaryScore1 = await student.getSummaryAllSubjectOfStudent(_student.id, 1, year_str);
+            _student.summaryScore2 = await student.getSummaryAllSubjectOfStudent(_student.id, 2, year_str);
+            if( _student.summaryScore1.length>0 &&_student.summaryScore2.length >0  ){
+                _student.summaryScore = await student.getSummarySubjectByYearOfStudent(_student.id, year_str)
+            }
 
-            student.dob = day + "/" + month + "/" + year;
-        })
+            _student.summarySemester = await student.getSummaryScoreBySemester(_student.id,year_str);
+            _student.summarYear = await student.getSummaryScoreByYear(_student.id,year_str)
+          }
 
+        
         const message = await req.flash('message');
-
+       
         res.render('class/students', {
             ClassName: class_name,
             Teacher: "Lê Thị Ngọc Bích",
@@ -72,7 +81,7 @@ class ClassPageController {
             Years: list_year,
             CurYear: year_str,
             CurSem: sem_str,
-            message: message
+            message: message,
         });
     }
 
@@ -112,25 +121,28 @@ class ClassPageController {
         let year_str = req.query.year
         let sem_str = req.query.semester
 
-        const data = [
-            {
-                STT: 1,
-                Name: "Lê Thị Ngọc Bích",
-                Test_15min: 10.0,
-                Test_45min: 9.5,
-                Final: 9.8
-            },
-            {
-                STT: 1,
-                Name: "Lê Thị Ngọc Bích",
-                Test_15min: 10.0,
-                Test_45min: 9.5,
-                Final: 9.8
-            }
-        ];
+        let score_board = await SubjectModel.getSubjectTranscriptOfClass(year_str,sem_str,class_name,course_name)
 
+        // const data = [
+        //     {
+        //         STT: 1,
+        //         Name: "Lê Thị Ngọc Bích",
+        //         Test_15min: 10.0,
+        //         Test_45min: 9.5,
+        //         Final: 9.8
+        //     },
+        //     {
+        //         STT: 1,
+        //         Name: "Lê Thị Ngọc Bích",
+        //         Test_15min: 10.0,
+        //         Test_45min: 9.5,
+        //         Final: 9.8
+        //     }
+        // ];
+        console.log(score_board)
         res.setHeader('Content-Type', 'application/json');
-        res.json(data);
+        res.json(score_board);
+
 
         // res.render('class/courses_detail',
         //     {
@@ -140,12 +152,12 @@ class ClassPageController {
         //         CourseName: course_name,
         //         Years: list_year,
         //         CurYear: year_str,
-        //         CurSem: sem_str
+        //         CurSem: sem_str,
+        //         ScoreBoard: score_board
         //     });
     }
 
     async downloadStudentsOfClass_CSV(req, res) {
-
         const className = req.params.class_name;
         const year = req.query.year;
         const data = await student.getInfoListStudentInClassToDownload(className, year);
@@ -158,30 +170,15 @@ class ClassPageController {
         const className = req.params.class_name;
         const year = req.query.year;
         let data = await student.getListStudentInClass_2(className, year);
-        console.log("CONCAC")
-        console.log(data);
     }
 
     async downloadTranscriptOfSubject_CSV(req, res) {
         const className = req.params.class_name;
         const year = req.query.year;
         const semester = req.query.semester;
-        const subjectName = req.query.subject;
-        const data = await subject.getTranscriptOfSubject(subjectName, className,year, semester);
-
-        // // Định nghĩa các trường (columns) cần xuất ra trong file CSV
-        // const fields = ['Name', 'Mark', 'Diem15Phut', 'Diem1Tiet', "DiemCuoiKi"];
-
-        // // Biến đổi dữ liệu JSON thành chuỗi CSV
-        // let csvData = '';
-        // data.forEach(item => {
-        //     const row = fields.map(field => item[field]).join(',');
-        //     csvData += row + '\n';
-        // });
-
-        // csvData = "\ufeff" + fields.join(',') + "\n" + csvData;
-        // const jsonData = JSON.stringify(csvData);
-
+        const subjectName = req.params.course_name;
+        const data = await subject.getSubjectTranscriptOfClass(year, semester,className, subjectName);
+        console.log("DATA:" + data);
         let jsonData = convertToCSVFormat(data);
 
         res.send(jsonData);
@@ -193,7 +190,7 @@ class ClassPageController {
         const year = req.query.year;
 
         const studentData = await student.getAStudent(studentId);
-
+            
         res.send(studentData);
     }
 
@@ -276,19 +273,20 @@ class ClassPageController {
 
         var date = new Date(_student.dob.toString());
         var day = date.getDate();
-        var month = date.getMonth() + 1; // Tháng trong JavaScript bắt đầu từ 0
+        var month = date.getMonth() + 1; 
         var yearBirth = date.getFullYear();
         day = (day < 10) ? "0" + day : day;
         month = (month < 10) ? "0" + month : month;
         _student.dob = day + "/" + month + "/" + yearBirth;
-
+        
+        _student.scoreSemester = await student.getSummaryScoreBySemester(studentId, year);
+        _student.scoreYear = await student.getSummaryScoreByYear(studentId, year);
+        _student.scoreDetail1 = await student.getScoreDetailOfStudent(studentId,1, year)
+        _student.scoreDetail2 = await student.getScoreDetailOfStudent(studentId,2, year)
         res.send(_student);
 
-        //TODO: Get score with semester in year 
 
     }
-
-
     //for method get(/:class_name/import)
     async importStudentRender(req, res) {
         let list_year = await Model.getYears();

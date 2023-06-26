@@ -3,7 +3,7 @@ var regulation = require('./regulation.model')
 var _class = require('./class.model')
 const { all } = require('../routers/class.router')
 
-async function getAnSubjectResult(student_id, subject_id, _semester, _year){
+async function getAnSubjectResult(student_id, subject_id, _semester, _year) {
     try {
         var query_string = `SELECT * FROM RESULT WHERE student_id = '${student_id}' and
         subject_id = '${subject_id}' and _semester = '${_semester}' and _year = '${_year}'`
@@ -51,6 +51,7 @@ module.exports = {
                                     E_semester._year = '${year}' AND
                                     E_semester._semester = '${semester}'`;
             let result = (await conn).query(query_string);
+
             return (await result).recordset;
         } catch (error) {
 
@@ -98,10 +99,10 @@ module.exports = {
         }
     },
 
-    getSummaryResultOfSubject: async (grade, subject, _semester, _year) =>{
+    getSummaryResultOfSubject: async (grade, subject, _semester, _year) => {
         try {
-        let regu = await regulation.getRegulation(_year);
-        var query_string =`select cl.name, cl.amount_student, count(*) as slDatChuan, count(*)*100/cl.amount_student as tile
+            let regu = await regulation.getRegulation(_year);
+            var query_string = `select cl.name, cl.amount_student, count(*) as slDatChuan, count(*)*100/cl.amount_student as tile
         from CLASS cl, RESULT rs, SUBJECT sj, STUDENT st 
         where cl._year = rs._year
          and sj.id = rs.subject_id
@@ -112,38 +113,72 @@ module.exports = {
          and sj.name = N'${subject}'
          and rs.mark > '${regu.standard_score}'
         group by cl.name, cl.amount_student`
-        let summaryQuery = (await conn).query(query_string);
-        let summaryQueryResult = (await summaryQuery).recordset;
-        let allClass = await _class.getAllClassInYear(_year);
-        let classOfGrade;
-        if (parseInt(grade)){
-            classOfGrade = allClass.filter(e => e.name.slice(0,2) === grade);
-            summaryQueryResult = summaryQueryResult.filter(e => e.name.slice(0,2) === grade);
-        }
-        else {
-            classOfGrade = allClass;
-        }
-        let result = [];
-        for (let cl of classOfGrade) {
-            if (summaryQueryResult.map(e => e.name).includes(cl.name)){
-                result.push(summaryQueryResult.find(e => e.name === cl.name));
+            let summaryQuery = (await conn).query(query_string);
+            let summaryQueryResult = (await summaryQuery).recordset;
+            let allClass = await _class.getAllClassInYear(_year);
+            let classOfGrade;
+            if (parseInt(grade)) {
+                classOfGrade = allClass.filter(e => e.name.slice(0, 2) === grade);
+                summaryQueryResult = summaryQueryResult.filter(e => e.name.slice(0, 2) === grade);
             }
             else {
-                result.push(
-                    {
-                        name: cl.name,
-                        amount_student: cl.amount_student,
-                        slDatChuan: "Chưa có kết quả",
-                        tile: "Chưa có"
-                    }
-                )
+                classOfGrade = allClass;
             }
+            let result = [];
+            for (let cl of classOfGrade) {
+                if (summaryQueryResult.map(e => e.name).includes(cl.name)) {
+                    result.push(summaryQueryResult.find(e => e.name === cl.name));
+                }
+                else {
+                    result.push(
+                        {
+                            name: cl.name,
+                            amount_student: cl.amount_student,
+                            slDatChuan: "Chưa có kết quả",
+                            tile: "Chưa có"
+                        }
+                    )
+                }
+            }
+            return result;
+
+        } catch (error) {
+            console.error(error);
+            return null;
         }
-        return result;
-        
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+    },
+    getSubjectTranscriptOfClass: async (_year, _semester, class_name, subject_name) => {
+        try {
+            var query_string = `SELECT
+                                    ID, Name,
+                                    [Kiểm tra 15 phút] AS exam_15,
+                                    [Kiểm tra 1 tiết] AS exam_45,
+                                    [Bài thi học kỳ] AS exam_Sem
+                                FROM
+                                    (
+                                        SELECT
+                                            s.id ID, s.name Name, er.mark Mark, e.name ExamName
+                                        FROM STUDENT s join EXAM_RESULT er on s.id=er.student_id
+                                                join EXAM e on e.id=er.exam_id
+                                                join CLASS c on c.id=s.class_id
+                                                join SUBJECT sj on sj.id=e.subject_id
+                                                where e._year='${_year}'
+                                                and e._semester=${_semester}
+                                                and c.name='${class_name}'
+                                                and sj.name = N'${subject_name}'
+                                    ) AS SourceTable
+                                PIVOT
+                                    (
+                                        MAX(Mark)
+                                        FOR ExamName IN ([Kiểm tra 15 phút],[Kiểm tra 1 tiết], [Bài thi học kỳ])
+                                    ) AS PivotTable;
+                                `;
+            let result = (await conn).query(query_string);
+            console.log("hihi\n" + result)
+            return (await result).recordset;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
     }
 }

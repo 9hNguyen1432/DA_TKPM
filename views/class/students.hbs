@@ -74,59 +74,46 @@
                                 <thead>
                                     <tr>
                                         <th scope="col" class="col-1"></th>
-                                        <th scope="col" class="col-1">Toán</th>
-                                        <th scope="col" class="col-1">Hóa</th>
-                                        <th scope="col" class="col-1">Lý</th>
-                                        <th scope="col" class="col-1">Văn</th>
-                                        <th scope="col" class="col-1">Sử</th>
-                                        <th scope="col" class="col-1">Địa</th>
-                                        <th scope="col" class="col-1">GDCD</th>
-                                        <th scope="col" class="col-1">Thể dục</th>
-                                        <th scope="col" class="col-1">Anh văn</th>
-                                        <th scope="col" class="col-1">TK</th>
+                                        {{#each this.summaryScore1}}
+                                            <th scope="col" class="col-1">{{subject}}</th>
+                                        {{/each}} 
+                                        <th scope="col" class="col-1">Tổng kết</th>
                                     </tr>
                                 </thead>
-                                <tbody data-bs-spy="scroll" data-bs-smooth-scroll="true">
+                                 <tbody data-bs-spy="scroll" data-bs-smooth-scroll="true">
+                                    {{#if this.summaryScore1}}
                                     <tr class="col">
                                         <th scope="row">HK 1</th>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
+                                        {{#each this.summaryScore1}}
+                                            <td>{{this.DTB}}</td>
+                                        {{/each}}
+                                         <td>{{summarySemester.0.DTB}}</td>
                                     </tr>
-                                    <tr>
+                                    {{/if}}
+
+                                    {{#if this.summaryScore2}}
+                                    <tr class="col">
                                         <th scope="row">HK 2</th>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
+                                        {{#each this.summaryScore2}}
+                                            <td>{{this.DTB}}</td>
+                                        {{/each}}
+                                         <td>{{summarySemester.1.DTB}}</td>
                                     </tr>
-                                    <tr>
-                                        <th scope="row">CK</th>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
-                                        <td>5</td>
+                                    {{/if}}
+
+                                    {{#if this.summaryScore}}
+                                    <tr class="col">
+                                        <th scope="row">Cuối kì</th>
+                                        {{#each this.summaryScore}}
+                                            <td>{{this.DTB}}</td>
+                                        {{/each}}
+
+                                         <td>{{summaryYear.DTB}}</td>
                                     </tr>
+                                    {{/if}}
+
                                 </tbody>
+                               
                             </table>
                         </div>
 
@@ -349,15 +336,15 @@
                                 <div class="mx-5">
                                     <div class="d-flex">
                                         <div style="width: 100px;">TB HK1 :</div>
-                                        <div class="mx-1" style="text-align: left;">0.0</div>
+                                        <div id ='score1-summary'class="mx-1" style="text-align: left;">0.0</div>
                                     </div>
                                     <div class="d-flex">
                                         <div style="width: 100px;">TB HK2 :</div>
-                                        <div class="mx-1" style="text-align: left;">0.0</div>
+                                        <div id ='score2-summary' class="mx-1" style="text-align: left;">0.0</div>
                                     </div>
                                     <div class="d-flex">
                                         <div style="width: 100px;">CK :</div>
-                                        <div class="mx-1" style="text-align: left;">0.0</div>
+                                        <div id ='score-summary' class="mx-1" style="text-align: left;">0.0</div>
                                     </div>
                                     <div class="d-flex">
                                         <div style="width: 100px;">Ghi chú :</div>
