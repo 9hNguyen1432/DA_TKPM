@@ -27,7 +27,13 @@ addAStudent = async function (student) {
                                             AND rs2.student_id = st.id AND rs2._semester = 2
                                             AND cl.name = '${className}' AND rs1._year = '${year}' AND rs2._year = '${year}'`;
                 let result = (await conn).query(query_string);
-                console.log(await result);
+                if((await result).recordset.length <= 0){
+                    let query_string = `SELECT st.id, st.name, st.gender, st.dob, st.email, st.address
+                                        FROM STUDENT st, CLASS cl
+                                        WHERE cl.id = st.class_id AND cl._year = '${year} AND cl.name = '${className}`;
+                    let result = (await conn).query(query_string);
+                    return (await result).recordset;
+                }
                 return (await result).recordset;
             } catch (error) {
                 console.log(error);

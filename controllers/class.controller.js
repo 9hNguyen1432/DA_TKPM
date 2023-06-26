@@ -165,7 +165,7 @@ class ClassPageController {
         const semester = req.query.semester;
         const subjectName = req.query.subject;
         const data = await subject.getTranscriptOfSubject(subjectName, className,year, semester);
-
+        
         let jsonData = convertToCSVFormat(data);
 
         res.send(jsonData);
