@@ -79,7 +79,7 @@ module.exports = {
     addAResultOfSubject: async (student_id, subject_id, _semester, _year, mark) => {
         const pool = await conn;
         try {
-            if (await this.getAnSubjectResult(student_id, subject_id, _semester, _year)) {
+            if (await getAnSubjectResult(student_id, subject_id, _semester, _year)) {
                 let query_string = `delete from RESULT where student_id = '${student_id}' and
                 subject_id = '${subject_id}' and _semester = '${_semester}' and _year = '${_year}'`
                 console.log(query_string)
@@ -93,5 +93,7 @@ module.exports = {
         } catch (err) {
             console.error(err)
         }
-    }
+    },
+
+    
 }
