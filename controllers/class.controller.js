@@ -14,10 +14,12 @@ const account = require('../models/account');
 const ClassModel = require("../models/class.model")
 const AccModel = require('../models/account')
 var crypto = require('crypto')
+const iconv = require('iconv-lite');
+const json2csv = require('json2csv').parse;
 
 class ClassPageController {
 
-    async loadPage(req, res) {
+    async loadPage(req, res) { 
         let list_year = await Model.getYears();
         let year_str = req.query.year
         let sem_str = req.query.semester
@@ -143,31 +145,52 @@ class ClassPageController {
     }
 
     async downloadStudentsOfClass_CSV(req, res) {
-        const data = await student.getListStudentInClass_2("12A1", "2021-2022")
 
-        // Convert the data to CSV format
-        const csv = DataHelper.convertToCsv(data);
+        const className = req.params.class_name;
+        const year = req.query.year;
+        const data = await student.getInfoListStudentInClassToDownload(className, year);
+        if(data === undefined)
+        {
+            console.log("CANNOT GET DATA");
+            return;
+        }
+        // Định nghĩa các trường (columns) cần xuất ra trong file CSV
+        const fields = ['Name', 'Class', 'TrungBinhHK1', 'TrungBinhHK2'];
 
-        // Set the response headers
-        res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-        res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(filename)}"; filename*=UTF-8''${encodeURIComponent(filename)}`);
+        // Biến đổi dữ liệu JSON thành chuỗi CSV
+        let csvData = '';
+        data.forEach(item => {
+            const row = fields.map(field => item[field]).join(',');
+            csvData += row + '\n';
+        });
 
-        // Send the CSV data to the client
-        res.send(csv);
+        csvData = "\ufeff" + fields.join(',') + "\n" + csvData;
+        const jsonData = JSON.stringify(csvData);
+
+        res.send(jsonData);
     }
 
     async downloadTranscriptOfSubject_CSV(req, res) {
-        const data = await subject.getTranscriptOfSubject("Toan", "10A1");
+        const className = req.params.class_name;
+        const year = req.query.year;
+        const semester = req.query.semester;
+        const subjectName = req.query.subject;
+        const data = await subject.getTranscriptOfSubject(subjectName, className,year, semester);
 
-        // Convert the data to CSV format
-        const csv = DataHelper.convertToCsv(data);
+        // Định nghĩa các trường (columns) cần xuất ra trong file CSV
+        const fields = ['Name', 'Mark', 'Diem15Phut', 'Diem1Tiet', "DiemCuoiKi"];
 
-        // Set the response headers
-        res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-        res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(filename)}"; filename*=UTF-8''${encodeURIComponent(filename)}`);
+        // Biến đổi dữ liệu JSON thành chuỗi CSV
+        let csvData = '';
+        data.forEach(item => {
+            const row = fields.map(field => item[field]).join(',');
+            csvData += row + '\n';
+        });
 
-        // Send the CSV data to the client
-        res.send(csv);
+        csvData = "\ufeff" + fields.join(',') + "\n" + csvData;
+        const jsonData = JSON.stringify(csvData);
+
+        res.send(jsonData);
     }
 
     async getInfoStudent(req, res) {
@@ -188,16 +211,14 @@ class ClassPageController {
         let semester = req.query.semester;
 
         let classinfo = await mo.getClass(className, year);
-        let maxID = await student.getMaxID();
+        let curId = await student.getTheNewestStudentID(className,year);
         var rule = await regulation.getRegulation(year);
 
         let amountStudent = classinfo.amount_student;
         if (amountStudent >= rule.max_student) {
-            // TODO: so hoc sinh vuot qua quy dinh
             req.flash('message', `Số học sinh đã là tối đa (${rule.max_student}).`);
             res.redirect(`/class/${className}?year=${year}&semester=${semester}`);
         }
-        let curId = maxID + 1;
         studentData.id = curId;
         studentData.class_id = classinfo.id;
         if (studentData.gender == 'male') {
@@ -248,6 +269,27 @@ class ClassPageController {
         }
         res.redirect(`/class/${className}?year=${year}&semester=${semester}`);
     }
+    async getStudent(req,res){
+        let studentId = req.params.student_id;
+        let className = req.params.class_name;
+        let year = req.query.year;
+
+        const _student = await student.getAStudent(studentId);
+
+        var date = new Date(_student.dob.toString());
+        var day = date.getDate();
+        var month = date.getMonth() + 1; // Tháng trong JavaScript bắt đầu từ 0
+        var yearBirth = date.getFullYear();
+        day = (day < 10) ? "0" + day : day;
+        month = (month < 10) ? "0" + month : month;
+        _student.dob = day + "/" + month + "/" + yearBirth;
+
+        res.send(_student);
+
+        //TODO: Get score with semester in year 
+
+    }
+
 
     //for method get(/:class_name/import)
     async importStudentRender(req, res) {

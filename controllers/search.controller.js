@@ -11,15 +11,16 @@ class ClassPageController{
 
     async loadSearchResultStudent(req,res){
         const {type_search , search_input} = req.body;
+        const year = req.query.year;
         let searchResult;
-
-        if(type_search === "mssv"){
-            searchResult = student.getStudentById(search_input);
+        console.log("SEACH: " + type_search + "  " + search_input);
+        if(type_search === "id"){
+            searchResult = student.getInfoStudentById_Search(search_input, year);
         }
         else if(type_search === "name"){
-            searchResult = student.getStudentByName(search_input);
+            searchResult = student.getInfoStudentByName_Search(search_input, year);
         }
-
+        
         res.render('search/searchStudent',{students:searchResult});
     }
 }
