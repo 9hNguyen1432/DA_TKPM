@@ -19,13 +19,8 @@ class SettingPageController {
         let sem_str = req.query.semester;
         regulation._year = year_str;
         //valid
-        var errors = [];
-        let isValidClass10 = util.isValidListClass(regulation.num_of_class_10, regulation.name_class_10, '10'); 
-        let isValidClass11 = util.isValidListClass(regulation.num_of_class_11, regulation.name_class_11, '11'); 
-        let isValidClass12 = util.isValidListClass(regulation.num_of_class_12, regulation.name_class_12, '12'); 
 
         let list_year = await yearModel.getYears();
-        console.log(regulation);
         let temp = await regulations.addRegulation(regulation);
 
         res.render('setting/setting', {regulation, Years: list_year, CurYear: year_str, CurSem: sem_str });
@@ -34,11 +29,11 @@ class SettingPageController {
     async addYear(req, res) {
         let start_year = req.body.start_year;
         let end_year = parseInt(start_year) + 1;
-        console.log(start_year)
 
         let cur_year = req.query.year
         let cur_sem = req.query.semester
 
+        console.log(cur_year,cur_sem)
         var mess = ""
         try {
             await Model.addYear(start_year, end_year)

@@ -7,7 +7,8 @@
         <div class="dropdown-menu" id="semestermenu-dropdown"
             style="width: 200px; border-radius: 10px; margin-top: 10px;">
             {{#each className.class10}}
-            <a class="btn dropdown-item" href="/class/{{this}}?year={{@root.CurYear}}&semester={{@root.CurSem}}" style="font-size: 18px; text-align: center;">
+            <a class="btn dropdown-item" href="/class/{{this}}?year={{@root.CurYear}}&semester={{@root.CurSem}}"
+                style="font-size: 18px; text-align: center;">
                 {{this}}</a>
             {{/each}}
         </div>
@@ -20,7 +21,8 @@
         <div class="dropdown-menu" id="semestermenu-dropdown"
             style="width: 200px; border-radius: 10px; margin-top: 10px;">
             {{#each className.class11}}
-            <a class="btn dropdown-item" href="/class/{{this}}?year={{@root.CurYear}}&semester={{@root.CurSem}}" style="font-size: 18px; text-align: center;">
+            <a class="btn dropdown-item" href="/class/{{this}}?year={{@root.CurYear}}&semester={{@root.CurSem}}"
+                style="font-size: 18px; text-align: center;">
                 {{this}}</a>
             {{/each}}
         </div>
@@ -33,7 +35,8 @@
         <div class="dropdown-menu" id="semestermenu-dropdown"
             style="width: 200px; border-radius: 10px; margin-top: 10px;">
             {{#each className.class12}}
-            <a class="btn dropdown-item" href="/class/{{this}}?year={{@root.CurYear}}&semester={{@root.CurSem}}" style="font-size: 18px; text-align: center;">
+            <a class="btn dropdown-item" href="/class/{{this}}?year={{@root.CurYear}}&semester={{@root.CurSem}}"
+                style="font-size: 18px; text-align: center;">
                 {{this}}</a>
             {{/each}}
         </div>
@@ -57,9 +60,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form class="d-flex" id="form-add-class" method="post" action="/class/add_class?year={{CurYear}}&semester={{CurSem}}">
+                <form class="d-flex" id="form-add-class" name="form-add-class" method="post"
+                    action="/class/add_class?year={{CurYear}}&semester={{CurSem}}"
+                    onsubmit="return validateAddClassForm()">
                     <div class="border-end" style="width: 30%;">
-                        <label >Chọn khối: </label>
+                        <label>Chọn khối: </label>
                         <select id="grade" name="grade" style="width: 100px;">
                             <option value="10">10</option>
                             <option value="11">11</option>
@@ -67,18 +72,22 @@
                         </select>
                     </div>
                     <div style="width: 70%; padding-left: 20px;">
-                        <label for="class_name" style="width: 150px;">Tên lớp: </label>
-                        <input type="text" class="form-control" name="class_name" id="class_name">
-
-                        <label for="teacher" style="width: 150px;">Giáo viên: </label>
-                        <input type="text" class="form-control" name="teacher" id="teacher">
+                        <div>
+                            <label for="class_name" style="width: 150px;">Tên lớp: </label>
+                            <input type="text" class="form-control" name="class_name" id="class_name">
+                            <span validation-for="class_name" class="text-danger" id="class_name_span"></span>
+                        </div>
+                        <div class="mt-2">
+                            <label for="teacher" style="width: 150px;">Giáo viên: </label>
+                            <input type="text" class="form-control" name="teacher" id="teacher">
+                            <span validation-for="teacher" class="text-danger" id="teacher_span"></span>
+                        </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                <button type="submit" form="form-add-class" class="btn btn-success"
-                    >Thêm</button>
+                <button type="submit" form="form-add-class" class="btn btn-success">Thêm</button>
             </div>
         </div>
     </div>

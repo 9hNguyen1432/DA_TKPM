@@ -16,7 +16,7 @@
                 <div class="card border-0 shadow rounded-3 my-5">
 
                     <div class="card-body p-4 p-sm-5">
-                        <form class="g-3" action="/class/10A1/import" method="post" enctype="multipart/form-data">
+                        <form class="g-3" action="/class/{{class_name}}/import?year={{CurYear}}&semester={{CurSem}}" method="post" enctype="multipart/form-data">
                             <div class="row mb-4">
                                 <div class="col-6">
                                     <label for="class" class="form-label">Lớp</label>
@@ -166,7 +166,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">CHÚC MỪNG CLB {{clb}}</h5>
+                        <h5 class="modal-title" id="exampleModalLabel"> THÔNG BÁO </h5>
                         <a href="/manage/register-club">
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </a>
@@ -179,12 +179,12 @@
                         </div>
                     </div>
                     {{/each}}
-                    <div class="modal-body">
-                        Câu lạc bộ của bạn đã đăng ký tham gia giải đấu thành công.
+                    <div class="modal-body text-success">
+                        Bạn đã import danh sách lớp {{class_name}} thành công.
                     </div>
                     <div class="modal-footer">
-                        <a href="/manage">
-                            <button type="button" class="btn btn-primary">Trang chủ</button>
+                        <a href="/class/{{class_name}}?year={{CurYear}}&semester={{CurSem}}">
+                            <button type="button" class="btn btn-primary">OK</button>
                         </a>
 
                     </div>

@@ -6,6 +6,7 @@ document.querySelectorAll('.edit-button').forEach(button => {
         const studentId = button.getAttribute('data-bs-mssv');
         const className = document.querySelector('#class-header').getAttribute('data-class-name');
         const currentYear = get_year_selected();
+        const currentSemester = get_semester_selected();
         const formStudent = document.querySelector('#form-student');
         const btnImportListStudent = document.querySelector('#btn-import-list-student');
 
@@ -26,7 +27,7 @@ document.querySelectorAll('.edit-button').forEach(button => {
 
         // Change action of form
         if (formStudent) {
-            formStudent.action = `/class/${className}/modify_student/${studentId}?year=${currentYear}`;
+            formStudent.action = `/class/${className}/modify_student/${studentId}?year=${currentYear}&semester=${currentSemester}`;
         }
 
         // Hiển thị thông tin học sinh trong modal
@@ -63,14 +64,27 @@ async function get_information(studentId, class_name, year) {
 }
 
 function get_year_selected() {
-    const yearElement = document.querySelector('.dropdown-item.active');
+    const yearElement = document.getElementById('yearmenu-dropdown');
+    let currentYear;
     try {
-        currentYear = yearElement.getAttribute('current-year');
+        currentYear = yearElement.getAttribute('data-year');
     } catch (error) {
         // TODO: after test, use this line and remove below line
         // currentYear = undefined; 
         currentYear = "2021-2022";
     }
+    return currentYear;
+}
+
+function get_semester_selected() {
+    const semesterElement = document.getElementById('semmenu-select');
+    let currentSemester;
+    try {
+        currentSemester = semesterElement.getAttribute('data-semester');
+    } catch (error) {
+        currentSemester = "1";
+    }
+    return currentSemester;
 }
 
 
@@ -81,14 +95,16 @@ document.querySelectorAll('.delete-button').forEach(button => {
         const studentId = button.getAttribute('data-bs-mssv');
         const className = document.querySelector('#class-header').getAttribute('data-class-name');
         const currentYear = get_year_selected();
+        const currentSemester = get_semester_selected();
         const modalDeleteStudent = document.querySelector('#form-delete');
 
         // Change action of form
         if (modalDeleteStudent) {
-            modalDeleteStudent.action = `/class/${className}/delete_student/${studentId}?year=${currentYear}`;
+            modalDeleteStudent.action = `/class/${className}/delete_student/${studentId}?year=${currentYear}&semester=${currentSemester}`;
         }
     });
 });
+
 
 // Lắng nghe sự kiện click trên nút THÊM HỌC SINH
 document.getElementById('btn_add_student').addEventListener('click', async () => {
@@ -116,8 +132,9 @@ document.getElementById('btn_add_student').addEventListener('click', async () =>
     // Change action of form
     if (formStudent) {
         const currentSelectedYear = get_year_selected();
+        const currentSemester = get_semester_selected();
         const className = document.querySelector('#class-header').getAttribute('data-class-name');
-        formStudent.action = `/class/${className}/add_a_student?year=${currentSelectedYear}`;
+        formStudent.action = `/class/${className}/add_a_student?year=${currentSelectedYear}&semester=${currentSemester}`;
     }
 })
 
@@ -134,51 +151,39 @@ document.querySelectorAll('.view-student').forEach(button => {
         // lấy thông tin học sinh
         let response = await getStudentInformations(studentId, className, currentYear);
         let student = await response.json();
-
         formStudent.querySelector('#name').innerHTML =student.name
         formStudent.querySelector('#gender').innerHTML =student.gender
         formStudent.querySelector('#dob').innerHTML =student.dob
         formStudent.querySelector('#address').innerHTML =student.address
+        formStudent.querySelector('#score1-summary').innerHTML = student.scoreSemester[0].DTB
+        if( student.scoreSemester[1]){
+            formStudent.querySelector('#score2-summary').innerHTML = student.scoreSemester[1].DTB 
+        }
+        if(student.scoreYear.DTB){
+            formStudent.querySelector('#score-summary').innerHTML = student.scoreYear.DTB
+        }
+       
 
-        //TODO: get summary score with semester
-
-        // TODO: Get student's score with semester and year from database
-        const scores = [{stt: 1 , subject: 'Toán', sc1: 9, sc2: 5, sc3: 10},
-        {stt: 2 , subject: 'Lý', sc1: 9, sc2: 5, sc3: 10},
-        {stt: 3 , subject: 'Hóa', sc1: 9, sc2: 5, sc3: 10},
-        {stt: 4 , subject: 'Sinh', sc1: 9, sc2: 5, sc3: 10},
-        {stt: 5 , subject: 'Sử', sc1: 9, sc2: 5, sc3: 10},
-        {stt: 6 , subject: 'Địa', sc1: 9, sc2: 5, sc3: 10},
-        {stt: 7 , subject: 'Văn', sc1: 9, sc2: 5, sc3: 10},
-        {stt: 8 , subject: 'Anh', sc1: 9, sc2: 5, sc3: 10}, ]
-
-
-        const scores2 = [{stt: 1 , subject: 'Toán', sc1: 1, sc2: 1, sc3: 10},
-        {stt: 2 , subject: 'Lý', sc1: 1, sc2: 1, sc3: 10},
-        {stt: 3 , subject: 'Hóa', sc1: 1, sc2: 1, sc3: 10},
-        {stt: 4 , subject: 'Sinh',sc1: 1, sc2: 1, sc3: 10},
-        {stt: 5 , subject: 'Sử', sc1: 1, sc2: 1, sc3: 10},
-        {stt: 6 , subject: 'Địa', sc1: 1, sc2: 1, sc3: 10},
-        {stt: 7 , subject: 'Văn', sc1: 1, sc2: 1, sc3: 10},
-        {stt: 8 , subject: 'Anh', sc1: 9, sc2: 5, sc3: 10}, ] 
         const tableScore = document.querySelector('#table-score-of-student tbody');
-        
-        const scoreSemester1 = formStudent.querySelector('#score-hk1');
-        const scoreSemester2 = formStudent.querySelector('#score-hk2');
 
-        showListScore(scores, tableScore);
-        scoreSemester1.style.color = 'red';
-        scoreSemester2.style.color = 'gray';
-        scoreSemester1.addEventListener('click', function() {
-            scoreSemester1.style.color = 'red';
-            scoreSemester2.style.color = 'gray';
-            showListScore(scores, tableScore);
+        const btnSemester1 = formStudent.querySelector('#score-hk1');
+        const btnSemester2 = formStudent.querySelector('#score-hk2');
+
+        console.log(student)
+
+        showListScore(student.scoreDetail1, tableScore);
+        btnSemester1.style.color = 'red';
+        btnSemester2.style.color = 'gray';
+        btnSemester1.addEventListener('click', function() {
+            btnSemester1.style.color = 'red';
+            btnSemester2.style.color = 'gray';
+            showListScore(student.scoreDetail1, tableScore);
           });
           
-          scoreSemester2.addEventListener('click', function() {
-            scoreSemester1.style.color = 'gray';
-            scoreSemester2.style.color = 'red';
-            showListScore(scores2, tableScore);
+          btnSemester2.addEventListener('click', function() {
+            btnSemester1.style.color = 'gray';
+            btnSemester2.style.color = 'red';
+            showListScore(student.scoreDetail2, tableScore);
           });
         
        
@@ -192,11 +197,11 @@ async function showListScore(scores, tableScore)
     scores.forEach(score => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <th scope="row">${score.stt}</th>
-          <td>${score.subject}</td>
-          <td>${score.sc1}</td>
-          <td>${score.sc2}</td>
-          <td>${score.sc3}</td>
+          <th scope="row">${score.ID}</th>
+          <td>${score.Name}</td>
+          <td>${score.exam_15}</td>
+          <td>${score.exam_45}</td>
+          <td>${score.exam_Sem}</td>
         `;
         tableScore.appendChild(row);
     });
@@ -206,3 +211,25 @@ async function getStudentInformations(studentId, _class, year){
     let student = await fetch(`/class/${_class}/student/${studentId}?year=${year}`);
     return await student;
 };
+
+
+//Lắng nghe sự kiện click trên nút Xuất danh sách học sinh
+document.getElementById('btn_export_students').addEventListener('click', () => {
+    const year = get_year_selected();
+    const semester = get_semester_selected();
+    const className = document.querySelector('#class-header').getAttribute('data-class-name');
+    fetch(`/class/${className}/export/list_student?year=${year}&semester=${semester}`)
+        .then(response => response.json())
+        .then(csvData => {
+            // Tạo đối tượng Blob từ chuỗi CSV
+            const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+            // Tải file CSV với tên file và mã hóa Unicode đúng cách
+            saveAs(blob, `students_${className}.csv`);
+        });
+})
+
+
+
+
+
+

@@ -1,31 +1,35 @@
 <div>
     <h5 class="card py-2 shadow-sm" style="width: 400px; text-align: center; margin: 15px auto; border-radius: 10px;">
-        BÁO CÁO TỔNG KẾT MÔN</h5>
+        BÁO CÁO TỔNG KẾT HỌC KỲ</h5>
     <div class="d-flex justify-content-between">
-        <div class="d-flex justify-content-center" style="width: 90%;">
-            <div class="d-flex" style="margin-right: 350px;">
-                <div class="mt-1" style="font-size: 13px;">Khối: </div>
+        <div class="d-flex justify-content-center" style="width: 90%; margin-left: 150px;">
+            <div class="mt-1" style="font-size: 13px; margin-right: 10%;">Năm học: <strong>{{CurYear}}</strong></div>
+            <div class="d-flex justify-content-center">
+                <div class="mt-1" style="font-size: 13px;">Học kì: </div>
                 <div class="mx-2">
-                    <select id="select_sum_subject_grade" name="select_grade" class="py-1 fw-bold" aria-label=".form-select-lg example" style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9; 
-                    width: 70px; padding-left: 20px;">
-                        <option value="10" selected style="font-size: 13px;">10</option>
-                        <option value="11" style="font-size: 13px;">11</option>
-                        <option value="12" style="font-size: 13px;">12</option>
-                    </select>
+                    {{!-- <select class="fw-bold text-center" aria-label=".form-select-lg example" style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9; 
+                    width: 80px; padding-block: 2px;">
+                        <option value="" selected style="font-size: 13px;">1</option>
+                        <option value="" style="font-size: 13px;">2</option>
+                        <option value="" style="font-size: 13px;">Cả năm</option>
+                    </select> --}}
+                    <button type="button" class="btn dropdown-toggle py-1 fw-bold" data-bs-toggle="dropdown"
+                        aria-expanded="false" style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9;
+                    width: 80px;">
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end" id="summary-semester-dropdown" style="min-width: 80px;" data-semester="{{sum_semester}}">
+                        <a class="dropdown-item" href="/summary?year={{CurYear}}&semester={{CurSem}}&sum_semester=1"
+                            style="font-size: 12px; text-align: center;">1</a>
+                        <a class="dropdown-item" href="/summary?year={{CurYear}}&semester={{CurSem}}&sum_semester=2"
+                            style="font-size: 12px; text-align: center;">2</a>
+                        <a class="dropdown-item" href="/summary?year={{CurYear}}&semester={{CurSem}}&sum_semester=3"
+                            style="font-size: 12px; text-align: center;">Cả năm</a>
+
+                    </div>
                 </div>
             </div>
-            <div class="d-flex">
-                <div class="mt-1" style="font-size: 13px;">Môn học: </div>
-                
-                <div class="mx-2">
-                    <select id="select_sum_subject_name" name="select_subject" class="py-1 fw-bold" aria-label=".form-select-lg example" style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9; 
-                    width: 200px; text-align: center;">
-                        {{#each listCourse}}
-                            <option value="{{this.name}}" {{#if @first}}selected{{/if}} style="font-size: 13px;">{{this.name}}</option>
-                        {{/each}}
-                    </select>
-                </div>
-            </div>
+        </div>
+        <div class="text-end me-5" style="width: 10%;">
         </div>
     </div>
     <div class="card my-2 mx-5" style="background-color: #D9D9D9; height: 510px; border-radius: 10px;">
@@ -42,13 +46,13 @@
                     </tr>
                 </thead>
                 <tbody data-bs-spy="scroll" data-bs-smooth-scroll="true">
-                    {{#each tongkets}}
+                    {{#each SemesterSummary}}
                     <tr>
-                        <th scope="row">{{this.stt}}</th>
-                        <td>{{this.class}}</td>
-                        <td>{{this.siso}}</td>
-                        <td>{{this.soluongdat}}</td>
-                        <td>{{this.tyle}}</td>
+                        <th scope="row">{{plus1 @index}}</th>
+                        <td>{{this.name}}</td>
+                        <td>{{this.amount_student}}</td>
+                        <td>{{this.Reached}}</td>
+                        <td>{{this.Rate}} %</td>
                     </tr>
                     {{/each}}
                 </tbody>

@@ -1,4 +1,5 @@
 var conn = require('./connect.model').conn
+const { json } = require('express');
 var classModel = require('./class.model')
 
 addAStudent = async function (student) {
@@ -17,22 +18,42 @@ addAStudent = async function (student) {
 },
     module.exports = {
         addAStudent,
-
-        getListStudentInClass: async (className, year) => {
+        getInfoListStudentInClassToDownload: async (className, year) => {
             try {
-                let query_string = `SELECT * FROM STUDENT st, CLASS cl'
-                            + 'WHERE st.ClassId = cl.ID'
-                            + 'AND cl.Name = '${className}' AND cl.Year = '${year}'`;
+                let query_string = `SELECT Student.name AS student_name, Class.name AS class_name,
+                                    AVG(CASE WHEN Result._semester = 1 THEN Result.mark ELSE NULL END) AS avg_mark_semester1,
+                                    AVG(CASE WHEN Result._semester = 2 THEN Result.mark ELSE NULL END) AS avg_mark_semester2
+                                    FROM Student
+                                    JOIN Class ON Student.class_id = Class.id
+                                    JOIN Result ON Result.student_id = Student.id
+                                    WHERE Result._year = '${year}' AND Class.name = '${className}'
+                                    GROUP BY Student.id, Student.name, Class.name`
+                // let query_string = `SELECT st.id, st.name, st.gender, st.dob, st.email, st.address,
+                //                             rs1.mark AS AverageMarkSemester1, rs2.mark AS AverageMarkSemester2
+                //                     FROM STUDENT st, RESULT rs1 ,RESULT rs2 , CLASS cl
+                //                     WHERE cl.id = st.class_id AND rs1.student_id = st.id AND rs1._semester = 1
+                //                             AND rs2.student_id = st.id AND rs2._semester = 2
+                //                             AND cl.name = '${className}' AND rs1._year = '${year}' AND rs2._year = '${year}'`;
                 let result = (await conn).query(query_string);
-                return (await result);
+                if((await result).recordset.length <= 0){
+                    let query_string = `SELECT st.id, st.name, st.gender, st.dob, st.email, st.address
+                                        FROM STUDENT st, CLASS cl
+                                        WHERE cl.id = st.class_id AND cl._year = '${year} AND cl.name = '${className}`;
+                    let result = (await conn).query(query_string);
+                    return (await result).recordset;
+                }
+                return (await result).recordset;
             } catch (error) {
+                console.log(error);
             }
         },
+
         getListStudentInClass_2: async (className, year) => {
             try {
-                let query_string = `SELECT * FROM STUDENT st, CLASS cl WHERE st.class_id = cl.ID AND cl.Name = '${className}' AND cl._year = '${year}'`;
+                let query_string = `SELECT * FROM STUDENT st, CLASS cl WHERE st.class_id = cl.id 
+                                    AND cl.name = '${className}' 
+                                    AND cl._year = '${year}'`;
                 let result = (await conn).query(query_string);
-
                 return (await result).recordset;
             } catch (error) {
             }
@@ -67,7 +88,7 @@ addAStudent = async function (student) {
             //update amount student of class
             classInfo.amount_student = classInfo.amount_student + listStudent.length;
             await classModel.updateAmountStudent(classInfo.name, classInfo._year, classInfo.amount_student);
-            
+
             for (let i = 0; i < listStudent.length; i++) {
                 id = String(parseInt(id) + 1);
                 student = {
@@ -95,25 +116,100 @@ addAStudent = async function (student) {
 
         modifyStudentInClassByID: async (idStudent, studentData) => {
             let query_string = `UPDATE STUDENT 
-                                SET name = N'${studentData.student_name}', gender = N'${studentData.gender}', dob = '${studentData.dob}',
+                                SET name = N'${studentData.name}', gender = N'${studentData.gender}', dob = '${studentData.dob}',
                                 email = '${studentData.email}', address = N'${studentData.address}' 
                                 WHERE id = '${idStudent}'`;
             let result = (await conn).query(query_string);
             return result;
         },
 
-        deleteStudentByID: async(idStudent) => {
+        deleteStudentByID: async (idStudent) => {
             let query_string = `DELETE FROM STUDENT WHERE id = '${idStudent}'`;
             let result = (await conn).query(query_string);
             return result;
         },
 
-        getMaxID: async()=>{
-            let query_string = `SELECT MAX(CAST(id AS INT)) AS max_id FROM STUDENT;`
+        getInfoStudentById_Search: async (idStudent, year) => {
+            let query_string = `SELECT Student.name AS student_name, Class.name AS class_name,
+                                AVG(CASE WHEN Result._semester = 1 THEN Result.mark ELSE NULL END) AS avg_mark_semester1,
+                                AVG(CASE WHEN Result._semester = 2 THEN Result.mark ELSE NULL END) AS avg_mark_semester2
+                                FROM Student
+                                JOIN Class ON Student.class_id = Class.id
+                                JOIN Result ON Result.student_id = Student.id
+                                WHERE Result._year = '${year}' AND Student.id = '${idStudent}'
+                                GROUP BY Student.id, Student.name, Class.name`;
+
             let result = (await conn).query(query_string);
-            if(result !== undefined){
-                return (await result).recordset[0].max_id;
-            }
-            return -1;
+            return (await result).recordset;
+        },
+
+        getInfoStudentByName_Search: async (studentName, year) => {
+            const query_string = `SELECT Student.name AS student_name, Class.name AS class_name,
+                                    AVG(CASE WHEN Result._semester = 1 THEN Result.mark ELSE NULL END) AS avg_mark_semester1,
+                                    AVG(CASE WHEN Result._semester = 2 THEN Result.mark ELSE NULL END) AS avg_mark_semester2
+                                    FROM Student
+                                    JOIN Class ON Student.class_id = Class.id
+                                    JOIN Result ON Result.student_id = Student.id
+                                    WHERE Student.name LIKE '%${studentName}%' AND Result._year = '${year}'
+                                    GROUP BY Student.id ,Student.name, Class.name`;
+            let result = (await conn).query(query_string);
+            console.log(result);
+            return (await result).recordset;
+        },
+        getSummaryAllSubjectOfStudent: async(studentID, semester, year) => {
+            const queryString =`select SB.name as subject, AVG(ER.mark) as DTB  from EXAM_RESULT ER, EXAM EX, SUBJECT sb  
+            WHERE ER.exam_id = EX.id and SB.id = EX.subject_id AND ER.student_id = '${studentID}' AND EX._semester='${semester}' AND EX._year='${year}'
+            GROUP BY EX.subject_id, SB.name`
+
+
+            let result = (await conn).query(queryString);
+            return (await result).recordset;
+        },
+        getSummarySubjectByYearOfStudent:  async(studentID, year) =>{
+            const queryString =`select SB.name as subject, AVG(ER.mark) as DTB from EXAM_RESULT ER, EXAM EX, SUBJECT sb  
+            WHERE ER.exam_id = EX.id and SB.id = EX.subject_id  and er.student_id= '${studentID}' AND EX._year='${year}'
+            GROUP BY EX.subject_id, SB.name`
+
+            let result = (await conn).query(queryString);
+            return (await result).recordset;
+        } ,
+        getSummaryScoreBySemester: async(studentID,year) => {
+            const queryString =`select  ex._semester as semester ,AVG(ER.mark) as DTB from EXAM_RESULT ER, EXAM EX, SUBJECT sb  
+            WHERE ER.exam_id = EX.id and SB.id = EX.subject_id AND ER.student_id = '${studentID}' AND EX._year='${year}'
+            GROUP BY ex._semester`
+
+            let result = (await conn).query(queryString);
+            return (await result).recordset;
+        },
+
+        getSummaryScoreByYear: async(studentID,year) => {
+        const queryString =`select AVG(ER.mark) as DTB from EXAM_RESULT ER, EXAM EX, SUBJECT sb  
+        WHERE ER.exam_id = EX.id and SB.id = EX.subject_id AND ER.student_id = '${studentID}' AND EX._year='${year}'
+        GROUP BY ex._year`
+
+        let result = (await conn).query(queryString);
+        return (await result).recordset;
+        },
+
+        getScoreDetailOfStudent: async(studentID,semester,year) =>{
+            const queryString =`SELECT ID, Name,[Kiểm tra 15 phút] AS exam_15,[Kiểm tra 1 tiết] AS exam_45, [Bài thi học kỳ] AS exam_Sem
+            FROM(
+             SELECT sj.id ID, sj.name Name, er.mark Mark, e.name ExamName
+             FROM STUDENT s join EXAM_RESULT er on s.id=er.student_id
+                join EXAM e on e.id=er.exam_id
+                join CLASS c on c.id=s.class_id
+                join SUBJECT sj on sj.id=e.subject_id
+                where e._year='${year}'
+                and e._semester='${semester}' and
+                s.id ='${studentID}'
+            ) AS SourceTable
+            PIVOT
+            (
+                MAX(Mark)
+                FOR ExamName IN ([Kiểm tra 15 phút],[Kiểm tra 1 tiết], [Bài thi học kỳ])
+            ) AS PivotTable;`
+
+            let result = (await conn).query(queryString);
+            return (await result).recordset;
         }
     }
