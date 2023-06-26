@@ -1,3 +1,4 @@
+
 // Lắng nghe sự kiện click trên nút chỉnh sửa
 document.querySelectorAll('.edit-button').forEach(button => {
     button.addEventListener('click', async () => {
@@ -103,6 +104,7 @@ document.querySelectorAll('.delete-button').forEach(button => {
         }
     });
 });
+
 
 // Lắng nghe sự kiện click trên nút THÊM HỌC SINH
 document.getElementById('btn_add_student').addEventListener('click', async () => {
@@ -237,3 +239,9 @@ document.getElementById('btn_export_students').addEventListener('click', () => {
             saveAs(blob, `students_${className}.csv`);
         });
 })
+
+
+
+
+
+
