@@ -1,6 +1,6 @@
 <div class="container-fluid" style="min-height: 600px;">
     <h5 class="card py-2 shadow-sm" style="width: 200px; text-align: center; margin: 15px auto; border-radius: 10px;"
-        id="class_name">
+        id="class_name" data-class-name="{{ClassName}}">
         {{ClassName}}</h5></span>
     <div class="d-flex justify-content-between align-items-end" style="margin-inline: 100px; margin-top: -30px;">
         <div>
@@ -23,15 +23,6 @@
                 <h5 style="margin: 5px auto; text-align: center;
                 border-bottom: 1px solid white; padding-bottom: 5px; margin-bottom: 5px; font-size:medium;">Danh sách
                     môn</h5>
-
-                {{!-- <a role="button" class="btn btn-light shadow mt-2 active"
-                    style="width: 100%; text-align: left; font-size: 14px;"
-                    href="/class/{{@root.ClassName}}/course/{{this.name}}?year={{@root.CurYear}}&semester={{@root.CurSem}}">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>{{plus1 @index}}. {{this.name}}</div>
-                        <img hidden src="/images/right-arrow.png" width="12" height="12">
-                    </div>
-                </a> --}}
                 <div onload="viewFirstCourse()">
                     {{#each ListCourse}}
                     <button role="button" class="btn btn-light shadow mt-2 active"
@@ -85,9 +76,8 @@
                     <div class="d-flex justify-content-center " style="position: absolute; bottom: 10px; left: 250px;">
                         <a href="/class/{{ClassName}}/course/CourseName/import?year={{CurYear}}&semester={{CurSem}}"
                             class="btn btn-sm btn-success mx-5" id="import_link">Thêm/Chỉnh sửa điểm</a>
-                        <a href="/class/{{ClassName}}/course/CourseName/download-transcript"
-                            class="btn btn-sm btn-success mx-5" id="dowloadTranscript_link">Tải
-                            bảng điểm</a>
+                        <button onclick="downloadTranscript()" class="btn btn-sm btn-success mx-5" id="dowloadTranscript_link">
+                            Tải bảng điểm</button>
                         <a href="#" class="btn btn-sm btn-success mx-5">Xuất bảng điểm</a>
                     </div>
                 </div>

@@ -54,7 +54,6 @@ $(document).ready(function () {
 });
 
 $(document).on('show.bs.modal', '#viewStudentDetailModal', event => {
-    console.log("hihi")
     const button = event.relatedTarget
     // Extract info from data-bs-* attributes
     const mssv = button.getAttribute('data-bs-mssv')
@@ -155,20 +154,23 @@ function validateAddClassForm() {
     return result;
 }
 
+let currentCourse = "";
+
 function viewCourseDetail(item) {
     let cur_year = $('#yearmenu-dropdown').attr("data-year");
     let cur_semester = $('#semmenu-select').val();
     let cur_class = $(item).attr("data-class")
-    let course_name = $(item).attr("data-course")
+    let course_name = $(item).attr("data-course");
+    currentCourse = course_name;
     $('#course_name').text("Môn : " + course_name)
 
     let import_link = $('#import_link').attr('href');
     let new_link_1 = import_link.replace("CourseName", course_name)
     $('#import_link').attr('href', new_link_1)
 
-    let dowloadTranscript_link = $('#dowloadTranscript_link').attr('href');
-    let new_link_2 = dowloadTranscript_link.replace("CourseName", course_name)
-    $('#dowloadTranscript_link').attr('href', new_link_2)
+    // let dowloadTranscript_link = $('#dowloadTranscript_link').attr('href');
+    // let new_link_2 = dowloadTranscript_link.replace("CourseName",course_name)
+    // $('#dowloadTranscript_link').attr('href',new_link_2)
 
     $('#courses_detail_table tbody tr').remove();
     $('#courses_detail_table tbody div').remove();
@@ -202,7 +204,25 @@ function viewCourseDetail(item) {
     });
 }
 
+
 function viewFirstCourse() {
 
 }
+
+function downloadTranscript(){
+    const year = $('#yearmenu-dropdown').attr("data-year");
+    const semester = $('#semmenu-select').val();
+    const className = document.querySelector('#class_name').getAttribute('data-class-name');
+    fetch(`/class/${className}/course/${currentCourse}/download-transcript?year=${year}&semester=${semester}`)
+        .then(response => response.json())
+        .then(csvData => {
+            // Tạo đối tượng Blob từ chuỗi CSV
+            const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+            // Tải file CSV với tên file và mã hóa Unicode đúng cách
+            saveAs(blob, `bangdiem_${className}_${year}_${semester}.csv`);
+        });
+}
+
+
+
 

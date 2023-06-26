@@ -51,11 +51,11 @@
                 <tbody data-bs-spy="scroll" data-bs-smooth-scroll="true">
                     {{#each students}}
                     <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
+                        <th scope="row">{{this.stt}}</th>
+                        <td>{{this.student_name}}</td>
+                        <td>{{this.class_name}}</td>
+                        <td>{{this.avg_mark_semester1}}</td>
+                        <td>{{this.avg_mark_semester2}}</td>
                     </tr>
                     {{/each}}
                 </tbody>
