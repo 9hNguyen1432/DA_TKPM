@@ -15,6 +15,7 @@ router.post('/:class_name/modify_student/:student_id',isNotAuthenticated, classC
 router.get('/:class_name/import',isNotAuthenticated,classController.importStudentRender);
 router.post('/:class_name/import',isNotAuthenticated, upload.fields([{name: "danhsachhocsinh"}]),classController.importStudentHandle);
 router.get('/:class_name/course/:course_name',isNotAuthenticated,classController.loadCourseDetailPage);
+
 router.get('/:class_name/course/:course_name/import',isNotAuthenticated,classController.importScoreRender);
 router.post('/:class_name/course/:course_name/import',isNotAuthenticated, upload.fields([{name: "importscore"}]),classController.importScoreHandle);
 router.get('/:class_name/course',isNotAuthenticated,classController.loadCourseListPage);

@@ -160,3 +160,16 @@ exports.saveListScore = async (listScore, classInfo, subjectInfo, semester, year
         exam.addAnExamResult(await exam_id[2], listScore[0].id, listScore[0].hocky);
     }
 }
+
+exports.getAllCourseInYear = async (year) => {
+    try {
+        var query_string = `SELECT * FROM SUBJECT WHERE _year = '${year}'`;
+        let result = (await conn).query(query_string);
+        let rs = (await result).recordset;
+        
+        return rs
+    } catch (error) {
+        console.error('Lỗi truy vấn:', error);
+        throw error;
+    }
+}
