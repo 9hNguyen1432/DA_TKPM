@@ -145,7 +145,6 @@ class ClassPageController {
     }
 
     async downloadStudentsOfClass_CSV(req, res) {
-
         const className = req.params.class_name;
         const year = req.query.year;
         const data = await student.getInfoListStudentInClassToDownload(className, year);
@@ -158,8 +157,6 @@ class ClassPageController {
         const className = req.params.class_name;
         const year = req.query.year;
         let data = await student.getListStudentInClass_2(className, year);
-        console.log("CONCAC")
-        console.log(data);
     }
 
     async downloadTranscriptOfSubject_CSV(req, res) {
@@ -168,19 +165,6 @@ class ClassPageController {
         const semester = req.query.semester;
         const subjectName = req.query.subject;
         const data = await subject.getTranscriptOfSubject(subjectName, className,year, semester);
-
-        // // Định nghĩa các trường (columns) cần xuất ra trong file CSV
-        // const fields = ['Name', 'Mark', 'Diem15Phut', 'Diem1Tiet', "DiemCuoiKi"];
-
-        // // Biến đổi dữ liệu JSON thành chuỗi CSV
-        // let csvData = '';
-        // data.forEach(item => {
-        //     const row = fields.map(field => item[field]).join(',');
-        //     csvData += row + '\n';
-        // });
-
-        // csvData = "\ufeff" + fields.join(',') + "\n" + csvData;
-        // const jsonData = JSON.stringify(csvData);
 
         let jsonData = convertToCSVFormat(data);
 
@@ -287,7 +271,6 @@ class ClassPageController {
         //TODO: Get score with semester in year 
 
     }
-
 
     //for method get(/:class_name/import)
     async importStudentRender(req, res) {

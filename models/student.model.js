@@ -20,16 +20,14 @@ addAStudent = async function (student) {
         addAStudent,
         getInfoListStudentInClassToDownload: async (className, year) => {
             try {
-                let query_string = `SELECT  st.id as ID, st.name AS Name, st.gender as Gender, st.dob as Birthday, 
-                                            st.email as Email, st.address as Address,
-                                            AVG(CASE WHEN rs._semester = 1 THEN rs.mark ELSE NULL END) AS TrungBinhHK1,
-                                            AVG(CASE WHEN rs._semester = 2 THEN rs.mark ELSE NULL END) AS TrungBinhHK2
-                                    FROM STUDENT st
-                                    JOIN CLASS cl ON st.class_id = cl.id
-                                    JOIN RESULT rs ON rs.student_id = st.id
-                                    WHERE rs._year = '${year}' AND cl.name = '${className}'
-                                    GROUP BY st.id, st.name, st.gender, st.dob, st.email, st.address`;
+                let query_string = `SELECT st.id, st.name, st.gender, st.dob, st.email, st.address,
+                                            rs1.mark AS AverageMarkSemester1, rs2.mark AS AverageMarkSemester2
+                                    FROM STUDENT st, RESULT rs1 ,RESULT rs2 , CLASS cl
+                                    WHERE cl.id = st.class_id AND rs1.student_id = st.id AND rs1._semester = 1
+                                            AND rs2.student_id = st.id AND rs2._semester = 2
+                                            AND cl.name = '${className}' AND rs1._year = '${year}' AND rs2._year = '${year}'`;
                 let result = (await conn).query(query_string);
+                console.log(await result);
                 return (await result).recordset;
             } catch (error) {
                 console.log(error);
