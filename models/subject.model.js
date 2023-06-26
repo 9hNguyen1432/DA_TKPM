@@ -13,6 +13,7 @@ async function getAnSubjectResult(student_id, subject_id, _semester, _year){
     }
 }
 module.exports = {
+    getAnSubjectResult,
     getInfoOfSubject: async (idSubject, idClass) => {
         try {
 
@@ -20,7 +21,6 @@ module.exports = {
 
         }
     },
-
     getTranscriptOfSubject: async (subjectName, className, year, semester) => {
         try {
             //TODO: 
@@ -79,7 +79,7 @@ module.exports = {
     addAResultOfSubject: async (student_id, subject_id, _semester, _year, mark) => {
         const pool = await conn;
         try {
-            if (await getAnSubjectResult(student_id, subject_id, _semester, _year)) {
+            if (await this.getAnSubjectResult(student_id, subject_id, _semester, _year)) {
                 let query_string = `delete from RESULT where student_id = '${student_id}' and
                 subject_id = '${subject_id}' and _semester = '${_semester}' and _year = '${_year}'`
                 console.log(query_string)
