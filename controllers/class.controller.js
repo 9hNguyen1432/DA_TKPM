@@ -12,7 +12,7 @@ const regulation = require('../models/regulation.model');
 const account = require('../models/account');
 
 const ClassModel = require("../models/class.model")
-const AccModel = require('../models/account')
+const SubjectModel = require("../models/subject.model")
 var crypto = require('crypto')
 const iconv = require('iconv-lite');
 const json2csv = require('json2csv').parse;
@@ -112,25 +112,28 @@ class ClassPageController {
         let year_str = req.query.year
         let sem_str = req.query.semester
 
-        const data = [
-            {
-                STT: 1,
-                Name: "Lê Thị Ngọc Bích",
-                Test_15min: 10.0,
-                Test_45min: 9.5,
-                Final: 9.8
-            },
-            {
-                STT: 1,
-                Name: "Lê Thị Ngọc Bích",
-                Test_15min: 10.0,
-                Test_45min: 9.5,
-                Final: 9.8
-            }
-        ];
+        let score_board = await SubjectModel.getSubjectTranscriptOfClass(year_str,sem_str,class_name,course_name)
 
+        // const data = [
+        //     {
+        //         STT: 1,
+        //         Name: "Lê Thị Ngọc Bích",
+        //         Test_15min: 10.0,
+        //         Test_45min: 9.5,
+        //         Final: 9.8
+        //     },
+        //     {
+        //         STT: 1,
+        //         Name: "Lê Thị Ngọc Bích",
+        //         Test_15min: 10.0,
+        //         Test_45min: 9.5,
+        //         Final: 9.8
+        //     }
+        // ];
+        console.log(score_board)
         res.setHeader('Content-Type', 'application/json');
-        res.json(data);
+        res.json(score_board);
+
 
         // res.render('class/courses_detail',
         //     {
@@ -140,7 +143,8 @@ class ClassPageController {
         //         CourseName: course_name,
         //         Years: list_year,
         //         CurYear: year_str,
-        //         CurSem: sem_str
+        //         CurSem: sem_str,
+        //         ScoreBoard: score_board
         //     });
     }
 
