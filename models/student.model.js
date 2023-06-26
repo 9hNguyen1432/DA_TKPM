@@ -148,5 +148,61 @@ addAStudent = async function (student) {
             let result = (await conn).query(query_string);
             console.log(result);
             return result;
+        },
+        getSummaryAllSubjectOfStudent: async(studentID, semester, year) => {
+            const queryString =`select SB.name as subject, AVG(ER.mark) as DTB  from EXAM_RESULT ER, EXAM EX, SUBJECT sb  
+            WHERE ER.exam_id = EX.id and SB.id = EX.subject_id AND ER.student_id = '${studentID}' AND EX._semester='${semester}' AND EX._year='${year}'
+            GROUP BY EX.subject_id, SB.name`
+
+
+            let result = (await conn).query(queryString);
+            return (await result).recordset;
+       },
+       getSummarySubjectByYearOfStudent:  async(studentID, year) =>{
+            const queryString =`select SB.name as subject, AVG(ER.mark) as DTB from EXAM_RESULT ER, EXAM EX, SUBJECT sb  
+            WHERE ER.exam_id = EX.id and SB.id = EX.subject_id  and er.student_id= '${studentID}' AND EX._year='${year}'
+            GROUP BY EX.subject_id, SB.name`
+
+            let result = (await conn).query(queryString);
+            return (await result).recordset;
+       } ,
+       getSummaryScoreBySemester: async(studentID,year) => {
+            const queryString =`select  ex._semester as semester ,AVG(ER.mark) as DTB from EXAM_RESULT ER, EXAM EX, SUBJECT sb  
+            WHERE ER.exam_id = EX.id and SB.id = EX.subject_id AND ER.student_id = '${studentID}' AND EX._year='${year}'
+            GROUP BY ex._semester`
+
+            let result = (await conn).query(queryString);
+            return (await result).recordset;
+       },
+
+       getSummaryScoreByYear: async(studentID,year) => {
+        const queryString =`select AVG(ER.mark) as DTB from EXAM_RESULT ER, EXAM EX, SUBJECT sb  
+        WHERE ER.exam_id = EX.id and SB.id = EX.subject_id AND ER.student_id = '${studentID}' AND EX._year='${year}'
+        GROUP BY ex._year`
+
+        let result = (await conn).query(queryString);
+        return (await result).recordset;
+        },
+
+        getScoreDetailOfStudent: async(studentID,semester,year) =>{
+            const queryString =`SELECT ID, Name,[Kiểm tra 15 phút] AS exam_15,[Kiểm tra 1 tiết] AS exam_45, [Bài thi học kỳ] AS exam_Sem
+            FROM(
+             SELECT sj.id ID, sj.name Name, er.mark Mark, e.name ExamName
+             FROM STUDENT s join EXAM_RESULT er on s.id=er.student_id
+                join EXAM e on e.id=er.exam_id
+                join CLASS c on c.id=s.class_id
+                join SUBJECT sj on sj.id=e.subject_id
+                where e._year='${year}'
+                and e._semester='${semester}' and
+                s.id ='${studentID}'
+            ) AS SourceTable
+            PIVOT
+            (
+                MAX(Mark)
+                FOR ExamName IN ([Kiểm tra 15 phút],[Kiểm tra 1 tiết], [Bài thi học kỳ])
+            ) AS PivotTable;`
+
+            let result = (await conn).query(queryString);
+            return (await result).recordset;
         }
     }
