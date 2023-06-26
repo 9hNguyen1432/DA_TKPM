@@ -153,22 +153,17 @@ class ClassPageController {
         const className = req.params.class_name;
         const year = req.query.year;
         const data = await student.getInfoListStudentInClassToDownload(className, year);
-        // // Định nghĩa các trường (columns) cần xuất ra trong file CSV
-        // const fields = ['Name', 'Class', 'TrungBinhHK1', 'TrungBinhHK2'];
-
-        // // Biến đổi dữ liệu JSON thành chuỗi CSV
-        // let csvData = '';
-        // data.forEach(item => {
-        //     const row = fields.map(field => item[field]).join(',');
-        //     csvData += row + '\n';
-        // });
-
-        // csvData = "\ufeff" + fields.join(',') + "\n" + csvData;
-        // const jsonData = JSON.stringify(csvData);
-
         let jsonData = convertToCSVFormat(data);
 
         res.send(jsonData);
+    }
+
+    async downloadMauBangDiemOfClass_CSV(req,res){
+        const className = req.params.class_name;
+        const year = req.query.year;
+        let data = await student.getListStudentInClass_2(className, year);
+        console.log("CONCAC")
+        console.log(data);
     }
 
     async downloadTranscriptOfSubject_CSV(req, res) {

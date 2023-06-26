@@ -13,6 +13,7 @@ async function getAnSubjectResult(student_id, subject_id, _semester, _year) {
     }
 }
 module.exports = {
+    getAnSubjectResult,
     getInfoOfSubject: async (idSubject, idClass) => {
         try {
 
@@ -20,7 +21,6 @@ module.exports = {
 
         }
     },
-
     getTranscriptOfSubject: async (subjectName, className, year, semester) => {
         try {
             //TODO: 
