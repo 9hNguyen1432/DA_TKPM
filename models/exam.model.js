@@ -13,9 +13,9 @@ exports.addAnExam = async (name, subject_id, class_id, semester, year) => {
         const insertedId = result.recordset[0].id;
         console.log('Inserted ID:', insertedId);
         return insertedId;
-      } catch (err) {
+    } catch (err) {
         console.error('Lỗi truy vấn:', err);
-      }
+    }
 }
 
 exports.getExam = async (name, subject_id, class_id, semester, year) => {
@@ -34,16 +34,33 @@ exports.getExam = async (name, subject_id, class_id, semester, year) => {
     }
 }
 
-exports.addAnExamResult = (exam_id, student_id, score) => {
-    conn.then(pool => {
+exports.getAnExamResult = async (exam_id, student_id) => {
+    try {
+        var query_string = `SELECT * FROM EXAM_RESULT WHERE exam_id = N'${exam_id}' and
+        student_id = '${student_id}'`
+        console.log(query_string)
+        let result = (await conn).query(query_string);
+        return (await result).recordset[0];
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+exports.addAnExamResult = async (exam_id, student_id, score) => {
+    const pool = await conn;
+    try {
+        if (await this.getAnExamResult(exam_id, student_id)) {
+            let query_string = `delete from EXAM_RESULT where exam_id = N'${exam_id}' and
+            student_id = '${student_id}'`
+            console.log(query_string)
+            await pool.request().query(query_string);
+        }
+
         let query_string = `insert into EXAM_RESULT (exam_id, student_id, mark)
             values('${exam_id}','${student_id}','${score}')`
         console.log(query_string)
-        return pool.request().query(query_string);
-
-    }).then(result => {
-        console.log(result.recordset);
-    }).catch(err => {
-
-    });
+        return await pool.request().query(query_string);
+    } catch (err) {
+        console.error(err)
+    }
 }

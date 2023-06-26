@@ -168,11 +168,11 @@ function viewCourseDetail(item) {
             for (let i = 0; i < data.length; i++) {
                 var newRow = $('<tr>');
                 // Add cells to the new row
-                newRow.append($(`<th scope="row">`).text(data[i].STT));
+                newRow.append($(`<th scope="row">`).text(data[i].ID));
                 newRow.append($('<td>').text(data[i].Name));
-                newRow.append($('<td>').text(data[i].Test_15min));
-                newRow.append($('<td>').text(data[i].Test_45min));
-                newRow.append($('<td>').text(data[i].Final));
+                newRow.append($('<td>').text(data[i].exam_15));
+                newRow.append($('<td>').text(data[i].exam_45));
+                newRow.append($('<td>').text(data[i].exam_Sem));
                 // Add the new row to the table body
                 $('#courses_detail_table tbody').append(newRow);
             }

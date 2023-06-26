@@ -12,7 +12,7 @@ const regulation = require('../models/regulation.model');
 const account = require('../models/account');
 
 const ClassModel = require("../models/class.model")
-const AccModel = require('../models/account')
+const SubjectModel = require("../models/subject.model")
 var crypto = require('crypto')
 const iconv = require('iconv-lite');
 const json2csv = require('json2csv').parse;
@@ -121,25 +121,28 @@ class ClassPageController {
         let year_str = req.query.year
         let sem_str = req.query.semester
 
-        const data = [
-            {
-                STT: 1,
-                Name: "Lê Thị Ngọc Bích",
-                Test_15min: 10.0,
-                Test_45min: 9.5,
-                Final: 9.8
-            },
-            {
-                STT: 1,
-                Name: "Lê Thị Ngọc Bích",
-                Test_15min: 10.0,
-                Test_45min: 9.5,
-                Final: 9.8
-            }
-        ];
+        let score_board = await SubjectModel.getSubjectTranscriptOfClass(year_str,sem_str,class_name,course_name)
 
+        // const data = [
+        //     {
+        //         STT: 1,
+        //         Name: "Lê Thị Ngọc Bích",
+        //         Test_15min: 10.0,
+        //         Test_45min: 9.5,
+        //         Final: 9.8
+        //     },
+        //     {
+        //         STT: 1,
+        //         Name: "Lê Thị Ngọc Bích",
+        //         Test_15min: 10.0,
+        //         Test_45min: 9.5,
+        //         Final: 9.8
+        //     }
+        // ];
+        console.log(score_board)
         res.setHeader('Content-Type', 'application/json');
-        res.json(data);
+        res.json(score_board);
+
 
         // res.render('class/courses_detail',
         //     {
@@ -149,31 +152,24 @@ class ClassPageController {
         //         CourseName: course_name,
         //         Years: list_year,
         //         CurYear: year_str,
-        //         CurSem: sem_str
+        //         CurSem: sem_str,
+        //         ScoreBoard: score_board
         //     });
     }
 
     async downloadStudentsOfClass_CSV(req, res) {
-
         const className = req.params.class_name;
         const year = req.query.year;
         const data = await student.getInfoListStudentInClassToDownload(className, year);
-        // // Định nghĩa các trường (columns) cần xuất ra trong file CSV
-        // const fields = ['Name', 'Class', 'TrungBinhHK1', 'TrungBinhHK2'];
-
-        // // Biến đổi dữ liệu JSON thành chuỗi CSV
-        // let csvData = '';
-        // data.forEach(item => {
-        //     const row = fields.map(field => item[field]).join(',');
-        //     csvData += row + '\n';
-        // });
-
-        // csvData = "\ufeff" + fields.join(',') + "\n" + csvData;
-        // const jsonData = JSON.stringify(csvData);
-
         let jsonData = convertToCSVFormat(data);
 
         res.send(jsonData);
+    }
+
+    async downloadMauBangDiemOfClass_CSV(req,res){
+        const className = req.params.class_name;
+        const year = req.query.year;
+        let data = await student.getListStudentInClass_2(className, year);
     }
 
     async downloadTranscriptOfSubject_CSV(req, res) {
@@ -182,20 +178,7 @@ class ClassPageController {
         const semester = req.query.semester;
         const subjectName = req.query.subject;
         const data = await subject.getTranscriptOfSubject(subjectName, className,year, semester);
-
-        // // Định nghĩa các trường (columns) cần xuất ra trong file CSV
-        // const fields = ['Name', 'Mark', 'Diem15Phut', 'Diem1Tiet', "DiemCuoiKi"];
-
-        // // Biến đổi dữ liệu JSON thành chuỗi CSV
-        // let csvData = '';
-        // data.forEach(item => {
-        //     const row = fields.map(field => item[field]).join(',');
-        //     csvData += row + '\n';
-        // });
-
-        // csvData = "\ufeff" + fields.join(',') + "\n" + csvData;
-        // const jsonData = JSON.stringify(csvData);
-
+        
         let jsonData = convertToCSVFormat(data);
 
         res.send(jsonData);
@@ -304,7 +287,6 @@ class ClassPageController {
 
 
     }
-    
     //for method get(/:class_name/import)
     async importStudentRender(req, res) {
         let list_year = await Model.getYears();

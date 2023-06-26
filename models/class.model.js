@@ -3,6 +3,7 @@ var conn = require('./connect.model').conn
 var util = require('./util.model')
 const regulation = require('./regulation.model');
 var exam = require('./exam.model')
+var subject = require('./subject.model')
 const sql = require('mssql/msnodesqlv8');
 const examTypes = require('../config/typeOfExam')
 
@@ -155,9 +156,18 @@ exports.saveListScore = async (listScore, classInfo, subjectInfo, semester, year
     };
     console.log(exam_id);
     for(let i = 0; i< listScore.length; i++){
-        exam.addAnExamResult(await exam_id[0], listScore[i].id, listScore[i].muoilam);
-        exam.addAnExamResult(await exam_id[1], listScore[i].id, listScore[i].mottiet);
-        exam.addAnExamResult(await exam_id[2], listScore[i].id, listScore[i].hocky);
+        // lưu điểm của sinh viên vào từng kết quả
+       await exam.addAnExamResult(await exam_id[0], listScore[i].id, listScore[i].muoilam);
+       await exam.addAnExamResult(await exam_id[1], listScore[i].id, listScore[i].mottiet);
+       await exam.addAnExamResult(await exam_id[2], listScore[i].id, listScore[i].hocky);
+       // lưu điểm tổng kết của sinh viên trong môn đó.
+       let avg = ( parseFloat(listScore[i].muoilam) +  parseFloat(listScore[i].mottiet) +  parseFloat(listScore[i].hocky))/3;
+       console.log("==========");
+       console.log(listScore[i].muoilam)
+       console.log(listScore[i].mottiet)
+       console.log(listScore[i].hocky)
+       console.log(avg)
+       await subject.addAResultOfSubject(listScore[i].id, subjectInfo.id, semester, year, avg);
     }
 }
 
