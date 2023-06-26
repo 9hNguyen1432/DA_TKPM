@@ -155,9 +155,9 @@ exports.saveListScore = async (listScore, classInfo, subjectInfo, semester, year
     };
     console.log(exam_id);
     for(let i = 0; i< listScore.length; i++){
-        exam.addAnExamResult(await exam_id[0], listScore[i].id, listScore[i].muoilam);
-        exam.addAnExamResult(await exam_id[1], listScore[i].id, listScore[i].mottiet);
-        exam.addAnExamResult(await exam_id[2], listScore[i].id, listScore[i].hocky);
+       await exam.addAnExamResult(await exam_id[0], listScore[i].id, listScore[i].muoilam);
+       await exam.addAnExamResult(await exam_id[1], listScore[i].id, listScore[i].mottiet);
+       await exam.addAnExamResult(await exam_id[2], listScore[i].id, listScore[i].hocky);
     }
 }
 
