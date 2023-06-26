@@ -20,12 +20,20 @@ addAStudent = async function (student) {
         addAStudent,
         getInfoListStudentInClassToDownload: async (className, year) => {
             try {
-                let query_string = `SELECT st.id, st.name, st.gender, st.dob, st.email, st.address,
-                                            rs1.mark AS AverageMarkSemester1, rs2.mark AS AverageMarkSemester2
-                                    FROM STUDENT st, RESULT rs1 ,RESULT rs2 , CLASS cl
-                                    WHERE cl.id = st.class_id AND rs1.student_id = st.id AND rs1._semester = 1
-                                            AND rs2.student_id = st.id AND rs2._semester = 2
-                                            AND cl.name = '${className}' AND rs1._year = '${year}' AND rs2._year = '${year}'`;
+                let query_string = `SELECT Student.name AS student_name, Class.name AS class_name,
+                                    AVG(CASE WHEN Result._semester = 1 THEN Result.mark ELSE NULL END) AS avg_mark_semester1,
+                                    AVG(CASE WHEN Result._semester = 2 THEN Result.mark ELSE NULL END) AS avg_mark_semester2
+                                    FROM Student
+                                    JOIN Class ON Student.class_id = Class.id
+                                    JOIN Result ON Result.student_id = Student.id
+                                    WHERE Result._year = '${year}' AND Class.name = '${className}'
+                                    GROUP BY Student.id, Student.name, Class.name`
+                // let query_string = `SELECT st.id, st.name, st.gender, st.dob, st.email, st.address,
+                //                             rs1.mark AS AverageMarkSemester1, rs2.mark AS AverageMarkSemester2
+                //                     FROM STUDENT st, RESULT rs1 ,RESULT rs2 , CLASS cl
+                //                     WHERE cl.id = st.class_id AND rs1.student_id = st.id AND rs1._semester = 1
+                //                             AND rs2.student_id = st.id AND rs2._semester = 2
+                //                             AND cl.name = '${className}' AND rs1._year = '${year}' AND rs2._year = '${year}'`;
                 let result = (await conn).query(query_string);
                 if((await result).recordset.length <= 0){
                     let query_string = `SELECT st.id, st.name, st.gender, st.dob, st.email, st.address
@@ -156,25 +164,25 @@ addAStudent = async function (student) {
 
             let result = (await conn).query(queryString);
             return (await result).recordset;
-       },
-       getSummarySubjectByYearOfStudent:  async(studentID, year) =>{
+        },
+        getSummarySubjectByYearOfStudent:  async(studentID, year) =>{
             const queryString =`select SB.name as subject, AVG(ER.mark) as DTB from EXAM_RESULT ER, EXAM EX, SUBJECT sb  
             WHERE ER.exam_id = EX.id and SB.id = EX.subject_id  and er.student_id= '${studentID}' AND EX._year='${year}'
             GROUP BY EX.subject_id, SB.name`
 
             let result = (await conn).query(queryString);
             return (await result).recordset;
-       } ,
-       getSummaryScoreBySemester: async(studentID,year) => {
+        } ,
+        getSummaryScoreBySemester: async(studentID,year) => {
             const queryString =`select  ex._semester as semester ,AVG(ER.mark) as DTB from EXAM_RESULT ER, EXAM EX, SUBJECT sb  
             WHERE ER.exam_id = EX.id and SB.id = EX.subject_id AND ER.student_id = '${studentID}' AND EX._year='${year}'
             GROUP BY ex._semester`
 
             let result = (await conn).query(queryString);
             return (await result).recordset;
-       },
+        },
 
-       getSummaryScoreByYear: async(studentID,year) => {
+        getSummaryScoreByYear: async(studentID,year) => {
         const queryString =`select AVG(ER.mark) as DTB from EXAM_RESULT ER, EXAM EX, SUBJECT sb  
         WHERE ER.exam_id = EX.id and SB.id = EX.subject_id AND ER.student_id = '${studentID}' AND EX._year='${year}'
         GROUP BY ex._year`
