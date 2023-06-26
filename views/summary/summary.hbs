@@ -1,44 +1,29 @@
 <div>
     <h5 class="card py-2 shadow-sm" style="width: 400px; text-align: center; margin: 15px auto; border-radius: 10px;">
         BÁO CÁO TỔNG KẾT HỌC KỲ</h5>
-    <div class="d-flex justify-content-center">
-        <div class="d-flex">
-            <div class="mt-1" style="font-size: 13px;">Học kỳ: </div>
-            {{!-- <div class="dropdown mx-2">
-                <button type="button" class="btn dropdown-toggle py-1 fw-bold" data-bs-toggle="dropdown"
-                    aria-expanded="false" style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9;
-                    width: 200px;">
-                </button>
-                <div class="dropdown-menu dropdown-menu-end" id="coursemenu-dropdown" style="width: 200px;">
-                    <button class="dropdown-item active" onclick="changeItem_DD(this)"
-                        style="font-size: 12px; text-align: center;">Anh văn</button>
-                    <button class="dropdown-item" onclick="changeItem_DD(this)"
-                        style="font-size: 12px; text-align: center;">Ngữ văn</button>
-                    <button class="dropdown-item" onclick="changeItem_DD(this)"
-                        style="font-size: 12px; text-align: center;">Thể dục</button>
-                </div>
-            </div> --}}
+    <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-center" style="width: 90%; margin-left: 150px;" >
+            <div class="mt-1" style="font-size: 13px;">Học kì: </div>
             <div class="mx-2">
                 <select class="py-1 fw-bold" aria-label=".form-select-lg example" style="background-color: #F4F4F4 ; font-size: 13px; border-radius: 20px; border-color: #D9D9D9; 
-                    width: 200px; text-align: center;">
-                    <option value="" selected style="font-size: 13px;">Học kì 1</option>
-                    <option value="" style="font-size: 13px;">Học kì 2</option>
-                    <option value="" style="font-size: 13px;">Cả năm</option>
+                    width: 70px; padding-left: 20px;">
+                    <option value="" selected style="font-size: 13px;">1</option>
+                    <option value="" style="font-size: 13px;">2</option>
+                    <option value="" style="font-size: 13px;">All</option>
                 </select>
             </div>
         </div>
-
-        <div class="text-end me-5">
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modify-class-name"
-                style="font-weight: bold; width:150px; position: fixed; top: 130px; right: 50px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
-                Chỉnh sửa
+        <div class="text-end me-5" style="width: 10%;">
+            <button type="button" class="btn btn-success shadow" data-bs-toggle="modal"
+                data-bs-target="#modify-class-name" style="font-weight: bold; width:130px;">
+                Xem
             </button>
         </div>
     </div>
-    <div class="card my-3 mx-5" style="background-color: #D9D9D9; height: 510px; border-radius: 10px;">
+    <div class="card my-2 mx-5" style="background-color: #D9D9D9; height: 510px; border-radius: 10px;">
         <div class="table-responsive px-3 py-2 m-4"
             style="background-color: white; border-radius: 10px; height: 500px;">
-            <table class="table table-bordered ">
+            <table class="table table-sm table-bordered ">
                 <thead>
                     <tr>
                         <th scope="col">STT</th>
@@ -137,3 +122,31 @@
 
     </div>
 </div>
+
+
+{{!-- MODIFY CLASS NAME --}}
+<div class="modal fade" id="modify-class-name" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+    tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalToggleLabel">Chỉnh sửa lớp học</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-add-class" method="post">
+                    <div>
+                        <label for="class-name" class="d-block">Tên môn học: </label>
+                        <input type="text" value="Anh Văn" style="width: 100%;" class="mt-2 p-1">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="submit" form="form-delete" class="btn btn-success" formtarget="form-add-class">Xác
+                    nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{!-- END MODIFY CLASS NAME --}}
