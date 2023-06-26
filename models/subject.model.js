@@ -56,7 +56,7 @@ module.exports = {
 
     getSubjectWithNameInYear: async(name, _year) => {
         try {
-            var query_string = `SELECT * FROM SUBJECT WHERE name ='${name}' and _year = '${_year}'`;
+            var query_string = `SELECT * FROM SUBJECT WHERE name =N'${name}' and _year = '${_year}'`;
             let result = (await conn).query(query_string);
             return (await result).recordset[0];
         } catch (error) {
