@@ -1,4 +1,3 @@
-
 // Lắng nghe sự kiện click trên nút chỉnh sửa
 document.querySelectorAll('.edit-button').forEach(button => {
     button.addEventListener('click', async () => {
@@ -6,6 +5,7 @@ document.querySelectorAll('.edit-button').forEach(button => {
         const studentId = button.getAttribute('data-bs-mssv');
         const className = document.querySelector('#class-header').getAttribute('data-class-name');
         const currentYear = get_year_selected();
+        const currentSemester = get_semester_selected();
         const formStudent = document.querySelector('#form-student');
         const btnImportListStudent = document.querySelector('#btn-import-list-student');
 
@@ -26,7 +26,7 @@ document.querySelectorAll('.edit-button').forEach(button => {
 
         // Change action of form
         if (formStudent) {
-            formStudent.action = `/class/${className}/modify_student/${studentId}?year=${currentYear}`;
+            formStudent.action = `/class/${className}/modify_student/${studentId}?year=${currentYear}&semester=${currentSemester}`;
         }
 
         // Hiển thị thông tin học sinh trong modal
@@ -63,14 +63,27 @@ async function get_information(studentId, class_name, year) {
 }
 
 function get_year_selected() {
-    const yearElement = document.querySelector('.dropdown-item.active');
+    const yearElement = document.getElementById('yearmenu-dropdown');
+    let currentYear;
     try {
-        currentYear = yearElement.getAttribute('current-year');
+        currentYear = yearElement.getAttribute('data-year');
     } catch (error) {
         // TODO: after test, use this line and remove below line
         // currentYear = undefined; 
         currentYear = "2021-2022";
     }
+    return currentYear;
+}
+
+function get_semester_selected() {
+    const semesterElement = document.getElementById('semmenu-select');
+    let currentSemester;
+    try {
+        currentSemester = semesterElement.getAttribute('data-semester');
+    } catch (error) {
+        currentSemester = "1";
+    }
+    return currentSemester;
 }
 
 
@@ -81,11 +94,12 @@ document.querySelectorAll('.delete-button').forEach(button => {
         const studentId = button.getAttribute('data-bs-mssv');
         const className = document.querySelector('#class-header').getAttribute('data-class-name');
         const currentYear = get_year_selected();
+        const currentSemester = get_semester_selected();
         const modalDeleteStudent = document.querySelector('#form-delete');
 
         // Change action of form
         if (modalDeleteStudent) {
-            modalDeleteStudent.action = `/class/${className}/delete_student/${studentId}?year=${currentYear}`;
+            modalDeleteStudent.action = `/class/${className}/delete_student/${studentId}?year=${currentYear}&semester=${currentSemester}`;
         }
     });
 });
@@ -116,8 +130,9 @@ document.getElementById('btn_add_student').addEventListener('click', async () =>
     // Change action of form
     if (formStudent) {
         const currentSelectedYear = get_year_selected();
+        const currentSemester = get_semester_selected();
         const className = document.querySelector('#class-header').getAttribute('data-class-name');
-        formStudent.action = `/class/${className}/add_a_student?year=${currentSelectedYear}`;
+        formStudent.action = `/class/${className}/add_a_student?year=${currentSelectedYear}&semester=${currentSemester}`;
     }
 })
 
@@ -206,3 +221,19 @@ async function getStudentInformations(studentId, _class, year){
     let student = await fetch(`/class/${_class}/student/${studentId}?year=${year}`);
     return await student;
 };
+
+
+//Lắng nghe sự kiện click trên nút Xuất danh sách học sinh
+document.getElementById('btn_export_students').addEventListener('click', () => {
+    const year = get_year_selected();
+    const semester = get_semester_selected();
+    const className = document.querySelector('#class-header').getAttribute('data-class-name');
+    fetch(`/class/${className}/export/list_student?year=${year}&semester=${semester}`)
+        .then(response => response.json())
+        .then(csvData => {
+            // Tạo đối tượng Blob từ chuỗi CSV
+            const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+            // Tải file CSV với tên file và mã hóa Unicode đúng cách
+            saveAs(blob, `students_${className}.csv`);
+        });
+})

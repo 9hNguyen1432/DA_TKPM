@@ -1,4 +1,5 @@
 var conn = require('./connect.model').conn
+const { json } = require('express');
 var classModel = require('./class.model')
 
 addAStudent = async function (student) {
@@ -17,22 +18,30 @@ addAStudent = async function (student) {
 },
     module.exports = {
         addAStudent,
-
-        getListStudentInClass: async (className, year) => {
+        getInfoListStudentInClassToDownload: async (className, year) => {
             try {
-                let query_string = `SELECT * FROM STUDENT st, CLASS cl'
-                            + 'WHERE st.ClassId = cl.ID'
-                            + 'AND cl.Name = '${className}' AND cl.Year = '${year}'`;
+                let query_string = `SELECT  st.id as ID, st.name AS Name, st.gender ad Gender, st.dob as Birthday, 
+                                            st.email as Email, st.address as Address,
+                                            AVG(CASE WHEN rs._semester = 1 THEN rs.mark ELSE NULL END) AS TrungBinhHK1,
+                                            AVG(CASE WHEN rs._semester = 2 THEN rs.mark ELSE NULL END) AS TrungBinhHK2
+                                    FROM STUDENT st
+                                    JOIN CLASS cl ON st.class_id = cl.id
+                                    JOIN RESULT rs ON rs.student_id = st.id
+                                    WHERE rs._year = '${year}' AND cl.name = '${className}'
+                                    GROUP BY st.id, st.name, st.gender, st.dob, st.email, st.address`;
                 let result = (await conn).query(query_string);
-                return (await result);
+                return (await result).recordset;
             } catch (error) {
+                console.log(error);
             }
         },
+
         getListStudentInClass_2: async (className, year) => {
             try {
-                let query_string = `SELECT * FROM STUDENT st, CLASS cl WHERE st.class_id = cl.ID AND cl.Name = '${className}' AND cl._year = '${year}'`;
+                let query_string = `SELECT * FROM STUDENT st, CLASS cl WHERE st.class_id = cl.id 
+                                    AND cl.name = '${className}' 
+                                    AND cl._year = '${year}'`;
                 let result = (await conn).query(query_string);
-
                 return (await result).recordset;
             } catch (error) {
             }
@@ -67,7 +76,7 @@ addAStudent = async function (student) {
             //update amount student of class
             classInfo.amount_student = classInfo.amount_student + listStudent.length;
             await classModel.updateAmountStudent(classInfo.name, classInfo._year, classInfo.amount_student);
-            
+
             for (let i = 0; i < listStudent.length; i++) {
                 id = String(parseInt(id) + 1);
                 student = {
@@ -95,25 +104,45 @@ addAStudent = async function (student) {
 
         modifyStudentInClassByID: async (idStudent, studentData) => {
             let query_string = `UPDATE STUDENT 
-                                SET name = N'${studentData.student_name}', gender = N'${studentData.gender}', dob = '${studentData.dob}',
+                                SET name = N'${studentData.name}', gender = N'${studentData.gender}', dob = '${studentData.dob}',
                                 email = '${studentData.email}', address = N'${studentData.address}' 
                                 WHERE id = '${idStudent}'`;
             let result = (await conn).query(query_string);
             return result;
         },
 
-        deleteStudentByID: async(idStudent) => {
+        deleteStudentByID: async (idStudent) => {
             let query_string = `DELETE FROM STUDENT WHERE id = '${idStudent}'`;
             let result = (await conn).query(query_string);
             return result;
         },
 
-        getMaxID: async()=>{
-            let query_string = `SELECT MAX(CAST(id AS INT)) AS max_id FROM STUDENT;`
+        getInfoStudentById_Search: async (idStudent, year) => {
+            let query_string = `SELECT Student.name AS student_name, Class.name AS class_name,
+                                AVG(CASE WHEN Result._semester = 1 THEN Result.mark ELSE NULL END) AS avg_mark_semester1,
+                                AVG(CASE WHEN Result._semester = 2 THEN Result.mark ELSE NULL END) AS avg_mark_semester2
+                                FROM Student
+                                JOIN Class ON Student.class_id = Class.id
+                                JOIN Result ON Result.student_id = Student.id
+                                WHERE Result._year = '${year}' AND Student.id = '${idStudent}'
+                                GROUP BY Student.id, Student.name, Class.name`;
+
             let result = (await conn).query(query_string);
-            if(result !== undefined){
-                return (await result).recordset[0].max_id;
-            }
-            return -1;
+            console.log(await result);
+            return result;
+        },
+
+        getInfoStudentByName_Search: async (studentName, year) => {
+            const query_string = `SELECT Student.name AS student_name, Class.name AS class_name,
+                                    AVG(CASE WHEN Result._semester = 1 THEN Result.mark ELSE NULL END) AS avg_mark_semester1,
+                                    AVG(CASE WHEN Result._semester = 2 THEN Result.mark ELSE NULL END) AS avg_mark_semester2
+                                    FROM Student
+                                    JOIN Class ON Student.class_id = Class.id
+                                    JOIN Result ON Result.student_id = Student.id
+                                    WHERE Student.name LIKE '%${studentName}%' AND Result._year = '${year}'
+                                    GROUP BY Student.id = Student.name, Class.name`;
+            let result = (await conn).query(query_string);
+            console.log(result);
+            return result;
         }
     }

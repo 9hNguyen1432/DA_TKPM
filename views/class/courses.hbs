@@ -1,74 +1,98 @@
-<div class="container-fluid">
-    <h5 class="card py-2 shadow-sm" style="width: 200px; text-align: center; margin: 15px auto; border-radius: 10px;">
+<div class="container-fluid" style="min-height: 600px;">
+    <h5 class="card py-2 shadow-sm" style="width: 200px; text-align: center; margin: 15px auto; border-radius: 10px;"
+        id="class_name">
         {{ClassName}}</h5></span>
     <div class="d-flex justify-content-between align-items-end" style="margin-inline: 100px; margin-top: -30px;">
         <div>
-            <a href="/class/{{ClassName}}?year={{CurYear}}&semester={{CurSem}}" style="text-decoration: underline; color: gray;">Danh sách học sinh</a>
+            <a href="/class/{{ClassName}}?year={{CurYear}}&semester={{CurSem}}"
+                style="text-decoration: underline; color: gray;">Danh sách học sinh</a>
             |
-            <a href="/class/{{ClassName}}/course?year={{CurYear}}&semester={{CurSem}}" style="text-decoration: underline; color: red;">Danh sách môn học</a>
+            <a href="/class/{{ClassName}}/course?year={{CurYear}}&semester={{CurSem}}"
+                style="text-decoration: underline; color: red;">Danh sách môn học</a>
 
         </div>
         <div>
-            <div>GVCN: {{Teacher}}</div>
-            <div>Sĩ số: {{StudentNumber}}</div>
+            <div>GVCN: {{Class.teacher}}</div>
+            <div>Sĩ số: {{Class.amount_student}}</div>
         </div>
     </div>
-    <div class="overflow-auto card" data-bs-spy="scroll" data-bs-smooth-scroll="true" style="margin-inline: 100px;height: 500px; padding:10px 150px; background-color: #D9D9D9;
-        margin-top: 15px;" id="student-info">
-        <a role="button" class="btn btn-light shadow mt-2" href="/class/{{ClassName}}/course/math?year={{CurYear}}&semester={{CurSem}}">
-            <div class=" d-flex justify-content-between  px-5 py-1">
-                <div>1. Toán</div>
-                <div>Lê Thị Ngọc Bích</div>
-            </div>
-        </a>
-        <a role="button" class="btn btn-light shadow mt-2" href="#">
-            <div class=" d-flex justify-content-between  px-5 py-1">
-                <div>1. Ngữ Văn</div>
-                <div>Lê Thị Ngọc Bích</div>
-            </div>
-        </a>
-        <a role="button" class="btn btn-light shadow mt-2" href="#">
-            <div class=" d-flex justify-content-between  px-5 py-1">
-                <div>1. Giáo dục công dân</div>
-                <div>Lê Thị Ngọc Bích</div>
-            </div>
-        </a>
-        <a role="button" class="btn btn-light shadow mt-2" href="#">
-            <div class=" d-flex justify-content-between  px-5 py-1">
-                <div>1. Giáo dục công dân</div>
-                <div>Lê Thị Ngọc Bích</div>
-            </div>
-        </a>
-        <a role="button" class="btn btn-light shadow mt-2" href="#">
-            <div class=" d-flex justify-content-between  px-5 py-1">
-                <div>1. Giáo dục công dân</div>
-                <div>Lê Thị Ngọc Bích</div>
-            </div>
-        </a>
-        <a role="button" class="btn btn-light shadow mt-2" href="#">
-            <div class=" d-flex justify-content-between  px-5 py-1">
-                <div>1. Giáo dục công dân</div>
-                <div>Lê Thị Ngọc Bích</div>
-            </div>
-        </a>
-        <a role="button" class="btn btn-light shadow mt-2" href="#">
-            <div class=" d-flex justify-content-between  px-5 py-1">
-                <div>1. Giáo dục công dân</div>
-                <div>Lê Thị Ngọc Bích</div>
-            </div>
-        </a>
-        <a role="button" class="btn btn-light shadow mt-2" href="#">
-            <div class=" d-flex justify-content-between  px-5 py-1">
-                <div>1. Giáo dục công dân</div>
-                <div>Lê Thị Ngọc Bích</div>
-            </div>
-        </a>
-        <a role="button" class="btn btn-light shadow mt-2" href="#">
-            <div class=" d-flex justify-content-between  px-5 py-1">
-                <div>1. Giáo dục công dân</div>
-                <div>Lê Thị Ngọc Bích</div>
-            </div>
-        </a>
-    </div>
+    <div class=" d-flex " data-bs-spy="scroll" data-bs-smooth-scroll="true" style="margin-inline: 60px ; padding:10px 50px; background-color: #D9D9D9;
+        margin-block: 15px; border-radius: 10px; min-height: 520px;" id="student-info">
+        <div class="d-flex justify-content-between">
+            <div class="overflow-auto" style="width: 15%; padding-right: 30px; border-right: 1px solid white;">
+                <h5 style="margin: 5px auto; text-align: center;
+                border-bottom: 1px solid white; padding-bottom: 5px; margin-bottom: 5px; font-size:medium;">Danh sách
+                    môn</h5>
 
+                {{!-- <a role="button" class="btn btn-light shadow mt-2 active"
+                    style="width: 100%; text-align: left; font-size: 14px;"
+                    href="/class/{{@root.ClassName}}/course/{{this.name}}?year={{@root.CurYear}}&semester={{@root.CurSem}}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>{{plus1 @index}}. {{this.name}}</div>
+                        <img hidden src="/images/right-arrow.png" width="12" height="12">
+                    </div>
+                </a> --}}
+                <div onload="viewFirstCourse()">
+                    {{#each ListCourse}}
+                    <button role="button" class="btn btn-light shadow mt-2 active"
+                        style="width: 100%; text-align: left; font-size: 14px;" onclick="viewCourseDetail(this)"
+                        data-course="{{this.name}}" data-class="{{@root.ClassName}}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>{{plus1 @index}}. {{this.name}}</div>
+                            <img hidden src="/images/right-arrow.png" width="12" height="12">
+                        </div>
+                    </button>
+                    {{/each}}
+                </div>
+            </div>
+            <div style="width: 82%; background-color: white; border-radius: 10px; padding-top: 8px; font-size: 13.5px; position: relative;
+                padding-bottom: 35px;" class="container-fluid">
+                <h5 style="margin: 0 auto; text-align: center;">BẢNG ĐIỂM</h5>
+                <div id="transcript" style="visibility: hidden;">
+                    <div class="" data-bs-spy="scroll" data-bs-smooth-scroll="true" id="course-info">
+                        <div class="" style="margin: 0px 200px;">
+                            <div class=" d-flex  justify-content-between py-2 " style="padding-inline: 70px;">
+                                <div id="course_name">Môn: {{CourseName}}</div>
+                                <div> Kì: {{CurSem}}</div>
+                                <div> Năm học: {{CurYear}}</div>
+                            </div>
+                        </div>
+                        <div class="table-responsive px-3" style="background-color: white; border-radius: 10px;">
+                            <table class="table table-bordered table-sm" id="courses_detail_table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="col-1">STT</th>
+                                        <th scope="col" class="col-2">Họ và tên</th>
+                                        <th scope="col" class="col-1">Điểm 15 phút</th>
+                                        <th scope="col" class="col-1">Điểm 1 tiết</th>
+                                        <th scope="col" class="col-1">Điểm cuối HK</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bs-spy="scroll" data-bs-smooth-scroll="true">
+                                    {{!-- <tr>
+                                        <th scope="row">1</th>
+                                        <td>Mark</td>
+                                        <td>Otto</td>
+                                        <td>@mdo</td>
+                                        <td>@mdo</td>
+                                    </tr> --}}
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center " style="position: absolute; bottom: 10px; left: 250px;">
+                        <a href="/class/{{ClassName}}/course/CourseName/import?year={{CurYear}}&semester={{CurSem}}"
+                            class="btn btn-sm btn-success mx-5" id="import_link">Import từ file</a>
+                        <a href="/class/{{ClassName}}/course/CourseName/download-transcript"
+                            class="btn btn-sm btn-success mx-5" id="dowloadTranscript_link">Tải
+                            bảng điểm</a>
+                        <a href="#" class="btn btn-sm btn-success mx-5">Xuất bảng điểm</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>

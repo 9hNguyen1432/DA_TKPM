@@ -22,6 +22,7 @@ class SettingPageController {
 
         let list_year = await yearModel.getYears();
         let temp = await regulations.addRegulation(regulation);
+
         res.render('setting/setting', {regulation, Years: list_year, CurYear: year_str, CurSem: sem_str });
     }
 

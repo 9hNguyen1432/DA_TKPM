@@ -9,19 +9,22 @@
             <a href="/class/{{ClassName}}/course?year={{CurYear}}&semester={{CurSem}}" style="text-decoration: underline; color: gray;">Danh sách môn học</a>
         </div>
         <div>
-            <div>GVCN: {{class.teacher}}</div>
-            <div>Sĩ số: {{class.amount_student}}</div>
+            <div>GVCN: {{Class.teacher}}</div>
+            <div>Sĩ số: {{Class.amount_student}}</div>
         </div>
     </div>
-    <div class="overflow-auto card" data-bs-spy="scroll" data-bs-smooth-scroll="true" style="margin-inline: 100px;height: 470px; padding:10px 20px; background-color: #D9D9D9;
-        margin-top: 15px;" id="student-info">
+    <div class="overflow-auto" data-bs-spy="scroll" data-bs-smooth-scroll="true" style="margin-inline: 100px;height: 470px; padding:10px 20px; background-color: #D9D9D9;
+        margin-top: 15px; border-radius: 10px;" id="student-info">
         {{#each listStudent}}
         <div class="accordion accordion-flush" id="AccordionFlush_{{this.id}}">
-            <div class="accordion-item mb-2 shadow-sm" style="border: 1px solid #D9D9D9;">
+            <div class="accordion-item mb-2 shadow-sm" style="border: 1px solid #D9D9D9; padding-inline: 2%;">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#collapse_{{this.id}}" aria-expanded="false" aria-controls={{this.id}}>
-                        {{this.stt}}.{{this.name}}
+                        <div style="margin-inline: 15px;">
+                            {{this.stt}}.
+                        </div>
+                        {{this.name}}
                     </button>
                 </h2>
                 <div id="collapse_{{this.id}}" class="accordion-collapse collapse" data-bs-parent="#AccordionFlush_{{this.id}}">
@@ -40,11 +43,12 @@
                                     <div style="width: 100px;">Ngày sinh: </div>
                                     <div class="mx-1" style="text-align: left;">{{this.dob}}</div>
                                 </div>
+
                             </div>
 
                             <div class="d-flex" style="width: 50%;">
                                 {{!-- <line style="height: 43px;"></line> --}}
-                                <div style="margin-left: 80px;">
+                                <div style="margin-left: 80px; margin-top: -10px;">
                                     <div class="d-flex">
                                         <div style="width: 100px;">Email: </div>
                                         <div class="mx-1" style="text-align: left;">{{this.email}}</div>
@@ -148,6 +152,9 @@
 
     </div>
     <div class="d-flex justify-content-center">
+        <button id="btn_export_students" class="mt-3  btn btn-success me-5" type="button" href="/{{ClassName}}/export/list_student">
+            Xuất danh sách học sinh
+        </button>
         <button id="btn_add_student" class="mt-3  btn btn-success me-5" type="button" data-bs-toggle="modal" data-bs-target="#student_form">
             Thêm học sinh
         </button>
@@ -178,7 +185,7 @@
                         <input class="text-center" type="text" class="form-control" id="class-name"
                             value="{{ClassName}}" style="display:block; width: 120px;" disabled>
 
-                        <a id="btn-import-list-student" href="/class/{{ClassName}}/import" type="button"
+                        <a id="btn-import-list-student" href="/class/{{ClassName}}/import?year={{CurYear}}&semester={{CurSem}}" type="button"
                             class="btn btn-secondary float-right ms-auto">Import danh sách từ file</a>
                     </div>
 
@@ -186,7 +193,7 @@
                         <div class="border-end">
                             <div class="m-3">
                                 <label for="form-student-name">Họ và tên: </label>
-                                <input type="text" class="form-control" id="form-student-name" name="student_name"
+                                <input type="text" class="form-control" id="form-student-name" name="name"
                                     style="width: 350px;">
                             </div>
 
@@ -265,7 +272,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="delete-button btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                 <button type="submit" form="form-delete" class="btn btn-danger">Xác nhận xóa</button>
             </div>
         </div>
@@ -393,20 +400,3 @@
     </div>
 </div>
 {{!-- END DETAIL INFO STUDENT --}}
-
-
-
-{{!-- TOAST --}}
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header">
-      <img src="..." class="rounded me-2" alt="...">
-      <strong class="me-auto">Bootstrap</strong>
-      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-    <div class="toast-body">
-      Hello, world! This is a toast message.
-    </div>
-  </div>
-</div>
-{{!-- END TOAST --}}

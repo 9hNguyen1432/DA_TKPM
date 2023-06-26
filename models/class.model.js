@@ -2,7 +2,9 @@ const csv = require('csvtojson')
 var conn = require('./connect.model').conn
 var util = require('./util.model')
 const regulation = require('./regulation.model');
+var exam = require('./exam.model')
 const sql = require('mssql/msnodesqlv8');
+const examTypes = require('../config/typeOfExam')
 
 exports.checkListStudent = async (listStudent, amountStudent, year) => {
     // TODO: load rule from database
@@ -43,10 +45,10 @@ exports.checkListStudent = async (listStudent, amountStudent, year) => {
 }
 
 
-exports.CSVFiletoJsonObject = async (uriFile) => {
+exports.CSVFiletoJsonObject = async (uriFile, headers) => {
     csv({
         noheader: false,
-        headers: ['stt', 'name', 'gender', 'DOB', 'address']
+        headers: headers
     })
         .fromString(uriFile)
         .then((jsonObj) => {
@@ -59,7 +61,7 @@ exports.CSVFiletoJsonObject = async (uriFile) => {
         })
     const jsonArray = await csv({
         noheader: false,
-        headers: ['stt', 'name', 'gender', 'DOB', 'address']
+        headers: headers
     }).fromString(uriFile);
     return jsonArray;
 }
@@ -134,6 +136,38 @@ exports.deleteClass = async (year, class_name) => {
         const output = result.recordset;
 
         return output;
+    } catch (error) {
+        console.error('Lỗi truy vấn:', error);
+        throw error;
+    }
+}
+exports.saveListScore = async (listScore, classInfo, subjectInfo, semester, year) => {
+    let exam_id = [];
+    for (const e of examTypes) {
+        const examExist = await exam.getExam(e, subjectInfo.id, classInfo.id, semester, year);
+        if(examExist){
+            exam_id.push(examExist.id)
+        }
+        else{
+            let addExam = await exam.addAnExam(e, subjectInfo.id, classInfo.id, semester, year);
+            exam_id.push(addExam);
+        }
+    };
+    console.log(exam_id);
+    for(let i = 0; i< listScore.length; i++){
+        exam.addAnExamResult(await exam_id[0], listScore[0].id, listScore[0].muoilam);
+        exam.addAnExamResult(await exam_id[1], listScore[0].id, listScore[0].mottiet);
+        exam.addAnExamResult(await exam_id[2], listScore[0].id, listScore[0].hocky);
+    }
+}
+
+exports.getAllCourseInYear = async (year) => {
+    try {
+        var query_string = `SELECT * FROM SUBJECT WHERE _year = '${year}'`;
+        let result = (await conn).query(query_string);
+        let rs = (await result).recordset;
+        
+        return rs
     } catch (error) {
         console.error('Lỗi truy vấn:', error);
         throw error;

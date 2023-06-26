@@ -1,0 +1,147 @@
+<script defer src="/js/csv.js"></script>
+<script defer src="/js/csvRenderAndCheckForImportScore.js"></script>
+<script>window.onload = function () { sessionStorage.setItem("StudentList", {{ class_name }})}</script>
+<div id="import_student">
+    <div class="container p-100">
+        <div class="row">
+            <div class="col-5 mx-auto ">
+                <h5 class="text-center bg-light shadow rounded-3 py-3 mt-3 text-dark">Thêm danh sách điểm</h5>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-19 col-lg-10 mx-auto">
+                {{#if dl}}
+                <p class="h3 text-danger text-center mt-4">*Đã hết thời gian đăng ký</p>
+                {{else}}
+                <div class="card border-0 shadow rounded-3 my-5">
+
+                    <div class="card-body p-4 p-sm-5">
+                        <form class="g-3" id="myform"
+                            action="/class/{{class_name}}/course/{{subject_name}}/import?year={{CurYear}}&semester={{CurSem}}"
+                            method="post" enctype="multipart/form-data">
+                            <div class="row mb-4">
+                                <div class="col-6">
+                                    <label for="class" class="form-label">Lớp</label>
+                                    <select id="class" name="class" class="form-select form-control"
+                                        aria-label="Default select example">
+                                        {{#rendercombolist allClassName class_name}}
+                                        {{this}}
+                                        {{/rendercombolist}}
+                                    </select>
+                                </div>
+
+
+                                <div class="col-6">
+                                    <label for="subject" class="form-label">Môn</label>
+                                    <select id="subject" name="subject" class="form-select form-control"
+                                        aria-label="Default select example">
+                                        {{#rendercombolist allSubjectName subject_name}}
+                                        {{this}}
+                                        {{/rendercombolist}}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <fieldset class="row mb-3">
+                                <div class="col-md-6 mb-2 my-auto">
+                                    <label for="btntaimau" class="form-label d-block">Tải mẫu</label>
+                                    <a href="/resources/mau_import_diem.csv"
+                                        download="mau_danh_sach_hoc_sinh_them_vao_lop.csv">
+                                        <button type="button" class=" btn btn-success" id="btntaimau">Tải
+                                            mẫu danh sách (.csv)</button>
+                                    </a>
+                                </div>
+                                <div class="col-md-6 mb-2 my-auto mx-auto">
+                                    <label for="fileDS" class="form-label">Tải danh sách lên</label>
+                                    <input class="form-control  form-floating" type="file" name="importscore"
+                                        id="fileDS" accept=".csv" enctype="multipart/form-data" required>
+                                </div>
+                            </fieldset>
+
+                            <!-- (C) GENERATE HTML TABLE HERE -->
+
+                            <div>
+                                <style>
+                                    tr {
+                                        padding: 5px !important;
+                                    }
+
+                                    td {
+                                        margin: 0 10px !important;
+                                    }
+                                </style>
+                                <table class="table table-striped" id="demoTable">
+
+                                </table>
+                            </div>
+                            {{!-- ERROR --}}
+                            <div id="warning" class="text-danger"></div>
+                            {{!-- END ERROR --}}
+                            <div class="d-flex justify-content-center">
+                                <button
+                                    class="btn btn-success btn-login text-uppercase fw-bold" type="submit" 
+                                    onclick="validatedForm(event, this)">Import</button>
+                            </div>
+                            <!-- Button trigger modal -->
+                        </form>
+
+                    </div>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#blah')
+                        .attr('src', e.target.result)
+                        .width(150)
+                        .height(200);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+    <div class="entry">
+        {{#if success}}
+
+        <div class="modal fade show" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            style="display: block;" aria-modal="true" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">THÔNG BÁO</h5>
+                        <a href="/class/{{class_name}}?year={{CurYear}}&semester={{CurSem}}">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </a>
+
+                    </div>
+                    {{#each errors}}
+                    <div>
+                        <div style="color: red; padding: 5px 0">
+                            * {{this}}
+                        </div>
+                    </div>
+                    {{/each}}
+                    <div class="modal-body">
+                        Bạn đã import danh sách điểm môn {{subject_name}} của lớp {{class_name}} thành công.
+                    </div>
+                    <div class="modal-footer">
+                        <a href="/class/{{class_name}}?year={{CurYear}}&semester={{CurSem}}">
+                            <button type="button" class="btn btn-primary">Trang chủ</button>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop fade show"></div>
+
+        {{/if}}
+    </div>
+</div>
