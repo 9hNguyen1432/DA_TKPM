@@ -130,13 +130,22 @@ addAStudent = async function (student) {
         },
 
         getInfoStudentById_Search: async (idStudent, year) => {
+            // let query_string = `SELECT Student.name AS student_name, Class.name AS class_name,
+            //                     AVG(CASE WHEN Result._semester = 1 THEN Result.mark ELSE NULL END) AS avg_mark_semester1,
+            //                     AVG(CASE WHEN Result._semester = 2 THEN Result.mark ELSE NULL END) AS avg_mark_semester2
+            //                     FROM Student
+            //                     JOIN Class ON Student.class_id = Class.id
+            //                     JOIN Result ON Result.student_id = Student.id
+            //                     WHERE Result._year = '${year}' AND Student.id = '${idStudent}'
+            //                     GROUP BY Student.id, Student.name, Class.name`;
+
             let query_string = `SELECT Student.name AS student_name, Class.name AS class_name,
-                                AVG(CASE WHEN Result._semester = 1 THEN Result.mark ELSE NULL END) AS avg_mark_semester1,
-                                AVG(CASE WHEN Result._semester = 2 THEN Result.mark ELSE NULL END) AS avg_mark_semester2
+                                    COALESCE(AVG(CASE WHEN Result._semester = 1 THEN Result.mark ELSE NULL END), 0) AS avg_mark_semester1,
+                                    COALESCE(AVG(CASE WHEN Result._semester = 2 THEN Result.mark ELSE NULL END), 0) AS avg_mark_semester2
                                 FROM Student
                                 JOIN Class ON Student.class_id = Class.id
-                                JOIN Result ON Result.student_id = Student.id
-                                WHERE Result._year = '${year}' AND Student.id = '${idStudent}'
+                                LEFT JOIN Result ON Result.student_id = Student.id AND Result._year = '${year}'
+                                WHERE Student.id = '${idStudent}'
                                 GROUP BY Student.id, Student.name, Class.name`;
 
             let result = (await conn).query(query_string);
