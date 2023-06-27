@@ -21,23 +21,21 @@
 </head>
 
 <body class="body">
-    <div class="layer">
-        {{!-- {{>header user}}
-        {{#if user.author}}
-        <div class="container-fluid">
-            <div class="row flex-nowrap">
-                {{>sidebar}}
-                <div class="col mx-auto">
-                    {{{body}}}
-                </div>
+    {{!-- {{>header user}}
+    {{#if user.author}}
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            {{>sidebar}}
+            <div class="col mx-auto">
+                {{{body}}}
             </div>
         </div>
-        {{else}}
-        {{{body}}}
-        {{/if}} --}}
-        {{>header}}
-        <div>{{{body}}}</div>
     </div>
+    {{else}}
+    {{{body}}}
+    {{/if}} --}}
+    {{>header}}
+    <div>{{{body}}}</div>
 
     <script rel="stylesheet" type="text/javascript" src="/js/script.js"></script>
     <script rel="stylesheet" type="text/javascript" src="/js/class/class_function.js"></script>
