@@ -14,10 +14,10 @@ class ClassPageController{
         const year = req.query.year;
         let searchResult = [];
         if(type_search === "id"){
-            searchResult = await student.getInfoStudentById_Search(search_input, year);
+            searchResult = await student.getInfoStudentById_Search(search_input.trim(), year);
         }
         else if(type_search === "name"){
-            searchResult = await student.getInfoStudentByName_Search(search_input, year);
+            searchResult = await student.getInfoStudentByName_Search(search_input.trim(), year);
         }
         console.log("SEARCH: " + searchResult);
         let i = 1;
