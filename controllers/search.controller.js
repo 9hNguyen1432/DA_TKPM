@@ -12,6 +12,7 @@ class ClassPageController{
     async loadSearchResultStudent(req,res){
         const {type_search , search_input} = req.body;
         const year = req.query.year;
+        let list_year = await Model.getYears();
         let searchResult = [];
         if(type_search === "id"){
             searchResult = await student.getInfoStudentById_Search(search_input.trim(), year);
@@ -26,7 +27,7 @@ class ClassPageController{
             i = i + 1;
         });
         
-        res.render('search/searchStudent',{students:searchResult});
+        res.render('search/searchStudent',{students:searchResult ,Years: list_year,CurYear: year});
     }
 }
 
