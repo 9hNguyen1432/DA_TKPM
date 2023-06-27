@@ -188,9 +188,8 @@ class ClassPageController {
         const className = req.params.class_name;
         const studentId = req.params.student_id;
         const year = req.query.year;
-
+        console.log(studentId);
         const studentData = await student.getAStudent(studentId);
-            
         res.send(studentData);
     }
 
