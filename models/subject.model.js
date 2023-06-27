@@ -127,7 +127,9 @@ module.exports = {
             let result = [];
             for (let cl of classOfGrade) {
                 if (summaryQueryResult.map(e => e.name).includes(cl.name)) {
-                    result.push(summaryQueryResult.find(e => e.name === cl.name));
+                    let r = summaryQueryResult.find(e => e.name === cl.name);
+                    r.tile = r.tile + '%';
+                    result.push(r);
                 }
                 else {
                     result.push(

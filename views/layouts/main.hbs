@@ -20,22 +20,24 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 
-<body style="">
-    {{!-- {{>header user}}
-    {{#if user.author}}
-    <div class="container-fluid">
-        <div class="row flex-nowrap">
-            {{>sidebar}}
-            <div class="col mx-auto">
-                {{{body}}}
+<body class="body">
+    <div class="layer">
+        {{!-- {{>header user}}
+        {{#if user.author}}
+        <div class="container-fluid">
+            <div class="row flex-nowrap">
+                {{>sidebar}}
+                <div class="col mx-auto">
+                    {{{body}}}
+                </div>
             </div>
         </div>
+        {{else}}
+        {{{body}}}
+        {{/if}} --}}
+        {{>header}}
+        <div>{{{body}}}</div>
     </div>
-    {{else}}
-    {{{body}}}
-    {{/if}} --}}
-    {{>header}}
-    <div>{{{body}}}</div>
 
     <script rel="stylesheet" type="text/javascript" src="/js/script.js"></script>
     <script rel="stylesheet" type="text/javascript" src="/js/class/class_function.js"></script>

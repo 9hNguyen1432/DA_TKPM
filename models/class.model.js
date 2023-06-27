@@ -162,11 +162,6 @@ exports.saveListScore = async (listScore, classInfo, subjectInfo, semester, year
        await exam.addAnExamResult(await exam_id[2], listScore[i].id, listScore[i].hocky);
        // lưu điểm tổng kết của sinh viên trong môn đó.
        let avg = ( parseFloat(listScore[i].muoilam) +  parseFloat(listScore[i].mottiet) +  parseFloat(listScore[i].hocky))/3;
-       console.log("==========");
-       console.log(listScore[i].muoilam)
-       console.log(listScore[i].mottiet)
-       console.log(listScore[i].hocky)
-       console.log(avg)
        await subject.addAResultOfSubject(listScore[i].id, subjectInfo.id, semester, year, avg);
     }
 }
