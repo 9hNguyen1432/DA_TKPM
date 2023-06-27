@@ -219,7 +219,7 @@ function downloadTranscript(){
             // Tạo đối tượng Blob từ chuỗi CSV
             const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
             // Tải file CSV với tên file và mã hóa Unicode đúng cách
-            saveAs(blob, `bangdiem_${className}_${year}_${semester}.csv`);
+            saveAs(blob, `bangdiem_${className}_${currentCourse}_${year}_${semester}.csv`);
         });
 }
 
