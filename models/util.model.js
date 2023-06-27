@@ -1,4 +1,6 @@
-
+const { all } = require('../routers/class.router');
+const year = require('./year.model');
+const semester = require('./semester.model');
 exports.getAge = (DOB) => {
     var DOByyyy = DOB.split('/')[2];
 
@@ -60,5 +62,19 @@ exports.isValidListSubject = (numOfSubject, SubjectNames) => {
     } catch {
         return false;
     }
+}
+
+exports.getCurYearSem = async () => {
+    let allYear = await year.getYears();
+    const yearLastest = (await allYear).reduce((largest, current) => {
+        if (parseInt(current._year.slice(0,4)) > parseInt(largest._year.slice(0,4))) {
+          return current;
+        } else {
+          return largest;
+        }
+    });
+    let _year = yearLastest._year;
+    let sem = await semester.getNewestSemester(_year);
+    return [sem, _year]
 }
 

@@ -37,7 +37,7 @@ class LoginPageController{
   
                     req.session.save(function (err) {
                         if (err) return next(err)
-                        res.redirect(`/class?year=${curYear}-${curYear+1}&semester=${semester}`)
+                        res.redirect(`/home`)
                     })
                 })
     
