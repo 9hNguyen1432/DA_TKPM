@@ -4,6 +4,7 @@ document.querySelectorAll('.edit-button').forEach(button => {
     button.addEventListener('click', async () => {
         // Lấy giá trị ID từ thuộc tính của hàng
         const studentId = button.getAttribute('data-bs-mssv');
+        console.log(studentId)
         const className = document.querySelector('#class-header').getAttribute('data-class-name');
         const currentYear = get_year_selected();
         const currentSemester = get_semester_selected();
@@ -211,7 +212,6 @@ async function getStudentInformations(studentId, _class, year){
     let student = await fetch(`/class/${_class}/student/${studentId}?year=${year}`);
     return await student;
 };
-
 
 //Lắng nghe sự kiện click trên nút Xuất danh sách học sinh
 document.getElementById('btn_export_students').addEventListener('click', () => {

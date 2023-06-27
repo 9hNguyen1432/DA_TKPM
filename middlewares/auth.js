@@ -5,7 +5,7 @@ var curYear = info[1];
 
 function isAuthenticated (req, res, next) {
     if (req.session.user){
-        return res.redirect(`/class?year=${curYear}-${curYear+1}&semester=${semester}`)
+        return res.redirect('/')
     }
     return next();
 }

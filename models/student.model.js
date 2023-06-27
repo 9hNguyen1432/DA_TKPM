@@ -20,14 +20,16 @@ addAStudent = async function (student) {
         addAStudent,
         getInfoListStudentInClassToDownload: async (className, year) => {
             try {
-                let query_string = `SELECT Student.name AS student_name, Class.name AS class_name,
-                                    AVG(CASE WHEN Result._semester = 1 THEN Result.mark ELSE NULL END) AS avg_mark_semester1,
-                                    AVG(CASE WHEN Result._semester = 2 THEN Result.mark ELSE NULL END) AS avg_mark_semester2
+                let query_string = `SELECT Student.id as id, Student.name AS student_name, Student.gender,
+                                        Student.dob as birthday, Student.email, Student.address,
+                                        Class.name AS class_name,
+                                        AVG(CASE WHEN Result._semester = 1 THEN Result.mark ELSE NULL END) AS avg_mark_semester1,
+                                        AVG(CASE WHEN Result._semester = 2 THEN Result.mark ELSE NULL END) AS avg_mark_semester2
                                     FROM Student
                                     JOIN Class ON Student.class_id = Class.id
                                     JOIN Result ON Result.student_id = Student.id
                                     WHERE Result._year = '${year}' AND Class.name = '${className}'
-                                    GROUP BY Student.id, Student.name, Class.name`
+                                    GROUP BY Student.id, Student.name, Student.gender,Student.dob,Student.email,Student.address, Class.name`
                 // let query_string = `SELECT st.id, st.name, st.gender, st.dob, st.email, st.address,
                 //                             rs1.mark AS AverageMarkSemester1, rs2.mark AS AverageMarkSemester2
                 //                     FROM STUDENT st, RESULT rs1 ,RESULT rs2 , CLASS cl
@@ -130,13 +132,22 @@ addAStudent = async function (student) {
         },
 
         getInfoStudentById_Search: async (idStudent, year) => {
+            // let query_string = `SELECT Student.name AS student_name, Class.name AS class_name,
+            //                     AVG(CASE WHEN Result._semester = 1 THEN Result.mark ELSE NULL END) AS avg_mark_semester1,
+            //                     AVG(CASE WHEN Result._semester = 2 THEN Result.mark ELSE NULL END) AS avg_mark_semester2
+            //                     FROM Student
+            //                     JOIN Class ON Student.class_id = Class.id
+            //                     JOIN Result ON Result.student_id = Student.id
+            //                     WHERE Result._year = '${year}' AND Student.id = '${idStudent}'
+            //                     GROUP BY Student.id, Student.name, Class.name`;
+
             let query_string = `SELECT Student.name AS student_name, Class.name AS class_name,
-                                AVG(CASE WHEN Result._semester = 1 THEN Result.mark ELSE NULL END) AS avg_mark_semester1,
-                                AVG(CASE WHEN Result._semester = 2 THEN Result.mark ELSE NULL END) AS avg_mark_semester2
+                                    COALESCE(AVG(CASE WHEN Result._semester = 1 THEN Result.mark ELSE NULL END), 0) AS avg_mark_semester1,
+                                    COALESCE(AVG(CASE WHEN Result._semester = 2 THEN Result.mark ELSE NULL END), 0) AS avg_mark_semester2
                                 FROM Student
                                 JOIN Class ON Student.class_id = Class.id
-                                JOIN Result ON Result.student_id = Student.id
-                                WHERE Result._year = '${year}' AND Student.id = '${idStudent}'
+                                LEFT JOIN Result ON Result.student_id = Student.id AND Result._year = '${year}'
+                                WHERE Student.id = '${idStudent}'
                                 GROUP BY Student.id, Student.name, Class.name`;
 
             let result = (await conn).query(query_string);
