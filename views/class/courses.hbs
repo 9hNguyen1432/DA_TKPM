@@ -23,14 +23,14 @@
                 <h5 style="margin: 5px auto; text-align: center;
                 border-bottom: 1px solid white; padding-bottom: 5px; margin-bottom: 5px; font-size:medium;">Danh sách
                     môn</h5>
-                <div onload="viewFirstCourse()">
+                <div>
                     {{#each ListCourse}}
-                    <button role="button" class="btn btn-light shadow mt-2 active"
-                        style="width: 100%; text-align: left; font-size: 14px;" onclick="viewCourseDetail(this)"
+                    <button role="button" class="btn btn-light shadow mt-2"
+                        style="width: 160px; text-align: left; font-size: 14px;" onclick="viewCourseDetail(this)"
                         data-course="{{this.name}}" data-class="{{@root.ClassName}}">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>{{plus1 @index}}. {{this.name}}</div>
-                            <img hidden src="/images/right-arrow.png" width="12" height="12">
+                            <img style="visibility: hidden;" src="/images/right-arrow.png" width="12" height="12">
                         </div>
                     </button>
                     {{/each}}
@@ -43,9 +43,9 @@
                     <div class="" data-bs-spy="scroll" data-bs-smooth-scroll="true" id="course-info">
                         <div class="" style="margin: 0px 200px;">
                             <div class=" d-flex  justify-content-between py-2 " style="padding-inline: 70px;">
-                                <div id="course_name">Môn: {{CourseName}}</div>
-                                <div> Kì: {{CurSem}}</div>
-                                <div> Năm học: {{CurYear}}</div>
+                                <div id="course_name">Môn: <strong>{{CourseName}}</strong></div>
+                                <div> Kì: <strong>{{CurSem}}</strong></div>
+                                <div> Năm học: <strong>{{CurYear}}</strong></div>
                             </div>
                         </div>
                         <div class="table-responsive px-3" style="background-color: white; border-radius: 10px;">
@@ -73,12 +73,11 @@
                             </table>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-center " style="position: absolute; bottom: 10px; left: 250px;">
+                    <div class="d-flex justify-content-center " style="position: absolute; bottom: 10px; left: 300px;">
                         <a href="/class/{{ClassName}}/course/CourseName/import?year={{CurYear}}&semester={{CurSem}}"
                             class="btn btn-sm btn-success mx-5" id="import_link">Thêm/Chỉnh sửa điểm</a>
                         <button onclick="downloadTranscript()" class="btn btn-sm btn-success mx-5" id="dowloadTranscript_link">
                             Tải bảng điểm</button>
-                        <a href="#" class="btn btn-sm btn-success mx-5">Xuất bảng điểm</a>
                     </div>
                 </div>
             </div>
