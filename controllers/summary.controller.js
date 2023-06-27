@@ -10,9 +10,9 @@ class SummaryController {
 
         let SemesterSummary = await SumModel.getSemeterSummary(year_str,sum_semester)
 
-        if(sum_semester==3){
-            sum_semester="Cả năm"
-        }
+        // if(sum_semester==3){
+        //     sum_semester="Cả năm"
+        // }
 
         res.render('summary/summary', { Years: list_year, CurYear: year_str, CurSem: sem_str, SemesterSummary, sum_semester });
     }
