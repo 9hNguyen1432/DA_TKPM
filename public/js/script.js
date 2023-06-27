@@ -162,7 +162,7 @@ function viewCourseDetail(item) {
     let cur_class = $(item).attr("data-class")
     let course_name = $(item).attr("data-course");
     currentCourse = course_name;
-    $('#course_name').text("Môn : " + course_name)
+    $('#course_name').children().eq(0).text(course_name)
 
     let import_link = $('#import_link').attr('href');
     let new_link_1 = import_link.replace("CourseName", course_name)
@@ -174,6 +174,17 @@ function viewCourseDetail(item) {
 
     $('#courses_detail_table tbody tr').remove();
     $('#courses_detail_table tbody div').remove();
+
+    let parent = $(item).parent();
+    var child_list = $(parent).children();
+    let old_active = parent.find('.active')
+    old_active.removeClass('active')
+    old_active_img=$(old_active).find('div img');
+    old_active_img.css('visibility','hidden')
+    
+    $(item).addClass('active')
+    new_active_img=$(item).find('div img');
+    new_active_img.css('visibility','visible')
 
     if ($('#transcript').css('visibility') == "hidden") {
         $('#transcript').css('visibility', "visible")
@@ -209,7 +220,7 @@ function viewFirstCourse() {
 
 }
 
-function downloadTranscript(){
+function downloadTranscript() {
     const year = $('#yearmenu-dropdown').attr("data-year");
     const semester = $('#semmenu-select').val();
     const className = document.querySelector('#class_name').getAttribute('data-class-name');
