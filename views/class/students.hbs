@@ -181,7 +181,7 @@
                             <div class="m-3">
                                 <label for="form-student-name">Họ và tên: </label>
                                 <input type="text" class="form-control" id="form-student-name" name="name"
-                                    style="width: 350px;">
+                                    style="width: 350px;" required>
                             </div>
 
                             <div class="d-flex m-3">
@@ -204,12 +204,12 @@
 
                             <div class="m-3">
                                 <label for="student-name">Ngày sinh: </label>
-                                <input type="date" class="form-control" id="birthday" name="dob">
+                                <input required type="date" class="form-control" id="birthday" name="dob">
                             </div>
 
                             <div class="m-3">
                                 <label for="student-name">Địa chỉ: </label>
-                                <input type="text" class="form-control" id="address" name="address">
+                                <input required type="text" class="form-control" id="address" name="address">
                             </div>
 
                         </div>
@@ -251,7 +251,7 @@
                 <form method="post" id="form-delete" action="">
                     <div class="m-3">
                         <label for="student-name">Nhập mật khẩu admin: </label>
-                        <input type="text" class="form-control mt-2" id="student-name" name="admin_password" style="width: 350px;">
+                        <input type="password" class="form-control mt-2" id="student-name" name="admin_password" style="width: 350px;">
                     </div>
                 </form>
                 <div class="text-danger mx-3">
