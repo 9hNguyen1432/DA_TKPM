@@ -291,6 +291,8 @@ BEGIN
 	DECLARE @max_id INT
 	DECLARE @new_id INT
 
+	SET @max_id=1
+
 	-- Khai báo con trỏ
 	DECLARE _cursor CURSOR FOR
 	SELECT id,name FROM CLASS
@@ -301,7 +303,6 @@ BEGIN
 
 	-- Lấy dòng đầu tiên
 	FETCH NEXT FROM _cursor INTO @id,@name
-	SET @max_id=@id
 
 	-- Duyệt qua các dòng trong bảng
 	WHILE @@FETCH_STATUS = 0
