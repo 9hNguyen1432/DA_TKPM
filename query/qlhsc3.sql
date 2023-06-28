@@ -286,69 +286,32 @@ AS
 BEGIN
 	--tạo id
 	--khai báo biến
-    DECLARE @id INT
 	DECLARE @name VARCHAR(10)
-	DECLARE @max_id INT
-	DECLARE @new_id INT
-
-	SET @max_id=1
-
 	-- Khai báo con trỏ
 	DECLARE _cursor CURSOR FOR
-	SELECT id,name FROM CLASS
+	SELECT name FROM CLASS
 	WHERE _year=@_year
-
 	-- Mở con trỏ
 	OPEN _cursor
-
 	-- Lấy dòng đầu tiên
-	FETCH NEXT FROM _cursor INTO @id,@name
-
+	FETCH NEXT FROM _cursor INTO @name
 	-- Duyệt qua các dòng trong bảng
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
 		IF @name=@_class_name
 			RETURN null
-		IF @max_id<@id
-			SET @max_id=@id
 		-- Lấy dòng tiếp theo
-		FETCH NEXT FROM _cursor INTO @id,@name
+		FETCH NEXT FROM _cursor INTO @name
 	END
-
 	-- Đóng con trỏ
 	CLOSE _cursor
 	DEALLOCATE _cursor
-
-	--new id
-	SET @new_id=(@max_id+1);
-
 	--lấy số học sinh mặc định
 	DECLARE @number_student INT
-
-	IF @_grade=10
-		BEGIN
-			SELECT @number_student = num_of_class_10	
-			FROM PARAMETERS
-			WHERE _year=@_year
-		END
-	ELSE IF @_grade=11
-		BEGIN
-			SELECT @number_student = num_of_class_11
-			FROM PARAMETERS
-			WHERE _year=@_year
-		END
-	ELSE IF @_grade=12
-		BEGIN
-			SELECT @number_student = num_of_class_12
-			FROM PARAMETERS
-			WHERE _year=@_year
-		END
-	
 	--insert
-	SET IDENTITY_INSERT CLASS ON
-	INSERT INTO CLASS(id,name,amount_student,_year,teacher) VALUES (@new_id,@_class_name,@number_student,@_year,@_teacher)
-	SET IDENTITY_INSERT CLASS OFF
+	INSERT INTO CLASS VALUES (@_class_name,0,@_year,@_teacher)
 END
+
 
 --drop procedure create_class
 --EXEC create_class '2021-2022', 11, '11C4', N'Lê Thị Ngọc Bích'
