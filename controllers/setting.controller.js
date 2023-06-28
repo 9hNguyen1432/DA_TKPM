@@ -36,16 +36,16 @@ class SettingPageController {
         console.log(cur_year,cur_sem)
         var mess = ""
         try {
-            await Model.addYear(start_year, end_year)
+            await yearModel.addYear(start_year,end_year)
             req.flash('message', 'Action Successful.');
         }
         catch (e) {
             req.flash('message', 'Action Failed !!!');
         }
 
-        await yearModel.addYear(start_year,end_year)
+        let year_str=""+start_year+"-"+(parseInt(start_year)+1)
 
-        res.redirect(`/`)
+        res.redirect(`/class?year=${year_str}&semester=1`)
     }
 }
 
