@@ -14,7 +14,6 @@ const isExitsRegulation = async (regulation) => {
     try {
         var query_string = `SELECT * FROM PARAMETERS WHERE _year = '${regulation._year}'`;
         let result = (await conn).query(query_string);
-        console.log(regulation._year);
         return (await result).recordset.length > 0;
     } catch (error) {
         console.error(error);
@@ -42,7 +41,7 @@ exports.addRegulation = async (regulation) => {
 	                standard_score='${regulation.standard_score}'
             where _year = '${regulation._year}'
             `
-            console.log(query_string)
+
             return pool.request().query(query_string);
         }).then(result => {
             console.log(result.recordset);

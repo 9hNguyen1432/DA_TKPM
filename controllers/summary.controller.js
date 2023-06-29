@@ -9,7 +9,7 @@ class SummaryController {
         let sum_semester = req.query.sum_semester
 
         let SemesterSummary = await SumModel.getSemeterSummary(year_str,sum_semester)
-
+        console.log(SemesterSummary)
         // if(sum_semester==3){
         //     sum_semester="Cả năm"
         // }

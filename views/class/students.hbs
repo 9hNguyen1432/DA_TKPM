@@ -77,7 +77,9 @@
                                         {{#each this.summaryScore1}}
                                             <th scope="col" class="col-1">{{subject}}</th>
                                         {{/each}} 
+                                        {{#if this.summaryScore1}}
                                         <th scope="col" class="col-1">Tổng kết</th>
+                                        {{/if}}
                                     </tr>
                                 </thead>
                                  <tbody data-bs-spy="scroll" data-bs-smooth-scroll="true">
@@ -108,7 +110,7 @@
                                             <td>{{this.DTB}}</td>
                                         {{/each}}
 
-                                         <td>{{summaryYear.DTB}}</td>
+                                         <td>{{summaryYear.0.DTB}}</td>
                                     </tr>
                                     {{/if}}
 

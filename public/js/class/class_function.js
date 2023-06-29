@@ -157,6 +157,7 @@ document.querySelectorAll('.view-student').forEach(button => {
         formStudent.querySelector('#dob').innerHTML =student.dob
         formStudent.querySelector('#address').innerHTML =student.address
         formStudent.querySelector('#score1-summary').innerHTML = student.scoreSemester[0].DTB
+
         if( student.scoreSemester[1]){
             formStudent.querySelector('#score2-summary').innerHTML = student.scoreSemester[1].DTB 
         }
@@ -169,8 +170,6 @@ document.querySelectorAll('.view-student').forEach(button => {
 
         const btnSemester1 = formStudent.querySelector('#score-hk1');
         const btnSemester2 = formStudent.querySelector('#score-hk2');
-
-        console.log(student)
 
         showListScore(student.scoreDetail1, tableScore);
         btnSemester1.style.color = 'red';
