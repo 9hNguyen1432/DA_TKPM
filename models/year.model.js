@@ -21,6 +21,18 @@ module.exports = {
             console.error(error);
             return null;
         }
+    },
+    addSemester: async (start_year, end_year) => {
+        let year_str = ""+start_year+"-"+end_year
+        try {
+            var query_string = `INSERT INTO SEMESTER VALUES(1,'${year_str}')
+                                INSERT INTO SEMESTER VALUES(2,'${year_str}')`;
+            let result = (await conn).query(query_string)
+            return result;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
     }
 }
 

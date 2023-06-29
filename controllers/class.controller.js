@@ -123,38 +123,10 @@ class ClassPageController {
 
         let score_board = await SubjectModel.getSubjectTranscriptOfClass(year_str,sem_str,class_name,course_name)
 
-        // const data = [
-        //     {
-        //         STT: 1,
-        //         Name: "Lê Thị Ngọc Bích",
-        //         Test_15min: 10.0,
-        //         Test_45min: 9.5,
-        //         Final: 9.8
-        //     },
-        //     {
-        //         STT: 1,
-        //         Name: "Lê Thị Ngọc Bích",
-        //         Test_15min: 10.0,
-        //         Test_45min: 9.5,
-        //         Final: 9.8
-        //     }
-        // ];
         console.log(score_board)
         res.setHeader('Content-Type', 'application/json');
         res.json(score_board);
 
-
-        // res.render('class/courses_detail',
-        //     {
-        //         ClassName: class_name,
-        //         Teacher: "Lê Thị Ngọc Bích",
-        //         StudentNumber: 100,
-        //         CourseName: course_name,
-        //         Years: list_year,
-        //         CurYear: year_str,
-        //         CurSem: sem_str,
-        //         ScoreBoard: score_board
-        //     });
     }
 
     async downloadStudentsOfClass_CSV(req, res) {

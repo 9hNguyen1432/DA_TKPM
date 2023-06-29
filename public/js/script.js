@@ -125,12 +125,15 @@ document.addEventListener("DOMContentLoaded", function () {
     activeYear(document.getElementById("yearmenu-dropdown"));
     activeSem(document.getElementById("semmenu-select"))
     let item = document.getElementById("summary-semester-dropdown")
-    if (item !== undefined && item !== null)
+    if (item !== undefined && item !== null) {
         activeSemesterInSummary(item)
+    }
+
+    $('#addYearModal').on('shown.bs.modal', loadAddYearForm())
 });
 
 setTimeout(function () {
-    $('.alert').alert('close');
+    $('.alert-fade').alert('close');
 }, 5000);
 
 function validateAddClassForm() {
@@ -179,12 +182,12 @@ function viewCourseDetail(item) {
     var child_list = $(parent).children();
     let old_active = parent.find('.active')
     old_active.removeClass('active')
-    old_active_img=$(old_active).find('div img');
-    old_active_img.css('visibility','hidden')
-    
+    old_active_img = $(old_active).find('div img');
+    old_active_img.css('visibility', 'hidden')
+
     $(item).addClass('active')
-    new_active_img=$(item).find('div img');
-    new_active_img.css('visibility','visible')
+    new_active_img = $(item).find('div img');
+    new_active_img.css('visibility', 'visible')
 
     if ($('#transcript').css('visibility') == "hidden") {
         $('#transcript').css('visibility', "visible")
@@ -216,8 +219,11 @@ function viewCourseDetail(item) {
 }
 
 
-function viewFirstCourse() {
+function changeStartYear(item) {
+    let start_year = $(item).val()
+    let end_year = parseInt(start_year) + 1;
 
+    $('#end_year').val(end_year)
 }
 
 function downloadTranscript() {
@@ -236,4 +242,161 @@ function downloadTranscript() {
 
 
 
+function loadAddYearForm() {
 
+    let cur_year = $("#addYearForm").attr("data-year")
+
+    let start_year = cur_year.slice(0, 4);
+    $("#start_year").val(start_year)
+    $("#end_year").val(parseInt(start_year) + 1)
+
+    $.ajax({
+        type: "get",
+        url: "/setting/data?year=" + cur_year,
+        data: {
+        },
+        success: function (data) {
+            if (data != null && data.length != 0) {
+                console.log(data)
+
+                $('#addYearForm input[name="min_age"]').val(data.min_age);
+                $('#addYearForm input[name="max_age"]').val(data.max_age);
+                $('#addYearForm input[name="max_student"]').val(data.max_student);
+                $('#addYearForm input[name="standard_score"]').val(data.standard_score);
+                $('#addYearForm input[name="num_of_class_10"]').val(data.num_of_class_10);
+                // $('#addYearForm input[name="name_class_10"]').val(data.name_class_10);
+                $('#addYearForm input[name="num_of_class_11"]').val(data.num_of_class_11);
+                // $('#addYearForm input[name="name_class_11"]').val(data.name_class_11);
+                $('#addYearForm input[name="num_of_class_12"]').val(data.num_of_class_12);
+                // $('#addYearForm input[name="name_class_12"]').val(data.name_class_12);
+                $('#addYearForm input[name="num_of_subject"]').val(data.num_of_subject);
+                // $('#addYearForm input[name="name_of_subject"]').val(data.name_of_subject);
+
+                //name class 10
+                let container_alert_10 = $('#alerts-name-class-10')
+                let hidden_input_10 = $(container_alert_10).next().next()
+                hidden_input_10.val(data.name_class_10.trim())
+                let arr_10 = data.name_class_10.split(", ");
+                for (let i = 0; i < arr_10.length; i++) {
+                    addAlert(arr_10[i], container_alert_10)
+                }
+
+                //name class 11
+                let container_alert_11 = $('#alerts-name-class-11')
+                let hidden_input_11 = $(container_alert_11).next().next()
+                hidden_input_11.val(data.name_class_11.trim())
+                let arr_11 = data.name_class_11.split(", ");
+                for (let i = 0; i < arr_11.length; i++) {
+                    addAlert(arr_11[i], container_alert_11)
+                }
+
+                //name class 10
+                let container_alert_12 = $('#alerts-name-class-12')
+                let hidden_input_12 = $(container_alert_12).next().next()
+                hidden_input_12.val(data.name_class_12.trim())
+                let arr_12 = data.name_class_12.split(", ");
+                for (let i = 0; i < arr_12.length; i++) {
+                    addAlert(arr_12[i], container_alert_12)
+                }
+
+                //name course
+                let container_alert_course = $('#alerts-name-course')
+                let hidden_input_course = $(container_alert_course).next().next()
+                hidden_input_course.val(data.name_of_subject.trim())
+                let arr_course = data.name_of_subject.split(", ");
+                for (let i = 0; i < arr_course.length; i++) {
+                    addAlert(arr_course[i], container_alert_course)
+                }
+            }
+
+        },
+        error: function (res) {
+            // var notice = $('<div>').text("Dữ liệu không tồn tại !")
+            // $('#courses_detail_table tbody').append(notice)
+        }
+    });
+}
+
+function addAlert(_text, _container) {
+    // Tạo phần tử div
+    var div = $('<div>', {
+        'class': 'alert flex alert-success alert-dismissible show me-2',
+        'role': 'alert',
+        'style': 'width: fit-content; padding: 5px;min-width: fit-content; padding-right: 35px'
+    });
+
+    // Tạo phần tử strong và đặt nội dung
+    var strong = $('<strong>').text(_text);
+
+    // Tạo phần tử button
+    var button = $('<button>', {
+        'type': 'button',
+        'class': 'btn-close',
+        'data-bs-dismiss': 'alert',
+        'style': 'padding: 10px;',
+        'aria-label': 'Close'
+    });
+
+    // Gắn strong và button vào div
+    div.append(strong, button);
+
+    // Gắn div vào một phần tử có id là 'container'
+    $(_container).append(div);
+    $(_container).scrollLeft($(_container)[0].scrollWidth);
+}
+
+function addClass_BtnClick(item) {
+    let new_class = $(item).prev().val().trim()
+    if (new_class == undefined || new_class == null || new_class == "") {
+        return;
+    }
+
+    let container = $(item).parent().parent().next();
+    let error_div = $(container).next()
+    let info = ""
+
+    let grade = $(item).attr('data-grade');
+    if (grade == undefined || grade == null) {
+        grade = ""
+        info = "môn"
+    } else {
+        info = "lớp"
+    }
+
+    //check ten lop
+    if (grade != "" && new_class.slice(0, 2) != grade) {
+        $(error_div).text('Hai ký tự đầu phải trùng với khối học.')
+        return;
+    }
+
+    let child_list = $(container).children()
+    let number_default = $(container).parent().parent().prev().find('div input').val()
+
+    //check so luong
+    if(number_default<=child_list.length){
+        $(error_div).text('Đã đủ số lượng '+info+' học mặc định: '+number_default)
+        return;
+    }
+
+    //check trung ten
+    for (let i = 0; i < child_list.length; i++) {
+        let child = child_list.eq(i).find('strong')
+
+        if (child.text() == new_class) {
+            $(error_div).text("Trùng tên " + info + " học đã có.")
+            return;
+        }
+    }
+
+    //add
+    let hidden_input = $(error_div).next();
+    if(hidden_input.val().trim()==""){
+        hidden_input.val(new_class)
+    }
+    else{
+        hidden_input.val(hidden_input.val()+", "+new_class)
+    }
+
+    addAlert(new_class, container)
+    $(error_div).text('')
+}

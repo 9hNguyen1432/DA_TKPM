@@ -1,8 +1,8 @@
 // information to connect to database
 var config = {
-    server: "TOAINGUYEN\\SQLEXPRESS",
-    user: "toainguyenvan",
-    password: "toainguyenvan",
+    server: "PANDA\\SQLEXPRESS01",
+    user: "sa",
+    password: "1",
     database: "QLHSC3",
     options: {
         trustedConnection: true,

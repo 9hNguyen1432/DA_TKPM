@@ -25,7 +25,13 @@ module.exports = (app) => {
           console.log(out)
           return out;
         },
+        splitString: function (_string, _delimiter) {
+          if (!string) {
+            return [];
+          }
 
+          return string.split(delimiter);
+        }
         // ifNotEqualZero: function (value,status , options) {
         //   if (value > 0) {
         //     return value;
