@@ -17,7 +17,12 @@ async function getAnSubjectResult(student_id, subject_id, _semester, _year) {
 }
 module.exports = {
     getAnSubjectResult,
-    getInfoOfSubject: async (idSubject, idClass) => {
+    addNewSubject: async (idSubject, idClass) =>{
+        //do add new subject in table SUBJECT and CLASS_SUBJECT
+
+        
+    },
+    getInfoOfSubject: async (_year, _sbj_name) => {
         try {
 
         } catch (error) {
