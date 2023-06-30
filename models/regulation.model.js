@@ -10,9 +10,9 @@ exports.getRegulation = async (year) => {
         return null;
     }
 }
-const isExitsRegulation = async (regulation) => {
+const isExitsRegulation = async (_year) => {
     try {
-        var query_string = `SELECT * FROM PARAMETERS WHERE _year = '${regulation._year}'`;
+        var query_string = `SELECT * FROM PARAMETERS WHERE _year = '${_year}'`;
         let result = (await conn).query(query_string);
         return (await result).recordset.length > 0;
     } catch (error) {
@@ -21,10 +21,14 @@ const isExitsRegulation = async (regulation) => {
     }
 }
 exports.addRegulation = async (regulation) => {
+
+    var _year=regulation._year;
+    if(_year==undefined||_year==null){
+        _year=""+regulation.start_year+"-"+(parseInt(regulation.start_year)+1)
+    }
     //
-    console.log(regulation._year)
-    console.log(await isExitsRegulation(regulation))
-    if (await isExitsRegulation(regulation)) {
+    console.log(_year)
+    if (await isExitsRegulation(_year)) {
         conn.then(pool => {
             let query_string = `update PARAMETERS SET
 	                min_age='${regulation.min_age}',
@@ -39,7 +43,7 @@ exports.addRegulation = async (regulation) => {
 	                num_of_subject='${regulation.num_of_subject}',
 	                name_of_subject=N'${regulation.name_of_subject}',
 	                standard_score='${regulation.standard_score}'
-            where _year = '${regulation._year}'
+            where _year = '${_year}'
             `
 
             return pool.request().query(query_string);
@@ -66,7 +70,7 @@ exports.addRegulation = async (regulation) => {
             num_of_subject,
             name_of_subject,
             standard_score)
-            values ('${regulation._year}',
+            values ('${_year}',
             '${regulation.min_age}',
             '${regulation.max_age}',
             '${regulation.max_student}',
