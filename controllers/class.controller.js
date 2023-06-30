@@ -67,7 +67,7 @@ class ClassPageController {
             }
 
             _student.summarySemester = await student.getSummaryScoreBySemester(_student.id,year_str);
-            _student.summarYear = await student.getSummaryScoreByYear(_student.id,year_str)
+            _student.summaryYear = await student.getSummaryScoreByYear(_student.id,year_str)    
           }
 
         
@@ -150,7 +150,6 @@ class ClassPageController {
         const semester = req.query.semester;
         const subjectName = req.params.course_name;
         const data = await subject.getSubjectTranscriptOfClass(year, semester,className, subjectName);
-        console.log("DATA:" + data);
         let jsonData = convertToCSVFormat(data);
 
         res.send(jsonData);
@@ -175,12 +174,23 @@ class ClassPageController {
         let classinfo = await mo.getClass(className, year);
         let curId = await student.getTheNewestStudentID(className,year);
         var rule = await regulation.getRegulation(year);
+        
+        const age = (new Date()).getFullYear() - (new Date(studentData.dob)).getFullYear();
+        
+        if(age< rule.min_age || age > rule.max_age){
+            req.flash('message', 'Độ tuổi không phù hợp.');
+            res.redirect(`/class/${className}?year=${year}&semester=${semester}`);
+            return;
+            
+        }
 
         let amountStudent = classinfo.amount_student;
         if (amountStudent >= rule.max_student) {
             req.flash('message', `Số học sinh đã là tối đa (${rule.max_student}).`);
             res.redirect(`/class/${className}?year=${year}&semester=${semester}`);
+            return;
         }
+        
         studentData.id = curId;
         studentData.class_id = classinfo.id;
         if (studentData.gender == 'male') {
@@ -392,20 +402,14 @@ class ClassPageController {
         let class_name = params.class_name;
 
 
-
-        console.log(params);
-        //get current class
         let allClass = await mo.getAllClassInYear(year_str);
         let allClassName = allClass.map(_class => _class.name);
-        console.log(allClassName);
+
         var listStudent = await student.getListStudentInClass_2(class_name, year_str);
         let listStudentWithIdAndName = listStudent.map(e => { return { id: e.id[0], fullName: e.name[0] } });
 
         let allSubject = await subject.getAllSubjectInYear(year_str);
         let allSubjectName = allSubject.map(e => e.name);
-
-
-
 
         res.render('class/import_score', {
             user,
@@ -463,7 +467,6 @@ class ClassPageController {
         catch (err) {
             console.log(err)
             res.render('class/home')
-
         }
 
     }
@@ -474,11 +477,11 @@ class ClassPageController {
         let year = req.query.year
 
         try {
-            await ClassModel.addClass(year, grade, class_name, teacher);
-            req.flash('message', `Thành công: Đã thêm lớp ${class_name}`);
+            await ClassModel.addClass(year, grade, class_name, teacher)? req.flash('message', `Thành công: Đã thêm lớp ${class_name}`):  req.flash('message', `Thất bại: ${class_name} tên lớp học không hợp lệ.`);
+            
         } catch (e) {
             console.log(e.message);
-            req.flash('message', `Thất bại: ${class_name} tên lớp học bị trùng.`);
+            req.flash('message', `Thất bại: ${class_name} tên lớp học không hợp lệ.`);
         }
 
         //reload

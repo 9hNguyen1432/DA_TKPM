@@ -195,12 +195,12 @@ addAStudent = async function (student) {
         },
 
         getSummaryScoreByYear: async(studentID,year) => {
-        const queryString =`select AVG(ER.mark) as DTB from EXAM_RESULT ER, EXAM EX, SUBJECT sb  
-        WHERE ER.exam_id = EX.id and SB.id = EX.subject_id AND ER.student_id = '${studentID}' AND EX._year='${year}'
-        GROUP BY ex._year`
+            const queryString =`select AVG(ER.mark) as DTB from EXAM_RESULT ER, EXAM EX, SUBJECT sb  
+            WHERE ER.exam_id = EX.id and SB.id = EX.subject_id AND ER.student_id = '${studentID}' AND EX._year='${year}'
+            GROUP BY ex._year`
 
-        let result = (await conn).query(queryString);
-        return (await result).recordset;
+            let result = (await conn).query(queryString);
+            return (await result).recordset;
         },
 
         getScoreDetailOfStudent: async(studentID,semester,year) =>{

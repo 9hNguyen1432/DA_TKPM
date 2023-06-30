@@ -121,37 +121,47 @@
                 var isValid = true;
                 var minage = document.getElementById('minage').value;
                 var maxage = document.getElementById('maxage').value;
-                console.log(minage)
-                console.log(maxage)
+
+                var numClass10 = document.getElementById('numClass10').value;
+                var nameClass10 = document.getElementById('nameClass10').value;
+
+                var numClass11 = document.getElementById('numClass11').value;
+                var nameClass11 = document.getElementById('nameClass11').value;
+
+                var numClass12 = document.getElementById('numClass12').value;
+                var nameClass12 = document.getElementById('nameClass12').value;
+
+                var numSubject = document.getElementById('numSubject').value;
+                var nameSubject = document.getElementById('nameSubject').value;
+                
+                if(minage =='' || maxage ==''|| numClass10 ==''  || numClass11=='' || numClass12==''|| numSubject ==''){
+                     document.getElementById('warning').innerHTML = "*Vui lòng điền đầy đủ thông tin. ";
+                     return
+                }
+
                 if(maxage < minage){
                     document.getElementById('warning').innerHTML = "Tuổi tối đa không nhỏ hơn tuổi tối thiểu!";
                     return
                 }
 
-
-                var numClass10 = document.getElementById('numClass10').value;
-                var nameClass10 = document.getElementById('nameClass10').value;
                 isValid = isValid && isValidListClass(numClass10, nameClass10, "10");
                 if (!isValid) {
                     document.getElementById('warning').innerHTML = "Thông tin các lớp 10 không hợp lệ, Chắc chắn rằng tên các lớp cách nhau bởi dấu \",\" và số lớp trùng với số lượng đã nêu.";
                     return
                 }
-                var numClass11 = document.getElementById('numClass11').value;
-                var nameClass11 = document.getElementById('nameClass11').value;
+                
                 isValid = isValid && isValidListClass(numClass11, nameClass11, "11");
                 if (!isValid) {
                     document.getElementById('warning').innerHTML = "Tên các lớp 11 không hợp lệ, Chắc chắn rằng tên các lớp cách nhau bởi dấu \",\" và số lớp trùng với số lượng đã nêu.";
                     return
                 }
-                var numClass12 = document.getElementById('numClass12').value;
-                var nameClass12 = document.getElementById('nameClass12').value;
+                
                 isValid = isValid && isValidListClass(numClass12, nameClass12, "12");
                 if (!isValid) {
                     document.getElementById('warning').innerHTML = "Tên các lớp 12 không hợp lệ, Chắc chắn rằng tên các lớp cách nhau bởi dấu \",\" và số lớp trùng với số lượng đã nêu.";
                     return
                 }
-                var numSubject = document.getElementById('numSubject').value;
-                var nameSubject = document.getElementById('nameSubject').value;
+                
 
                 isValid = isValid && isValidListSubject(numSubject, nameSubject);
                 if (!isValid) {
@@ -171,6 +181,7 @@
                     if (numOfClass <= 0) {
                         return false;
                     }
+                    
                     let listClassName = classNames.split(',');
                     if (listClassName.length != numOfClass) {
                         return false;

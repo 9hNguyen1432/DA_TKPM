@@ -168,9 +168,9 @@ function viewCourseDetail(item) {
     $('#course_name').children().eq(0).text(course_name)
 
     let import_link = $('#import_link').attr('href');
-    let new_link_1 = import_link.replace("CourseName", course_name)
+    let new_link_1 = import_link.split('/');
+    new_link_1[4] = course_name; new_link_1 = new_link_1.join('/');
     $('#import_link').attr('href', new_link_1)
-
     // let dowloadTranscript_link = $('#dowloadTranscript_link').attr('href');
     // let new_link_2 = dowloadTranscript_link.replace("CourseName",course_name)
     // $('#dowloadTranscript_link').attr('href',new_link_2)
@@ -191,8 +191,7 @@ function viewCourseDetail(item) {
 
     if ($('#transcript').css('visibility') == "hidden") {
         $('#transcript').css('visibility', "visible")
-    }
-
+    } ``
     $.ajax({
         type: "get",
         url: "/class/" + cur_class + "/course/" + course_name + "?year=" + cur_year + "&semester=" + cur_semester,
