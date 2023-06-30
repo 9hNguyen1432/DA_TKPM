@@ -332,9 +332,9 @@ function addAlert(_text, _container) {
     var button = $('<button>', {
         'type': 'button',
         'class': 'btn-close',
-        'data-bs-dismiss': 'alert',
         'style': 'padding: 10px;',
-        'aria-label': 'Close'
+        'aria-label': 'Close',
+        'onclick': 'removeAlert(this)'
     });
 
     // Gắn strong và button vào div
@@ -373,8 +373,8 @@ function addClass_BtnClick(item) {
     let number_default = $(container).parent().parent().prev().find('div input').val()
 
     //check so luong
-    if(number_default<=child_list.length){
-        $(error_div).text('Đã đủ số lượng '+info+' học mặc định: '+number_default)
+    if (number_default <= child_list.length) {
+        $(error_div).text('Đã đủ số lượng ' + info + ' học mặc định: ' + number_default)
         return;
     }
 
@@ -390,13 +390,85 @@ function addClass_BtnClick(item) {
 
     //add
     let hidden_input = $(error_div).next();
-    if(hidden_input.val().trim()==""){
+    if (hidden_input.val().trim() == "") {
         hidden_input.val(new_class)
     }
-    else{
-        hidden_input.val(hidden_input.val()+", "+new_class)
+    else {
+        hidden_input.val(hidden_input.val() + ", " + new_class)
     }
 
     addAlert(new_class, container)
     $(error_div).text('')
+}
+
+function removeAlert(item) {
+    let hidden_input = $(item).parent().parent().next().next();
+    let hidden_text = hidden_input.val()
+
+    let _text = $(item).prev().text();
+
+    let new_text = hidden_text.split(", " + _text).join("");
+
+    hidden_input.val(new_text)
+    $(item).parent().remove()
+}
+
+function validateAddYearForm() {
+    var result = true;
+
+    //check age
+    var minage = document.forms["addYearForm"]["min_age"].value;
+    var maxage = document.forms["addYearForm"]["max_age"].value;
+    if (maxage < minage) {
+        $("#error-chung").text('Tuổi tối đa phải lớn hơn tuổi tối thiểu.')
+        result=false;
+    }
+
+    //check number student max
+    var number_student_max = document.forms["addYearForm"]["max_student"].value;
+    if(number_student_max<=0){
+        $("#error-chung").text('Số lượng học sinh tối đa phải dương (>0).')
+        result=false;
+    }
+
+    //check standard score
+    var standard_score = document.forms["addYearForm"]["standard_score"].value;
+    if(standard_score<=0.25){
+        $("#error-chung").text('Điểm chuẩn phải dương (>0).')
+        result=false;
+    }
+
+    //check number class 10
+    let class_10_str = document.forms["addYearForm"]["name_class_10"].value;
+    let number_class_10 = document.forms["addYearForm"]["num_of_class_10"].value
+    if (class_10_str.split(", ").length != number_class_10) {
+        $("#error-class-10").text('Không đúng với số lớp đã nhập: '+number_class_10)
+        result = false;
+    }
+
+    //check number class 11
+    let class_11_str = document.forms["addYearForm"]["name_class_11"].value;
+    let number_class_11 = document.forms["addYearForm"]["num_of_class_11"].value
+    if (class_11_str.split(", ").length != number_class_11) {
+        $("#error-class-11").text('Không đúng với số lớp đã nhập: '+number_class_11)
+        result = false;
+    }
+
+    //check number class 12
+    let class_12_str = document.forms["addYearForm"]["name_class_12"].value;
+    let number_class_12 = document.forms["addYearForm"]["num_of_class_12"].value
+    if (class_12_str.split(", ").length != number_class_12) {
+        $("#error-class-12").text('Không đúng với số lớp đã nhập: '+number_class_12)
+        result = false;
+    }
+
+    //check list course
+    let course_str = document.forms["addYearForm"]["name_of_subject"].value;
+    let num_of_subject = document.forms["addYearForm"]["num_of_subject"].value
+    if (course_str.split(", ").length != num_of_subject) {
+        $("#error-course").text('Không đúng với số môn đã nhập: '+num_of_subject)
+        result = false;
+    }
+
+    return result;
 }

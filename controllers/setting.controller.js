@@ -42,7 +42,7 @@ class SettingPageController {
         const regulation = req.body;
 
         let start_year = regulation.start_year;
-        let end_year = parseInt(start_year)+1;
+        let end_year = parseInt(start_year) + 1;
 
         let cur_year = req.query.year
         let cur_sem = req.query.semester
@@ -73,20 +73,20 @@ class SettingPageController {
         //add Class
         try {
             let classes_10 = regulation.name_class_10.split(", ")
-            for (let i = 0; classes_10; i++) {
+            for (let i = 0; i < classes_10.length; i++) {
                 await classModel.addClass(year_str, 10, classes_10[i], "")
             }
 
             let classes_11 = regulation.name_class_11.split(", ")
-            for (let i = 0; classes_11; i++) {
+            for (let i = 0; i < classes_11.length; i++) {
                 await classModel.addClass(year_str, 11, classes_11[i], "")
             }
 
             let classes_12 = regulation.name_class_12.split(", ")
-            for (let i = 0; classes_12; i++) {
+            for (let i = 0; i < classes_12.length; i++) {
                 await classModel.addClass(year_str, 12, classes_12[i], "")
             }
-            
+
             mess += "Thêm lớp học thành công.\n";
         }
         catch (e) {
@@ -95,11 +95,10 @@ class SettingPageController {
 
         //add Course
         try {
-            // let courses = regulation.name_of_subject.split(", ")
-            // for (let i = 0; courses; i++) {
-            //     await classModel.addClass(year_str, 10, courses[i], "")
-            // }
-            // await subjectModel.a
+            let courses = regulation.name_of_subject.split(", ")
+            for (let i = 0; i < courses.length; i++) {
+                await subjectModel.addNewSubject(courses[i], year_str)
+            }
             mess += "Thêm môn học thành công.\n";
         }
         catch (e) {
@@ -107,7 +106,13 @@ class SettingPageController {
         }
 
         //add Regulation
-
+        try {
+            await reguModel.addRegulation(regulation)
+            mess += "Thêm quy định thành công.\n";
+        }
+        catch (e) {
+            mess += "Thêm quy định thất bại.\n";
+        }
 
         req.flash('message', mess);
 

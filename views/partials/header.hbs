@@ -85,9 +85,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/setting/add_year?year={{CurYear}}&semester={{CurSem}}" method="post" id="addYearForm"
-                    style="margin-top: -10px;
-                padding-inline: 5%;" data-year="{{CurYear}}">
+                <form action="/setting/add_year?year={{CurYear}}&semester={{CurSem}}" method="post" id="addYearForm" name="addYearForm"
+                    style="margin-top: -10px; padding-inline: 5%;" data-year="{{CurYear}}" onsubmit="return validateAddYearForm()">
                     <div class="d-flex pb-1">
                         <div style="margin-left: 25%;">
                             <label for="start_year" style="width: 120px;">Năm bắt đầu:</label>
@@ -128,6 +127,7 @@
 
                             </div>
                         </div>
+                        <div class="error" id="error-chung" style="font-size: medium; color: red"></div>
                     </div>
                     <div class="row border-bottom p-1">
                         <div class="col-4">
@@ -154,8 +154,8 @@
                                     style="overflow-x: auto; white-space: nowrap;">
 
                                 </div>
-                                <div class="error" style="font-size: medium; color: red"></div>
-                                <input type="text" class="form-control py-0" id="nameClass10" name="name_class_10" hidden>
+                                <div class="error" id="error-class-10" style="font-size: medium; color: red"></div>
+                                <input type="text" class="form-control py-0" id="nameClass10" name="name_class_10">
                             </div>
                         </div>
                     </div>
@@ -185,8 +185,8 @@
                                     style="overflow-x: auto; white-space: nowrap;">
 
                                 </div>
-                                <div class="error" style="font-size: medium; color: red"></div>
-                                <input type="text" class="form-control" id="nameClass11" name="name_class_11" hidden>
+                                <div class="error" id="error-class-11" style="font-size: medium; color: red"></div>
+                                <input type="text" class="form-control" id="nameClass11" name="name_class_11">
                             </div>
                         </div>
                     </div>
@@ -217,8 +217,8 @@
                                     style="overflow-x: auto; white-space: nowrap;">
 
                                 </div>
-                                <div class="error" style="font-size: medium; color: red"></div>
-                                <input type="text" class="form-control" id="nameClass12" name="name_class_12" hidden>
+                                <div class="error" id="error-class-12" style="font-size: medium; color: red"></div>
+                                <input type="text" class="form-control" id="nameClass12" name="name_class_12">
                             </div>
                         </div>
                     </div>
@@ -249,8 +249,8 @@
                                     style="overflow-x: auto; white-space: nowrap; width: 100%;">
 
                                 </div>
-                                <div class="error" style="font-size: medium; color: red"></div>
-                                <input type="text" class="form-control" id="nameSubject" name="name_of_subject" hidden>
+                                <div class="error" id="error-course" style="font-size: medium; color: red"></div>
+                                <input type="text" class="form-control" id="nameSubject" name="name_of_subject">
                             </div>
                         </div>
                     </div>
