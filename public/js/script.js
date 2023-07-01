@@ -203,9 +203,9 @@ function viewCourseDetail(item) {
                 // Add cells to the new row
                 newRow.append($(`<th scope="row">`).text(data[i].ID));
                 newRow.append($('<td>').text(data[i].Name));
-                newRow.append($('<td>').text(data[i].exam_15));
-                newRow.append($('<td>').text(data[i].exam_45));
-                newRow.append($('<td>').text(data[i].exam_Sem));
+                newRow.append($('<td>').text(data[i].exam_15.toFixed(2)));
+                newRow.append($('<td>').text(data[i].exam_45.toFixed(2)));
+                newRow.append($('<td>').text(data[i].exam_Sem.toFixed(2)));
                 // Add the new row to the table body
                 $('#courses_detail_table tbody').append(newRow);
             }
@@ -244,6 +244,9 @@ function downloadTranscript() {
 function loadAddYearForm() {
 
     let cur_year = $("#addYearForm").attr("data-year")
+
+    if (cur_year == undefined)
+        return;
 
     let start_year = cur_year.slice(0, 4);
     $("#start_year").val(start_year)
@@ -416,18 +419,18 @@ function validateAddYearForm(element) {
     var result = true;
 
     var year = document.forms["addYearForm"]["start_year"].value;
-    year = year + "-"+ (parseInt(year) + 1);
+    year = year + "-" + (parseInt(year) + 1);
 
     let checkAddYear = document.getElementById("checkAddYear").getAttribute("data-title");
     let yearsData = element.dataset.years;
     yearsData = JSON.parse(yearsData.substring(0, yearsData.length - 1)).map(e => e._year);
     console.log(yearsData);
-    if(checkAddYear === "THÊM NĂM HỌC MỚI"){
+    if (checkAddYear === "THÊM NĂM HỌC MỚI") {
         result = !yearsData.includes(year);
     }
 
-    if (!result){
-        $("#error-chung").text('Năm học đã tồn tại')
+    if (!result) {
+        $("#error-year").text('Năm học đã tồn tại.')
     }
     // check age
 
@@ -435,28 +438,28 @@ function validateAddYearForm(element) {
     var maxage = document.forms["addYearForm"]["max_age"].value;
     if (maxage < minage) {
         $("#error-chung").text('Tuổi tối đa phải lớn hơn tuổi tối thiểu.')
-        result=false;
+        result = false;
     }
 
     //check number student max
     var number_student_max = document.forms["addYearForm"]["max_student"].value;
-    if(number_student_max<=0){
+    if (number_student_max <= 0) {
         $("#error-chung").text('Số lượng học sinh tối đa phải dương (>0).')
-        result=false;
+        result = false;
     }
 
     //check standard score
     var standard_score = document.forms["addYearForm"]["standard_score"].value;
-    if(standard_score<=0.25){
+    if (standard_score <= 0.25) {
         $("#error-chung").text('Điểm chuẩn phải dương (>0).')
-        result=false;
+        result = false;
     }
 
     //check number class 10
     let class_10_str = document.forms["addYearForm"]["name_class_10"].value;
     let number_class_10 = document.forms["addYearForm"]["num_of_class_10"].value
     if (class_10_str.split(", ").length != number_class_10) {
-        $("#error-class-10").text('Không đúng với số lớp đã nhập: '+number_class_10)
+        $("#error-class-10").text('Không đúng với số lớp đã nhập: ' + number_class_10)
         result = false;
     }
 
@@ -464,7 +467,7 @@ function validateAddYearForm(element) {
     let class_11_str = document.forms["addYearForm"]["name_class_11"].value;
     let number_class_11 = document.forms["addYearForm"]["num_of_class_11"].value
     if (class_11_str.split(", ").length != number_class_11) {
-        $("#error-class-11").text('Không đúng với số lớp đã nhập: '+number_class_11)
+        $("#error-class-11").text('Không đúng với số lớp đã nhập: ' + number_class_11)
         result = false;
     }
 
@@ -472,7 +475,7 @@ function validateAddYearForm(element) {
     let class_12_str = document.forms["addYearForm"]["name_class_12"].value;
     let number_class_12 = document.forms["addYearForm"]["num_of_class_12"].value
     if (class_12_str.split(", ").length != number_class_12) {
-        $("#error-class-12").text('Không đúng với số lớp đã nhập: '+number_class_12)
+        $("#error-class-12").text('Không đúng với số lớp đã nhập: ' + number_class_12)
         result = false;
     }
 
@@ -480,7 +483,7 @@ function validateAddYearForm(element) {
     let course_str = document.forms["addYearForm"]["name_of_subject"].value;
     let num_of_subject = document.forms["addYearForm"]["num_of_subject"].value
     if (course_str.split(", ").length != num_of_subject) {
-        $("#error-course").text('Không đúng với số môn đã nhập: '+num_of_subject)
+        $("#error-course").text('Không đúng với số môn đã nhập: ' + num_of_subject)
         result = false;
     }
 
