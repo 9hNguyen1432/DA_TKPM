@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
         activeSemesterInSummary(item)
     }
 
-    $('#addYearModal').on('shown.bs.modal', loadAddYearForm())
+    $('#addYearModal').on('load', loadAddYearForm());
 });
 
 setTimeout(function () {
@@ -412,9 +412,12 @@ function removeAlert(item) {
     $(item).parent().remove()
 }
 
-function validateAddYearForm() {
+function validateAddYearForm(element) {
     var result = true;
-
+    let yearsData = element.dataset.years;
+    console.log(yearsData)
+    let strings = JSON.parse(yearsData);
+    console.log(strings)
     //check age
     var minage = document.forms["addYearForm"]["min_age"].value;
     var maxage = document.forms["addYearForm"]["max_age"].value;

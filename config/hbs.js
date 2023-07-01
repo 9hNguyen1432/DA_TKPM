@@ -31,6 +31,9 @@ module.exports = (app) => {
           }
 
           return string.split(delimiter);
+        },
+        StringifyArray(value){
+          return JSON.stringify(value);
         }
         // ifNotEqualZero: function (value,status , options) {
         //   if (value > 0) {
@@ -92,5 +95,5 @@ module.exports = (app) => {
       }
     })
   );
-  app.set("view engine", "hbs");
+app.set("view engine", "hbs");
 };
