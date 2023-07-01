@@ -156,13 +156,13 @@ document.querySelectorAll('.view-student').forEach(button => {
         formStudent.querySelector('#gender').innerHTML =student.gender
         formStudent.querySelector('#dob').innerHTML =student.dob
         formStudent.querySelector('#address').innerHTML =student.address
-        formStudent.querySelector('#score1-summary').innerHTML = student.scoreSemester[0].DTB
+        formStudent.querySelector('#score1-summary').innerHTML = student.scoreSemester[0].DTB.toFixed(2)
 
         if( student.scoreSemester[1]){
-            formStudent.querySelector('#score2-summary').innerHTML = student.scoreSemester[1].DTB 
+            formStudent.querySelector('#score2-summary').innerHTML = student.scoreSemester[1].DTB.toFixed(2)
         }
         if(student.scoreYear.DTB){
-            formStudent.querySelector('#score-summary').innerHTML = student.scoreYear.DTB
+            formStudent.querySelector('#score-summary').innerHTML = student.scoreYear.DTB.toFixed(2)
         }
        
 
@@ -199,9 +199,9 @@ async function showListScore(scores, tableScore)
         row.innerHTML = `
           <th scope="row">${score.ID}</th>
           <td>${score.Name}</td>
-          <td>${score.exam_15}</td>
-          <td>${score.exam_45}</td>
-          <td>${score.exam_Sem}</td>
+          <td>${score.exam_15.toFixed(2)}</td>
+          <td>${score.exam_45.toFixed(2)}</td>
+          <td>${score.exam_Sem.toFixed(2)}</td>
         `;
         tableScore.appendChild(row);
     });

@@ -34,6 +34,9 @@ module.exports = (app) => {
         },
         StringifyArray(value){
           return JSON.stringify(value);
+        },
+        toFixed: function (_number){
+          return _number.toFixed(2);
         }
         // ifNotEqualZero: function (value,status , options) {
         //   if (value > 0) {

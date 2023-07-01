@@ -1,177 +1,190 @@
-
-        <form action="/setting/add_year?year={{CurYear}}&semester={{CurSem}}" method="post" id="addYearForm"
-            name="addYearForm" style="margin-top: -10px; padding-inline: 5%;" data-year="{{CurYear}}" data-years={{StringifyArray Years}};
-            onsubmit="return validateAddYearForm(this)">
-            <div class="d-flex pb-1">
-                <div style="margin-left: 25%;">
-                    <label for="start_year" style="width: 120px;">Năm bắt đầu:</label>
-                    <input type="number" class="form-control text-center" id="start_year" name="start_year"
-                        style="width: 120px;" value="" step="1" onchange="changeStartYear(this)">
-                </div>
-                <div style="margin-left: 15%;">
-                    <label for="end_year" style="width: 120px;">Năm kết thúc:</label>
-                    <input type="number" class="form-control text-center" id="end_year" name="end_year" disabled
-                        style="width: 120px;" value="" step="1">
-                </div>
+<form action="/setting/add_year?year={{CurYear}}&semester={{CurSem}}" method="post" id="addYearForm" name="addYearForm"
+    style="margin-top: -10px; padding-inline: 5%;" data-year="{{CurYear}}" data-years={{StringifyArray Years}};
+    onsubmit="return validateAddYearForm(this)">
+    <div>
+        <div class="d-flex pb-1">
+            <div style="margin-left: 25%;">
+                <label for="start_year" style="width: 120px;">Năm bắt đầu:</label>
+                <input type="number" class="form-control text-center" id="start_year" name="start_year"
+                    style="width: 120px;" value="" step="1" onchange="changeStartYear(this)">
             </div>
-            <div class="row border-bottom border-top mt-2">
-                <div class="col-6 p-2">
-
-                    <div class="m-2">
-                        <label for="minage">Độ tuổi tối thiểu: </label>
-                        <input type="number" class="form-control" id="minage" name="min_age" min="0" max="120"
-                            value="{{regulation.min_age}}">
-                    </div>
-                    <div class="m-2">
-                        <label for="maxage">Độ tuổi tối đa: </label>
-                        <input type="text" class="form-control" id="maxage" name="max_age" min="0" max="120"
-                            value="{{regulation.max_age}}">
-                    </div>
-                </div>
-                <div class="col-6 p-2">
-
-                    <div class="m-2">
-                        <label for="maxstudent">Số học sinh tối đa: </label>
-                        <input type="number" class="form-control" id="maxstudent" name="max_student" min="0"
-                            value="{{regulation.max_student}}">
-                    </div>
-                    <div class="m-2">
-                        <label for="score">Điểm chuẩn: </label>
-                        <input type="text" class="form-control" id="score" name="standard_score" min="0" max="10"
-                            value="{{regulation.standard_score}}">
-
-                    </div>
-                </div>
-                <div class="error" id="error-chung" style="font-size: medium; color: red"></div>
+            <div style="margin-left: 15%;">
+                <label for="end_year" style="width: 120px;">Năm kết thúc:</label>
+                <input type="number" class="form-control text-center" id="end_year" name="end_year" disabled
+                    style="width: 120px;" value="" step="1">
             </div>
-            <div class="row border-bottom p-1">
-                <div class="col-4">
-                    <div class="m-2 mt-4">
-                        <label for="numClass10">Số lớp 10: </label>
-                        <input type="number" class="form-control" id="numClass10" name="num_of_class_10"
-                            value="{{regulation.num_of_class_10}}">
-                    </div>
-                </div>
-                <div class="col-8">
-                    <div class="m-2">
-                        <div class="d-flex justify-content-between align-items-end">
-                            <label>Tên các lớp 10: </label>
-                            {{!-- <div>
-                                <input type="text" class="form-control" value="{{regulation.name_class_10}}">
-                            </div> --}}
-                            <div class="input-group input-group-sm" style="width: 130px;">
-                                <input type="text" class="form-control py-0">
-                                <button class="btn btn-outline-secondary btn-sm fs-4 py-0" type="button" data-grade="10"
-                                    onclick="addClass_BtnClick(this)">+</button>
-                            </div>
-                        </div>
-                        <div id="alerts-name-class-10" class="d-flex mt-1"
-                            style="overflow-x: auto; white-space: nowrap;">
-
-                        </div>
-                        <div class="error" id="error-class-10" style="font-size: medium; color: red"></div>
-                        <input type="text" class="form-control py-0" hidden id="nameClass10" name="name_class_10">
-                    </div>
-                </div>
-            </div>
-            <div class="row border-bottom p-1">
-                <div class="col-4">
-                    <div class="m-2 mt-4">
-                        <label for="numClass11">Số lớp 11: </label>
-                        <input type="number" class="form-control" id="numClass11" name="num_of_class_11"
-                            value="{{regulation.num_of_class_11}}">
-                    </div>
-                </div>
-                <div class="col-8">
-                    <div class="m-2">
-                        <div class="d-flex justify-content-between align-items-end">
-                            <label>Tên các lớp 11: </label>
-                            {{!-- <div>
-                                <input type="text" class="form-control" id="nameClass11" name="name_class_11"
-                                    value="{{regulation.name_class_10}}">
-                            </div> --}}
-                            <div class="input-group input-group-sm" style="width: 130px;">
-                                <input type="text" class="form-control">
-                                <button class="btn btn-outline-secondary btn-sm fs-4 py-0" type="button" data-grade="11"
-                                    onclick="addClass_BtnClick(this)">+</button>
-                            </div>
-                        </div>
-                        <div id="alerts-name-class-11" class="d-flex mt-1"
-                            style="overflow-x: auto; white-space: nowrap;">
-
-                        </div>
-                        <div class="error" id="error-class-11" style="font-size: medium; color: red"></div>
-                        <input type="text" class="form-control" hidden id="nameClass11" name="name_class_11">
-                    </div>
-                </div>
-            </div>
-            <div class="row border-bottom p-1">
-                <div class="col-4">
-                    <div class="m-2 mt-4">
-                        <label for="numClass12">Số lớp 12: </label>
-                        <input type="number" class="form-control" id="numClass12" name="num_of_class_12"
-                            value="{{regulation.num_of_class_12}}">
-                    </div>
-                </div>
-                <div class="col-8">
-                    {{!-- <div class="m-2">
-                        <label for="nameClass12">Tên các lớp 12: </label>
-                        <input type="text" class="form-control" id="nameClass12" name="name_class_12"
-                            value="{{regulation.name_class_12}}">
-                    </div> --}}
-                    <div class="m-2">
-                        <div class="d-flex justify-content-between align-items-end">
-                            <label>Tên các lớp 12: </label>
-                            <div class="input-group input-group-sm" style="width: 130px;">
-                                <input type="text" class="form-control">
-                                <button class="btn btn-outline-secondary btn-sm fs-4 py-0" type="button" data-grade="12"
-                                    onclick="addClass_BtnClick(this)">+</button>
-                            </div>
-                        </div>
-                        <div id="alerts-name-class-12" class="d-flex mt-1"
-                            style="overflow-x: auto; white-space: nowrap;">
-
-                        </div>
-                        <div class="error" id="error-class-12" style="font-size: medium; color: red"></div>
-                        <input type="text" class="form-control" hidden id="nameClass12" name="name_class_12">
-                    </div>
-                </div>
-            </div>
-            <div class="row p-1">
-                <div class="col-4">
-                    <div class="m-2 mt-4">
-                        <label for="numSubject">Số Môn học: </label>
-                        <input type="number" class="form-control" id="numSubject" name="num_of_subject"
-                            value="{{regulation.num_of_subject}}">
-                    </div>
-                </div>
-                <div class="col-8">
-                    {{!-- <div class="m-2">
-                        <label for="nameSubject">Tên các Môn học: </label>
-                        <input type="text" class="form-control" id="nameSubject" name="name_of_subject"
-                            value="{{regulation.name_of_subject}}">
-                    </div> --}}
-                    <div class="m-2">
-                        <div class="d-flex justify-content-between align-items-end">
-                            <label>Tên các Môn học: </label>
-                            <div class="input-group input-group-sm" style="width: 130px;">
-                                <input type="text" class="form-control">
-                                <button class="btn btn-outline-secondary btn-sm fs-4 py-0" type="button"
-                                    onclick="addClass_BtnClick(this)">+</button>
-                            </div>
-                        </div>
-                        <div id="alerts-name-course" class="d-flex mt-1"
-                            style="overflow-x: auto; white-space: nowrap; width: 100%;">
-
-                        </div>
-                        <div class="error" id="error-course" style="font-size: medium; color: red"></div>
-                        <input type="text" class="form-control" hidden id="nameSubject" name="name_of_subject">
-                    </div>
-                </div>
-            </div>
-            <input type="text" class="form-control" id="link" name="link" value="" onload="getCurrentUrl(this)" hidden>
-        </form>
-
-        <div class="d-flex justify-content-center mt-3">
-            <button type="submit" form="addYearForm" class="btn btn-success" style="width: 200px;">Tạo mới</button>
         </div>
+        <div class="error text-center" id="error-year" style="font-size: medium; color: red"></div>
+    </div>
+    <div class="row border-bottom border-top mt-2">
+        <div class="col-6 p-2">
+
+            <div class="m-2">
+                <label for="minage">Độ tuổi tối thiểu: </label>
+                <input type="number" class="form-control" id="minage" name="min_age" min="0" max="120"
+                    value="{{regulation.min_age}}">
+            </div>
+            <div class="m-2">
+                <label for="maxage">Độ tuổi tối đa: </label>
+                <input type="text" class="form-control" id="maxage" name="max_age" min="0" max="120"
+                    value="{{regulation.max_age}}">
+            </div>
+        </div>
+        <div class="col-6 p-2">
+
+            <div class="m-2">
+                <label for="maxstudent">Số học sinh tối đa: </label>
+                <input type="number" class="form-control" id="maxstudent" name="max_student" min="0"
+                    value="{{regulation.max_student}}">
+            </div>
+            <div class="m-2">
+                <label for="score">Điểm chuẩn: </label>
+                <input type="text" class="form-control" id="score" name="standard_score" min="0" max="10"
+                    value="{{regulation.standard_score}}">
+
+            </div>
+        </div>
+        <div class="error" id="error-chung" style="font-size: medium; color: red"></div>
+    </div>
+    <div id="div_list">
+        <div class="row border-bottom py-2" id="div_10">
+            <div class="col-4">
+                <div class="m-2 mt-4">
+                    <label for="numClass10">Số lớp 10: </label>
+                    <input type="number" class="form-control" id="numClass10" name="num_of_class_10"
+                        value="{{regulation.num_of_class_10}}">
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="m-2">
+                    <div class="d-flex justify-content-between align-items-end">
+                        <label>Tên các lớp 10: </label>
+                        {{!-- <div>
+                            <input type="text" class="form-control" value="{{regulation.name_class_10}}">
+                        </div> --}}
+                        <div class="input-group input-group-sm" style="width: 130px;">
+                            <input type="text" class="form-control py-0">
+                            <button class="btn btn-outline-secondary btn-sm fs-4 py-0" type="button" data-grade="10"
+                                onclick="addClass_BtnClick(this)">+</button>
+                        </div>
+                    </div>
+                    <div id="alerts-name-class-10" class="d-flex mt-1" style="overflow-x: auto; white-space: nowrap;">
+
+                    </div>
+                    <div class="error" id="error-class-10" style="font-size: medium; color: red"></div>
+                    <input type="text" class="form-control py-0" hidden id="nameClass10" name="name_class_10">
+                </div>
+            </div>
+        </div>
+        <div class="row border-bottom py-2" id="div_11">
+            <div class="col-4">
+                <div class="m-2 mt-4">
+                    <label for="numClass11">Số lớp 11: </label>
+                    <input type="number" class="form-control" id="numClass11" name="num_of_class_11"
+                        value="{{regulation.num_of_class_11}}">
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="m-2">
+                    <div class="d-flex justify-content-between align-items-end">
+                        <label>Tên các lớp 11: </label>
+                        {{!-- <div>
+                            <input type="text" class="form-control" id="nameClass11" name="name_class_11"
+                                value="{{regulation.name_class_10}}">
+                        </div> --}}
+                        <div class="input-group input-group-sm" style="width: 130px;">
+                            <input type="text" class="form-control">
+                            <button class="btn btn-outline-secondary btn-sm fs-4 py-0" type="button" data-grade="11"
+                                onclick="addClass_BtnClick(this)">+</button>
+                        </div>
+                    </div>
+                    <div id="alerts-name-class-11" class="d-flex mt-1" style="overflow-x: auto; white-space: nowrap;">
+
+                    </div>
+                    <div class="error" id="error-class-11" style="font-size: medium; color: red"></div>
+                    <input type="text" class="form-control" hidden id="nameClass11" name="name_class_11">
+                </div>
+            </div>
+        </div>
+        <div class="row border-bottom py-2" id="div_12">
+            <div class="col-4">
+                <div class="m-2 mt-4">
+                    <label for="numClass12">Số lớp 12: </label>
+                    <input type="number" class="form-control" id="numClass12" name="num_of_class_12"
+                        value="{{regulation.num_of_class_12}}">
+                </div>
+            </div>
+            <div class="col-8">
+                {{!-- <div class="m-2">
+                    <label for="nameClass12">Tên các lớp 12: </label>
+                    <input type="text" class="form-control" id="nameClass12" name="name_class_12"
+                        value="{{regulation.name_class_12}}">
+                </div> --}}
+                <div class="m-2">
+                    <div class="d-flex justify-content-between align-items-end">
+                        <label>Tên các lớp 12: </label>
+                        <div class="input-group input-group-sm" style="width: 130px;">
+                            <input type="text" class="form-control">
+                            <button class="btn btn-outline-secondary btn-sm fs-4 py-0" type="button" data-grade="12"
+                                onclick="addClass_BtnClick(this)">+</button>
+                        </div>
+                    </div>
+                    <div id="alerts-name-class-12" class="d-flex mt-1" style="overflow-x: auto; white-space: nowrap;">
+
+                    </div>
+                    <div class="error" id="error-class-12" style="font-size: medium; color: red"></div>
+                    <input type="text" class="form-control" hidden id="nameClass12" name="name_class_12">
+                </div>
+            </div>
+        </div>
+        <div class="row py-2" id="div_course">
+            <div class="col-4">
+                <div class="m-2 mt-4">
+                    <label for="numSubject">Số Môn học: </label>
+                    <input type="number" class="form-control" id="numSubject" name="num_of_subject"
+                        value="{{regulation.num_of_subject}}">
+                </div>
+            </div>
+            <div class="col-8">
+                {{!-- <div class="m-2">
+                    <label for="nameSubject">Tên các Môn học: </label>
+                    <input type="text" class="form-control" id="nameSubject" name="name_of_subject"
+                        value="{{regulation.name_of_subject}}">
+                </div> --}}
+                <div class="m-2">
+                    <div class="d-flex justify-content-between align-items-end">
+                        <label>Tên các Môn học: </label>
+                        <div class="input-group input-group-sm" style="width: 130px;">
+                            <input type="text" class="form-control">
+                            <button class="btn btn-outline-secondary btn-sm fs-4 py-0" type="button"
+                                onclick="addClass_BtnClick(this)">+</button>
+                        </div>
+                    </div>
+                    <div id="alerts-name-course" class="d-flex mt-1"
+                        style="overflow-x: auto; white-space: nowrap; width: 100%;">
+
+                    </div>
+                    <div class="error" id="error-course" style="font-size: medium; color: red"></div>
+                    <input type="text" class="form-control" hidden id="nameSubject" name="name_of_subject">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="d-flex justify-content-center mt-3">
+    <button type="submit" form="addYearForm" class="btn btn-success" style="width: 200px;">Tạo mới</button>
+</div>
+
+<script text="text/javascript">
+    function disableDiv(item) {
+        $(item).css('pointer-events', 'none');
+        $(item).css('opacity', 0.6);
+    }
+
+    let title = $('#checkAddYear').attr('data-title')
+    if (title === "CHỈNH SỬA QUY ĐỊNH") {
+        disableDiv($('#div_list'))
+    }
+
+</script>
