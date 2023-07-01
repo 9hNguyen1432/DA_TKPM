@@ -13,9 +13,21 @@ class SettingPageController {
         let sem_str = req.query.semester;
         let list_year = await yearModel.getYears();
         let regulation = await regulations.getRegulation(year_str);
-        console.log(regulation)
-        res.render('setting/setting', { regulation, Years: list_year, CurYear: year_str, CurSem: sem_str });
+        res.render('setting/setting', { regulation, Years: list_year, CurYear: year_str, CurSem: sem_str, title: "CHỈNH SỬA QUY ĐỊNH" });
     }
+
+    async loadRegulation(req, res) {
+        let year_str = req.query.year;
+        let sem_str = req.query.semester;
+        let list_year = await yearModel.getYears();
+        let regulation = await regulations.getRegulation(year_str);
+        
+        res.render('setting/setting', { regulation, Years: list_year, CurYear: year_str, CurSem: sem_str, title: "THÊM NĂM HỌC MỚI" });
+    }
+    async getAllYear(req, res) {
+        let list_year = await yearModel.getYears();
+        res.send(list_year);
+    }    
 
     async getRules(req, res) {
         let year_str = req.query.year;
