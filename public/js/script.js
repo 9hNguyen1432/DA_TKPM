@@ -430,6 +430,7 @@ function validateAddYearForm(element) {
         $("#error-chung").text('Năm học đã tồn tại')
     }
     // check age
+
     var minage = document.forms["addYearForm"]["min_age"].value;
     var maxage = document.forms["addYearForm"]["max_age"].value;
     if (maxage < minage) {
