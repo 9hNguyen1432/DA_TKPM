@@ -13,7 +13,7 @@ class SettingPageController {
         let sem_str = req.query.semester;
         let list_year = await yearModel.getYears();
         let regulation = await regulations.getRegulation(year_str);
-
+        console.log(regulation)
         res.render('setting/setting', { regulation, Years: list_year, CurYear: year_str, CurSem: sem_str });
     }
 
@@ -30,10 +30,9 @@ class SettingPageController {
         let year_str = req.query.year;
         let sem_str = req.query.semester;
         regulation._year = year_str;
-        //valid
-
         let list_year = await yearModel.getYears();
         let temp = await regulations.addRegulation(regulation);
+     
         res.render('setting/setting', {regulation, Years: list_year, CurYear: year_str, CurSem: sem_str });
     }
 
@@ -95,6 +94,7 @@ class SettingPageController {
         //add Course
         try {
             let courses = regulation.name_of_subject.split(", ")
+
             for (let i = 0; i < courses.length; i++) {
                 await subjectModel.addNewSubject(courses[i], year_str)
             }

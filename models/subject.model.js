@@ -2,7 +2,8 @@ var conn = require('./connect.model').conn
 var regulation = require('./regulation.model')
 var _class = require('./class.model')
 const { all } = require('../routers/class.router')
-
+const sql = require('mssql/msnodesqlv8');
+ 
 async function getAnSubjectResult(student_id, subject_id, _semester, _year) {
     try {
         var query_string = `SELECT * FROM RESULT WHERE student_id = '${student_id}' and
@@ -17,8 +18,26 @@ async function getAnSubjectResult(student_id, subject_id, _semester, _year) {
 }
 module.exports = {
     getAnSubjectResult,
-    addNewSubject: async (idSubject, idClass) =>{
-        //do add new subject in table SUBJECT and CLASS_SUBJECT
+    addNewSubject: async (subject, year) =>{
+        try {
+            const pool = await conn;
+            const request = pool.request();
+            request.input('name', sql.NVarChar(30), subject);
+            request.input('_year', sql.VarChar(10), year);
+         
+
+            const result = await request.execute('InsertSubject');
+    
+            // Xử lý kết quả trả về từ stored procedure
+            const output = result.recordset;
+    
+            return output;
+        } catch (error) {
+            console.error('Lỗi truy vấn:', error);
+            throw error;
+        }
+
+
 
         
     },
