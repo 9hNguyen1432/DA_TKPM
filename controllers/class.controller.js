@@ -14,8 +14,7 @@ const account = require('../models/account');
 const ClassModel = require("../models/class.model")
 const SubjectModel = require("../models/subject.model")
 var crypto = require('crypto')
-const iconv = require('iconv-lite');
-const json2csv = require('json2csv').parse;
+const moment = require('moment');
 
 class ClassPageController {
 
@@ -524,6 +523,15 @@ function convertToCSVFormat(data){
 
     let fields = Object.keys(data[0]);
     console.log(fields);
+
+    data.forEach(item => {
+        var dateObject = moment(item.birthday, 'DD/MM/YYYY').toDate();
+        const day = dateObject.getDate();
+        const month = dateObject.getMonth() + 1; // Tháng trong JavaScript được đánh số từ 0 (0 - 11)
+        const year = dateObject.getFullYear();
+        const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+        item.birthday = formattedDate;
+    })
 
     // Biến đổi dữ liệu JSON thành chuỗi CSV
     let csvData = '';
