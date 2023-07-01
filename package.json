@@ -37,6 +37,7 @@
     "iconv-lite": "^0.6.3",
     "json2csv": "^6.0.0-alpha.2",
     "jsontocsv": "^0.3.0",
+    "moment": "^2.29.4",
     "morgan": "^1.10.0",
     "msnodesqlv8": "^4.1.0",
     "mssql": "^9.1.1",
