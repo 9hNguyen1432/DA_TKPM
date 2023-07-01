@@ -414,11 +414,22 @@ function removeAlert(item) {
 
 function validateAddYearForm(element) {
     var result = true;
+
+    var year = document.forms["addYearForm"]["start_year"].value;
+    year = year + "-"+ (parseInt(year) + 1);
+
+    let checkAddYear = document.getElementById("checkAddYear").getAttribute("data-title");
     let yearsData = element.dataset.years;
-    console.log(yearsData)
-    let strings = JSON.parse(yearsData);
-    console.log(strings)
-    //check age
+    yearsData = JSON.parse(yearsData.substring(0, yearsData.length - 1)).map(e => e._year);
+    console.log(yearsData);
+    if(checkAddYear === "THÊM NĂM HỌC MỚI"){
+        result = !yearsData.includes(year);
+    }
+
+    if (!result){
+        $("#error-chung").text('Năm học đã tồn tại')
+    }
+    // check age
     var minage = document.forms["addYearForm"]["min_age"].value;
     var maxage = document.forms["addYearForm"]["max_age"].value;
     if (maxage < minage) {
